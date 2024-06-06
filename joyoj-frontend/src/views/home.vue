@@ -2,24 +2,34 @@
   <div id="home-container">
     <a-row class="home-wrapper" style="margin-bottom: 16px;">
       <!--   左侧标语   -->
-      <a-col flex="600px">
+      <a-col flex="500px">
         <div class="home-wrapper-slogan">
-          <div class="home-wrapper-slogan-line">智能在线评测</div>
+          <div class="home-wrapper-slogan-title">
+            <a-row>
+              <a-col flex="200px" style="margin-left: 100px">
+                <div class="home-wrapper-slogan-line">智能在线</div>
+              </a-col>
+              <a-col flex="200px">
+                <TypeIt :options="options"/>
+              </a-col>
+            </a-row>
+          </div>
+
           <div class="home-wrapper-slogan-line-black">连接轻盈体验</div>
           <div class="home-wrapper-introduce">
-            <span>JOY Judge 是一个开源的在线评测系统，支持多种编程语言</span>
+            <span>JOY Judge 是一个<a style="color:#3491FA">开源</a>的在线评测系统，支持多种编程语言</span>
             <div style="display: flex;justify-content: center;align-items: center">
               <div class="home-wrapper-bubble">
                 <joy-svg-icon icon="bubble"/>
-                <span class="bubble-title">#</span>
+                <span class="bubble-title" style="color:#999999">#</span>
               </div>
-              <span style="margin-left: 10px">支持自定义题目，支持多种评测方式</span>
+              <span style="margin-left: 10px">支持自定义题目，支持多种<a style="color:#3491FA">评测</a>方式</span>
             </div>
           </div>
           <div class="btn-box">
             <a-row class="grid-demo" :gutter="24">
               <a-col :span="12">
-                <a-button type="primary" size="large">开始使用</a-button>
+                <HomeGoButton/>
               </a-col>
               <a-col :span="12">
                 <a-button size="large">关于我们</a-button>
@@ -36,21 +46,47 @@
 </template>
 
 <script setup lang="ts">
-
 import { defineComponent } from 'vue'
+import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
+import HomeGoButton from '@/components/button/HomeGoButton.vue'
 
 defineComponent({
   name: 'Home',
-  components: {}
+  components: {
+    TypeIt,
+    HomeGoButton
+  }
 })
+
+const options: TypeItOptions = {
+  strings: ['评测', '教学', '比赛'],
+  loop: true,
+  breakLines: false,
+  cursorChar: '|',
+  speed: 600,
+  deleteSpeed: 200
+}
 </script>
 
 <style scoped lang="scss">
+
 #home-container {
   padding: 120px;
   margin: 0 20px;
 
   .home-wrapper-slogan {
+    .home-wrapper-slogan-title {
+
+      :deep(.type-it) {
+        font-size: 48px;
+
+        .ti-cursor {
+          font-size: 48px;
+          color: linear-gradient(92.06deg, #33c2ff -17.9%, #257cff 43.39%, #165dff 99.4%);
+        }
+      }
+    }
+
     .home-wrapper-introduce {
       text-align: center;
       margin-top: 20px;
@@ -78,7 +114,6 @@ defineComponent({
       span {
         display: block;
         margin-bottom: 10px;
-
       }
     }
 
@@ -90,6 +125,7 @@ defineComponent({
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-size: 48px;
+      width: auto;
     }
 
     .home-wrapper-slogan-line-black {
@@ -112,4 +148,5 @@ defineComponent({
     }
   }
 }
+
 </style>
