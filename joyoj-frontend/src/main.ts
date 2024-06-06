@@ -6,10 +6,12 @@ import { installRouterGuards } from '@/router/guard'
 import { installArco } from '@/plugins/arco'
 import { installStore } from '@/store'
 import { installAssets } from '@/plugins/assets'
+// 额外引入图标库
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 
 const startApp = () => {
   const app = createApp(App)
-
+  app.use(ArcoVueIcon)
   // 静态资源
   installAssets(app)
   // 路由 VueRouter

@@ -9,7 +9,7 @@ const components = [
 
 export const installComponents = (app: App) => {
   components.forEach(c => {
-    app.component(`yyg-${c.name}`, c)
+    app.component(`joy-${c.name}`, c)
   })
 }
 
