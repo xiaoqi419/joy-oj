@@ -10,14 +10,16 @@
                 <div class="home-wrapper-slogan-line">智能在线</div>
               </a-col>
               <a-col flex="200px">
+                <!-- 打字机 -->
                 <TypeIt :options="options"/>
               </a-col>
             </a-row>
           </div>
-
           <div class="home-wrapper-slogan-line-black">连接轻盈体验</div>
           <div class="home-wrapper-introduce">
             <span>JOY Judge 是一个<a style="color:#3491FA">开源</a>的在线评测系统，支持多种编程语言</span>
+            <span>本平台采用Vue3 + SpringBoot 前后端分离</span>
+
             <div style="display: flex;justify-content: center;align-items: center">
               <div class="home-wrapper-bubble">
                 <joy-svg-icon icon="bubble"/>
@@ -27,19 +29,21 @@
             </div>
           </div>
           <div class="btn-box">
-            <a-row class="grid-demo" :gutter="24">
+            <a-row :gutter="24">
               <a-col :span="12">
                 <HomeGoButton/>
               </a-col>
               <a-col :span="12">
-                <a-button size="large">关于我们</a-button>
+                <a-button size="large" class="button-about">关于我们</a-button>
               </a-col>
             </a-row>
           </div>
         </div>
       </a-col>
       <a-col flex="auto">
-        <div>auto</div>
+        <div>
+          <CodeTypeIt/>
+        </div>
       </a-col>
     </a-row>
   </div>
@@ -48,13 +52,15 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue'
 import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
-import HomeGoButton from '@/components/button/HomeGoButton.vue'
+import HomeGoButton from '@/components/Button/HomeGoButton.vue'
+import CodeTypeIt from '@/components/Home/CodeTypeIt.vue'
 
 defineComponent({
   name: 'Home',
   components: {
     TypeIt,
-    HomeGoButton
+    HomeGoButton,
+    CodeTypeIt
   }
 })
 
@@ -143,8 +149,15 @@ const options: TypeItOptions = {
       width: 100%;
       align-items: center;
       justify-content: center;
-      margin-top: 5px;
       height: 100px;
+
+      .button-about {
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #c4c4c4;
+        }
+      }
     }
   }
 }

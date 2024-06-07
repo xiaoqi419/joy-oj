@@ -17,5 +17,15 @@ defineComponent({
   <div id="app">
     <BasicLayout/>
     <UserModal/>
+    <a-back-top target-container="#app" :style="{position:'absolute'}">
+      <icon-caret-up/>
+    </a-back-top>
   </div>
 </template>
+
+<style scoped>
+#app {
+  position: relative;
+}
+
+</style>

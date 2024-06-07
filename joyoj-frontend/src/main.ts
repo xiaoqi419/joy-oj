@@ -9,6 +9,7 @@ import { installAssets } from '@/plugins/assets'
 // 额外引入图标库
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import '@/assets/style.css'
+import 'animate.css'
 
 const startApp = () => {
   const app = createApp(App)

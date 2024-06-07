@@ -1,10 +1,9 @@
 import { App } from 'vue'
 import SvgIcon from './svg-icon/index.vue'
-import HelloWorld from './hello-world/index.vue'
 
 const components = [
-  SvgIcon,
-  HelloWorld
+  SvgIcon
+
 ]
 
 export const installComponents = (app: App) => {
