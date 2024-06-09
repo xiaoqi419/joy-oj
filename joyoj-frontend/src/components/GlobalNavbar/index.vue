@@ -1,36 +1,53 @@
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { routes } from '@/router/routes'
 import useModalStore from '@/store/modules/modal'
+import useUserStore from '@/store/modules/user'
+import { storeToRefs } from 'pinia'
+import checkAccess from '@/utils/checkAccess'
 
 defineComponent({
   name: 'GlobalNavbar'
 })
 const router = useRouter()
-
 // 跳转到首页
 const jumpHome = () => {
   router.push('/')
 }
-
 // 动态菜单跳转
 const doMenuClick = (key: string) => {
   router.push(key)
 }
-
 // 默认主页
 const selectedKeys = ref(['/'])
 // 路由跳转后，更新选中菜单
 router.afterEach((to) => {
   selectedKeys.value = [to.path]
 })
-
 // 显示登录模态框
 const modalStore = useModalStore()
 const showLoginModal = () => {
   modalStore.userModal = true
 }
+// 获取用户信息
+const { userInfo } = storeToRefs(useUserStore())
+// 展示的路由
+const visibleRoutes = computed(() => {
+  return routes.filter((routes) => {
+    if (routes.meta?.hidden) {
+      return false
+    }
+    if (!checkAccess(userInfo.value, routes.meta?.access)) {
+      return false
+    }
+    return true
+  })
+})
+
+setTimeout(() => {
+  userInfo.value.access = 'admin'
+}, 3000)
 
 </script>
 
@@ -43,10 +60,10 @@ const showLoginModal = () => {
           <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
             <div class="title-bar" @click="jumpHome">
               <!--              <img class="logo" src="../../assets/images/logo.png"/>-->
-              <div class="title">JOY Judge</div>
+              <div class="title">Joy Judge</div>
             </div>
           </a-menu-item>
-          <a-menu-item v-for="item in routes" :key="item.path">
+          <a-menu-item v-for="item in visibleRoutes" :key="item.path">
             <template #icon>
               <icon-home/>
               {{ item.meta?.title }}
@@ -58,12 +75,21 @@ const showLoginModal = () => {
         <div>
           <a-dropdown trigger="hover">
             <a-avatar :style="{ backgroundColor: '#3370ff' }">
-              <IconUser/>
+              <img
+                v-if="userInfo.avatar !== ''"
+                alt="avatar"
+                :src="userInfo.avatar"
+              />
+              <IconUser v-else/>
             </a-avatar>
             <template #content>
-              <a-menu>
+              <a-menu v-if="userInfo.userName === ''">
                 <a-menu-item key="1" style="text-align: center" @click="showLoginModal">登录</a-menu-item>
                 <a-menu-item key="2">去注册</a-menu-item>
+              </a-menu>
+              <a-menu v-else>
+                <a-menu-item key="1">个人中心</a-menu-item>
+                <a-menu-item key="2">退出登录</a-menu-item>
               </a-menu>
             </template>
           </a-dropdown>

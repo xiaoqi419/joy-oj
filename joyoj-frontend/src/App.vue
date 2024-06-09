@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue'
-import BasicLayout from './components/layouts/BasicLayout.vue'
-import UserModal from '@/components/modal/UserModal.vue'
+import BasicLayout from '@/components/Layouts/BasicLayout.vue'
+import UserModal from '@/components/Modal/UserModal.vue'
 
 defineComponent({
   name: 'App',

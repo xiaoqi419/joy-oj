@@ -2,5 +2,24 @@ body {
   margin: 0;
 }
 
+/* 定义滚动条的宽度和背景颜色 */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #F5F5F5;
+}
+
+/* 定义滚动条滑块的样式 */
+::-webkit-scrollbar-thumb {
+  
+  background: linear-gradient(92.06deg, #33c2ff -17.9%, #257cff 43.39%, #165dff 99.4%);
+  border-radius: 10px;
+}
+
+/* 定义滚动条滑块在鼠标悬停时的样式 */
+::-webkit-scrollbar-thumb:hover {
+  background: #165dff;
+}
+
+
 
 

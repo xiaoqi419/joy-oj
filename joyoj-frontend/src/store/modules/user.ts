@@ -2,7 +2,11 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const useUserStore = defineStore('user', () => {
-  const userInfo = ref()
+  const userInfo = ref({
+    userName: '',
+    avatar: '',
+    access: 'notLogin'
+  })
 
   const updateUserInfo = (obj: any) => {
     userInfo.value = obj

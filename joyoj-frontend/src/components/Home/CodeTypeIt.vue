@@ -10,8 +10,8 @@ defineComponent({
 })
 
 const options: TypeItOptions = {
-  strings: ['<span class="keyword">const</span> hello = <span class="string">"Hello, world!"</span>;',
-    '<span class="function">console.log</span>(hello);', ' ', '<span class="function">print</span>("<span class="string">Hello, World!</span>")', ' ', '<span class="public">public class</span> HelloWorld {\n' +
+  strings: [
+    '<span class="function">console.log</span>(<span class="string">"Hello, world!"</span>);', ' ', '<span class="function">print</span>("<span class="string">Hello, World!</span>")', ' ', '<span class="public">public class</span> HelloWorld {\n' +
     '    <span class="public">public static void</span> main(<span class="keyword">String[]</span> args) {\n' +
     '        <span class="function">System.out.println</span>("<span class="string">Hello, World!</span>");\n' +
     '    }\n' +
@@ -24,6 +24,11 @@ const codeEditor = ref(null)
 
 <template>
   <div class="code-container animate__animated animate__fadeInUp">
+    <div class="mac-buttons">
+      <div class="mac-button close"></div>
+      <div class="mac-button minimize"></div>
+      <div class="mac-button maximize"></div>
+    </div>
     <div class="code-editor" ref="codeEditor">
       <TypeIt :options="options"/>
     </div>
@@ -34,7 +39,7 @@ const codeEditor = ref(null)
 
 .code-container {
   background-color: #1e1e1e;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 20px;
   color: #abb2bf;
   font-family: 'Courier New', Courier, monospace;
@@ -42,7 +47,7 @@ const codeEditor = ref(null)
   line-height: 1.5;
   white-space: pre;
   overflow: auto;
-  box-shadow: 8px 8px 5px 0 rgba(0, 0, 0, 0.26);
+  box-shadow: 8px 8px 10px 0 rgba(0, 0, 0, 0.26);
 }
 
 .code-editor {
@@ -81,4 +86,28 @@ const codeEditor = ref(null)
   }
 }
 
+.mac-buttons {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px;
+
+  .mac-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  .close {
+    background-color: #ff5f57;
+  }
+
+  .minimize {
+    background-color: #ffbd2e;
+  }
+
+  .maximize {
+    background-color: #27c93f;
+  }
+}
 </style>

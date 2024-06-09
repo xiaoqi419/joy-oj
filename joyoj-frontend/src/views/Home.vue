@@ -17,7 +17,7 @@
           </div>
           <div class="home-wrapper-slogan-line-black">连接轻盈体验</div>
           <div class="home-wrapper-introduce">
-            <span>JOY Judge 是一个<a style="color:#3491FA">开源</a>的在线评测系统，支持多种编程语言</span>
+            <span>Joy Judge 是一个<a style="color:#3491FA">开源</a>的在线评测系统，支持多种编程语言</span>
             <span>本平台采用Vue3 + SpringBoot 前后端分离</span>
 
             <div style="display: flex;justify-content: center;align-items: center">
@@ -43,6 +43,7 @@
       <a-col flex="auto">
         <div>
           <CodeTypeIt/>
+
         </div>
       </a-col>
     </a-row>
@@ -56,7 +57,7 @@ import HomeGoButton from '@/components/Button/HomeGoButton.vue'
 import CodeTypeIt from '@/components/Home/CodeTypeIt.vue'
 
 defineComponent({
-  name: 'Home',
+  name: 'home',
   components: {
     TypeIt,
     HomeGoButton,
@@ -85,11 +86,7 @@ const options: TypeItOptions = {
 
       :deep(.type-it) {
         font-size: 48px;
-
-        .ti-cursor {
-          font-size: 48px;
-          color: linear-gradient(92.06deg, #33c2ff -17.9%, #257cff 43.39%, #165dff 99.4%);
-        }
+        color: #165dff;
       }
     }
 
@@ -136,7 +133,7 @@ const options: TypeItOptions = {
 
     .home-wrapper-slogan-line-black {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 50px;
       background: linear-gradient(92.06deg, #000000 -17.9%, #000000 43.39%, #000000 99.4%);
       background-clip: text;
       -webkit-background-clip: text;
