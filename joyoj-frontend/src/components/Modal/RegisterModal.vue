@@ -10,7 +10,7 @@
             <div class="arm arm-r"></div>
           </div>
         </div>
-        <h1>登录</h1>
+        <h1>注册账号</h1>
       </template>
       <div class="box-main">
         <a-form
@@ -29,9 +29,9 @@
           <a-form-item field="userPassword" validate-trigger="blur">
             <a-input-password
               v-model="formLabelAlign.userPassword"
+              placeholder="密码"
               @focus="isPassword = true"
               @blur="isPassword = false"
-              placeholder="密码"
               allow-clear
               autocomplete
               show-password>
@@ -40,25 +40,29 @@
               </template>
             </a-input-password>
           </a-form-item>
-          <a-form-item>
-            <div class="btn-box">
-              <a-checkbox v-model="formLabelAlign.type">记住我</a-checkbox>
-              <a-space wrap>
-                <a-link type="primary">忘记密码</a-link>
-                <a-link type="primary" @click="doRegister">没有账号？</a-link>
-              </a-space>
-            </div>
+          <a-form-item field="checkPassword" validate-trigger="blur">
+            <a-input-password
+              v-model="formLabelAlign.checkPassword"
+              placeholder="确认密码"
+              @focus="isPassword = true"
+              @blur="isPassword = false"
+              allow-clear
+              autocomplete
+              show-password>
+              <template #prefix>
+                <icon-lock/>
+              </template>
+            </a-input-password>
           </a-form-item>
         </a-form>
         <!-- 登录 -->
-        <div>
-          <button>
-            <span class="shadow"></span>
-            <span class="edge"></span>
-            <span class="front text">登录</span>
-          </button>
-        </div>
+        <a-button :loading="loading" type="primary" size="large" @click="doVerify">注册</a-button>
+
       </div>
+    </a-modal>
+    <a-modal v-if="verifyModal" :modal-style="{width:'350px'}" v-model:visible="verifyModal" :closable="false"
+             :footer="false">
+      <Verify @success="doRegister"/>
     </a-modal>
   </div>
 </template>
@@ -67,16 +71,21 @@
 import useModalStore from '@/store/modules/modal'
 import { storeToRefs } from 'pinia'
 import { defineComponent, reactive, ref, watch } from 'vue'
-import '@/assets/userModal.scss'
 import { FieldRule } from '@arco-design/web-vue'
+import Verify from '@/components/Verify/verify.vue'
+import '@/assets/userModal.scss'
 
 defineComponent({
-  name: 'UserModal'
+  name: 'RegisterModal',
+  components: {
+    Verify
+  }
 })
-
-const modalStore = storeToRefs(useModalStore())
-const dialogVisible = modalStore.userModal
 const isPassword = ref(false)
+const verifyModal = ref(false)
+const modalStore = storeToRefs(useModalStore())
+const dialogVisible = modalStore.registerModal
+const loading = ref(false)
 // 模态框宽度
 const dialogWidth = ref(500)
 // 监视浏览器宽度变化调整合适的模态框宽度
@@ -99,6 +108,7 @@ watch(
 const formLabelAlign = reactive<any & { type: boolean }>({
   userAccount: '',
   userPassword: '',
+  checkPassword: '',
   type: false
 })
 const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
@@ -111,20 +121,67 @@ const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
       minLength: 8,
       maxLength: 20,
       message: '密码长度在 8 到 20 个字符'
+    },
+    {
+      validator (value, callback) {
+        // 密码不能是非法字符
+        const reg = /^[a-zA-Z0-9_]+$/
+        if (!reg.test(value)) {
+          const errorMsg = '密码只能包含字母、数字、下划线'
+          return callback(errorMsg)
+        }
+      }
+    }
+  ],
+  checkPassword: [
+    {
+      required: true,
+      message: '请输入确认密码'
+    },
+    {
+      validator: (value, cb) => {
+        if (value !== formLabelAlign.userPassword) {
+          const errorMsg = '两次输入密码不一致'
+          cb(errorMsg)
+        }
+        return true
+      }
     }
   ],
   userAccount: [
     {
       required: true,
       message: '请输入用户名'
+    },
+    {
+      validator (value, callback) {
+        if (!value) {
+          const errorMsg = '请输入用户名'
+          return callback(errorMsg)
+        }
+        // 只允许输入字母、数字、下划线
+        const reg = /^[a-zA-Z0-9_]+$/
+        if (!reg.test(value)) {
+          const errorMsg = '用户名只能包含字母、数字、下划线'
+          return callback(errorMsg)
+        }
+        if (value.length < 4 || value.length > 20) {
+          const errorMsg = '用户名长度在 4 到 20 个字符'
+          return callback(errorMsg)
+        }
+        return callback()
+      }
     }
   ]
 })
-
-// 打开注册模态框
-const doRegister = () => {
-  modalStore.userModal.value = false
-  modalStore.registerModal.value = true
+const doVerify = () => {
+  verifyModal.value = true
+}
+// 验证通过后注册
+const doRegister = (e: object) => {
+  console.log(e)
+  verifyModal.value = false
+  loading.value = true
 }
 </script>
 
@@ -145,4 +202,5 @@ const doRegister = () => {
     margin-top: 5px;
   }
 }
+
 </style>

@@ -2,12 +2,14 @@
 import { defineComponent, onMounted } from 'vue'
 import BasicLayout from '@/components/Layouts/BasicLayout.vue'
 import UserModal from '@/components/Modal/UserModal.vue'
+import RegisterModal from '@/components/Modal/RegisterModal.vue'
 
 defineComponent({
   name: 'App',
   components: {
     BasicLayout,
-    UserModal
+    UserModal,
+    RegisterModal
   }
 })
 
@@ -28,6 +30,7 @@ onMounted(() => {
   <div id="app">
     <BasicLayout/>
     <UserModal/>
+    <RegisterModal/>
     <a-back-top target-container="#app" :style="{position:'absolute'}">
       <icon-caret-up/>
     </a-back-top>

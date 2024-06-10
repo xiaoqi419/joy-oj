@@ -5,13 +5,19 @@ const useModalStore = defineStore(
   'modal',
   () => {
     const userModal = ref(false)
+    const registerModal = ref(false)
 
     const setUserModal = (value: boolean) => {
       userModal.value = value
     }
+    const setRegisterModal = (value: boolean) => {
+      registerModal.value = value
+    }
 
     return {
       userModal,
+      registerModal,
+      setRegisterModal,
       setUserModal
     }
   },

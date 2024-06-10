@@ -38,12 +38,14 @@ const visibleRoutes = computed(() => {
     if (routes.meta?.hidden) {
       return false
     }
-    if (!checkAccess(userInfo.value, routes.meta?.access)) {
-      return false
-    }
-    return true
+    return checkAccess(userInfo.value, routes.meta?.access)
   })
 })
+
+// 展示注册模态框
+const showRegisterModal = () => {
+  modalStore.registerModal = true
+}
 
 </script>
 
@@ -81,7 +83,7 @@ const visibleRoutes = computed(() => {
             <template #content>
               <a-menu v-if="userInfo.userName === ''">
                 <a-menu-item key="1" style="text-align: center" @click="showLoginModal">登录</a-menu-item>
-                <a-menu-item key="2">去注册</a-menu-item>
+                <a-menu-item key="2" @click="showRegisterModal">去注册</a-menu-item>
               </a-menu>
               <a-menu v-else>
                 <a-menu-item key="1">个人中心</a-menu-item>
