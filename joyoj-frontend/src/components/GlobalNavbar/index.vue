@@ -45,10 +45,6 @@ const visibleRoutes = computed(() => {
   })
 })
 
-setTimeout(() => {
-  userInfo.value.access = 'admin'
-}, 3000)
-
 </script>
 
 <template>
