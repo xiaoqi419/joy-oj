@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import BasicLayout from '@/components/Layouts/BasicLayout.vue'
 import UserModal from '@/components/Modal/UserModal.vue'
 
@@ -11,6 +11,17 @@ defineComponent({
   }
 })
 
+/**
+ * 初始化函数，用于初始化数据
+ */
+const init = () => {
+  // 初始化数据
+  console.log('欢迎使用Joy Judge！')
+}
+
+onMounted(() => {
+  init()
+})
 </script>
 
 <template>
