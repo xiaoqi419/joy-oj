@@ -85,8 +85,8 @@ class Request {
 
 // 默认配置
 const defaultConfig: CreateAxiosDefaults = {
-  timeout: 5000,
-  baseURL: import.meta.env.VITE_BASE_API
+  timeout: 5000
+  // baseURL: import.meta.env.VITE_BASE_API
 }
 
 // 导出 Request 类的对象

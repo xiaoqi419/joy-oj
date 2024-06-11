@@ -74,9 +74,9 @@ const showRegisterModal = () => {
           <a-dropdown trigger="hover">
             <a-avatar :style="{ backgroundColor: '#3370ff' }">
               <img
-                v-if="userInfo.avatar !== ''"
+                v-if="userInfo.userAvatar !== ''"
                 alt="avatar"
-                :src="userInfo.avatar"
+                :src="userInfo.userAvatar"
               />
               <IconUser v-else/>
             </a-avatar>
