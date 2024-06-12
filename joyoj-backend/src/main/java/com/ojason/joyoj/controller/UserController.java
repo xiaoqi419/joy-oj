@@ -1,7 +1,8 @@
 package com.ojason.joyoj.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ojason.joyoj.annotation.AuthCheck;
 import com.ojason.joyoj.common.BaseResponse;
 import com.ojason.joyoj.common.DeleteRequest;
 import com.ojason.joyoj.common.ErrorCode;
@@ -88,6 +89,7 @@ public class UserController {
      *
      * @return 是否成功
      */
+    @SaCheckLogin
     @PostMapping("/logout")
     public BaseResponse<Boolean> userLogout() {
         boolean result = userService.userLogout();
@@ -97,11 +99,11 @@ public class UserController {
     /**
      * 获取当前登录用户
      *
-     * @param request
-     * @return
+     * @param request 请求
+     * @return 登录用户信息
      */
-
     @GetMapping("/get/login")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
         return ResultUtils.success(userService.getLoginUserVO(user));
@@ -114,12 +116,12 @@ public class UserController {
     /**
      * 创建用户
      *
-     * @param userAddRequest
-     * @param request
-     * @return
+     * @param userAddRequest 用户添加请求
+     * @param request        请求
+     * @return 用户 id
      */
     @PostMapping("/add")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Long> addUser(@RequestBody UserAddRequest userAddRequest, HttpServletRequest request) {
         if (userAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -138,12 +140,12 @@ public class UserController {
     /**
      * 删除用户
      *
-     * @param deleteRequest
-     * @param request
-     * @return
+     * @param deleteRequest 用户删除请求
+     * @param request       请求
+     * @return 是否成功
      */
     @PostMapping("/delete")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -155,12 +157,12 @@ public class UserController {
     /**
      * 更新用户
      *
-     * @param userUpdateRequest
-     * @param request
-     * @return
+     * @param userUpdateRequest 用户更新请求
+     * @param request           请求
+     * @return 是否成功
      */
     @PostMapping("/update")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest,
                                             HttpServletRequest request) {
         if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
@@ -176,12 +178,12 @@ public class UserController {
     /**
      * 根据 id 获取用户（仅管理员）
      *
-     * @param id
-     * @param request
-     * @return
+     * @param id      用户 id
+     * @param request 请求
+     * @return 用户信息
      */
     @GetMapping("/get")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<User> getUserById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -194,9 +196,9 @@ public class UserController {
     /**
      * 根据 id 获取包装类
      *
-     * @param id
-     * @param request
-     * @return
+     * @param id      用户 id
+     * @param request 请求
+     * @return 用户信息
      */
     @GetMapping("/get/vo")
     public BaseResponse<UserVO> getUserVOById(long id, HttpServletRequest request) {
@@ -208,12 +210,12 @@ public class UserController {
     /**
      * 分页获取用户列表（仅管理员）
      *
-     * @param userQueryRequest
-     * @param request
-     * @return
+     * @param userQueryRequest 用户查询请求
+     * @param request          请求
+     * @return 用户列表
      */
     @PostMapping("/list/page")
-    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest,
                                                    HttpServletRequest request) {
         long current = userQueryRequest.getCurrent();
@@ -226,9 +228,9 @@ public class UserController {
     /**
      * 分页获取用户封装列表
      *
-     * @param userQueryRequest
-     * @param request
-     * @return
+     * @param userQueryRequest 用户查询请求
+     * @param request          请求
+     * @return 用户列表
      */
     @PostMapping("/list/page/vo")
     public BaseResponse<Page<UserVO>> listUserVOByPage(@RequestBody UserQueryRequest userQueryRequest,
@@ -253,9 +255,9 @@ public class UserController {
     /**
      * 更新个人信息
      *
-     * @param userUpdateMyRequest
-     * @param request
-     * @return
+     * @param userUpdateMyRequest 个人信息更新请求
+     * @param request             请求
+     * @return 是否成功
      */
     @PostMapping("/update/my")
     public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,

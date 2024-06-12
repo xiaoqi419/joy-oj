@@ -124,7 +124,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getLoginUser(HttpServletRequest request) {
         // 先判断是否已登录
-//        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) StpUtil.getSession().get("user");
         if (currentUser == null || currentUser.getId() == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
@@ -177,7 +176,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户注销
-     *
      */
     @Override
     public boolean userLogout() {
