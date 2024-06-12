@@ -1,5 +1,7 @@
 package com.ojason.joyoj.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @ClassName : VerifyService
  * @Description : 验证服务
@@ -9,5 +11,5 @@ package com.ojason.joyoj.service;
 public interface VerifyService {
 
 
-
+    void getArithmetic(HttpServletResponse response);
 }

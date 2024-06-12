@@ -1,8 +1,13 @@
 package com.ojason.joyoj.controller;
 
+import com.ojason.joyoj.service.VerifyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @program: joyoj-backend
@@ -17,5 +22,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class VerifyController {
 
+    private final VerifyService verifyService;
 
+    @Autowired
+    public VerifyController(VerifyService verifyService) {
+        this.verifyService = verifyService;
+    }
+
+    /**
+     * 获取四则运算验证码
+     */
+    @GetMapping("/arithmetic")
+    public void getArithmetic(HttpServletResponse response) {
+        verifyService.getArithmetic(response);
+    }
 }
