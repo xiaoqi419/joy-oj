@@ -273,4 +273,27 @@ public class UserController {
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
+
+    /**
+     * 忘记密码
+     */
+    @PostMapping("/forget")
+    public BaseResponse<String> forgetPassword(@RequestBody UserForgetPasswordRequest userForgetPasswordRequest) {
+        if (userForgetPasswordRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String userAccount = userForgetPasswordRequest.getUserAccount();
+        String newPassword = userForgetPasswordRequest.getNewPassword();
+        String code = userForgetPasswordRequest.getCode();
+
+        if (StringUtils.isAnyBlank(userAccount, newPassword, code)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean result = userService.forgetPassword(userAccount, newPassword, code);
+        if (!result) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR);
+        }
+        return ResultUtils.success("修改成功");
+    }
+
 }

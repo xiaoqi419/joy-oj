@@ -15,10 +15,12 @@ import com.ojason.joyoj.model.enums.UserRoleEnum;
 import com.ojason.joyoj.model.vo.LoginUserVO;
 import com.ojason.joyoj.model.vo.UserVO;
 import com.ojason.joyoj.service.UserService;
+import com.ojason.joyoj.service.VerifyService;
 import com.ojason.joyoj.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -42,7 +44,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 盐值，混淆密码
      */
-    public static final String SALT = "yupi";
+    public static final String SALT = "joy";
+
+    private final VerifyService verifyService;
+
+    @Autowired
+    public UserServiceImpl(VerifyService verifyService) {
+        this.verifyService = verifyService;
+    }
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -239,5 +248,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    @Override
+    public boolean forgetPassword(String userAccount, String userPassword, String checkPassword) {
+        boolean verifyCaptcha = verifyService.verifyCaptcha(checkPassword);
+        if (verifyCaptcha) {
+            // 1. 校验
+            if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+            }
+            // 查询当前修改用户是否存在
+            User currentUser = this.getOne(new QueryWrapper<User>().eq("userAccount", userAccount));
+            if (currentUser == null) {
+                log.info("forget password failed, userAccount cannot match userPassword");
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+            }
+            // 2. 加密
+            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+            // 3. 更新密码
+            currentUser.setUserPassword(encryptPassword);
+            boolean updateResult = this.updateById(currentUser);
+            if (!updateResult) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "修改密码失败，数据库错误");
+            }
+            return true;
+        }
+        throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误");
     }
 }

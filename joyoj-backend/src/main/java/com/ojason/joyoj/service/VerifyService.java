@@ -11,5 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 public interface VerifyService {
 
 
+    /**
+     * 获取验证码
+     *
+     * @param response 响应
+     */
     void getArithmetic(HttpServletResponse response);
+
+    /**
+     * 验证验证码
+     */
+    boolean verifyCaptcha(String captchaCode);
 }

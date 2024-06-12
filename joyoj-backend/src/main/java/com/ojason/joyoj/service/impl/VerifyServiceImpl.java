@@ -1,9 +1,9 @@
 package com.ojason.joyoj.service.impl;
 
-import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.session.SaSessionCustomUtil;
 import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.ShearCaptcha;
-import cn.hutool.captcha.generator.MathGenerator;
+import cn.hutool.captcha.CircleCaptcha;
 import com.ojason.joyoj.service.VerifyService;
 import org.springframework.stereotype.Service;
 
@@ -25,19 +25,29 @@ public class VerifyServiceImpl implements VerifyService {
 
     @Override
     public void getArithmetic(HttpServletResponse response) {
-        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(200, 45, 4, 4);
+        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 4, 20);
         response.setContentType("image/png");
-        // 自定义验证码内容为四则运算方式
-        captcha.setGenerator(new MathGenerator());
         // 重新生成code
         captcha.createCode();
         // 输出code到浏览器的流
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             captcha.write(outputStream);
-            StpUtil.getSession().set("CaptchaCode", captcha.getCode());
+            SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
+            session.set("code", captcha.getCode());
         } catch (IOException e) {
             throw new IllegalArgumentException("验证码获取失败");
         }
 
+    }
+
+    @Override
+    public boolean verifyCaptcha(String captchaCode) {
+        SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
+        String code = (String) session.get("code");
+        // 不区分大小写
+        if (!code.equalsIgnoreCase(captchaCode)) {
+            throw new IllegalArgumentException("验证码错误");
+        }
+        return true;
     }
 }

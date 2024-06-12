@@ -30,9 +30,9 @@ public class VerifyController {
     }
 
     /**
-     * 获取四则运算验证码
+     * 获取验证码
      */
-    @GetMapping("/arithmetic")
+    @GetMapping("/captcha")
     public void getArithmetic(HttpServletResponse response) {
         verifyService.getArithmetic(response);
     }

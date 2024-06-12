@@ -7,7 +7,6 @@ import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.vo.LoginUserVO;
 import com.ojason.joyoj.model.vo.UserVO;
 
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -110,4 +109,8 @@ public interface UserService extends IService<User> {
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
+    /**
+     * 忘记密码
+     */
+    boolean forgetPassword(String userAccount, String userPassword, String checkPassword);
 }
