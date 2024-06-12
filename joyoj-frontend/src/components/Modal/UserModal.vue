@@ -18,6 +18,7 @@
           :rules="rules"
           ref="longinFormRef"
           style="max-width: 400px;"
+          @submit="doLogin"
         >
           <a-form-item field="userAccount" validate-trigger="blur">
             <a-input v-model="formLabelAlign.userAccount" placeholder="用户名" allow-clear>
@@ -49,18 +50,22 @@
               </a-space>
             </div>
           </a-form-item>
+          <a-form-item content-flex>
+            <!-- 登录 -->
+            <div style="width: 100%;justify-content: center">
+              <button @submit="doLogin" v-if="loading">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front text">登录</span>
+              </button>
+              <a-spin v-else dot class="mr-4"/>
+            </div>
+          </a-form-item>
         </a-form>
-        <!-- 登录 -->
-        <div>
-          <button>
-            <span class="shadow"></span>
-            <span class="edge"></span>
-            <span class="front text">登录</span>
-          </button>
-        </div>
       </div>
     </a-modal>
   </div>
+
 </template>
 
 <script lang="ts" setup>
@@ -68,7 +73,9 @@ import useModalStore from '@/store/modules/modal'
 import { storeToRefs } from 'pinia'
 import { defineComponent, reactive, ref, watch } from 'vue'
 import '@/assets/userModal.scss'
-import { FieldRule } from '@arco-design/web-vue'
+import { FieldRule, Message } from '@arco-design/web-vue'
+import { UserControllerService } from '../../../generated'
+import useUserStore from '@/store/modules/user'
 
 defineComponent({
   name: 'UserModal'
@@ -111,12 +118,41 @@ const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
       minLength: 8,
       maxLength: 20,
       message: '密码长度在 8 到 20 个字符'
+    },
+    {
+      validator (value, callback) {
+        // 密码不能是非法字符
+        const reg = /^[a-zA-Z0-9_]+$/
+        if (!reg.test(value)) {
+          const errorMsg = '密码只能包含字母、数字、下划线'
+          return callback(errorMsg)
+        }
+      }
     }
   ],
   userAccount: [
     {
       required: true,
       message: '请输入用户名'
+    },
+    {
+      validator (value, callback) {
+        if (!value) {
+          const errorMsg = '请输入用户名'
+          return callback(errorMsg)
+        }
+        // 只允许输入字母、数字、下划线
+        const reg = /^[a-zA-Z0-9_]+$/
+        if (!reg.test(value)) {
+          const errorMsg = '用户名只能包含字母、数字、下划线'
+          return callback(errorMsg)
+        }
+        if (value.length < 4 || value.length > 20) {
+          const errorMsg = '用户名长度在 4 到 20 个字符'
+          return callback(errorMsg)
+        }
+        return callback()
+      }
     }
   ]
 })
@@ -126,6 +162,32 @@ const doRegister = () => {
   modalStore.userModal.value = false
   modalStore.registerModal.value = true
 }
+// 登录
+const loading = ref(true)
+const { userInfo } = storeToRefs(useUserStore())
+const doLogin = async ({ errors }: any) => {
+  // 验证表单
+  if (errors === undefined) {
+    loading.value = false
+    const res = await UserControllerService.userLoginUsingPost({
+      userAccount: formLabelAlign.userAccount,
+      userPassword: formLabelAlign.userPassword
+    })
+    if (res.code === 20000) {
+      // 登录成功
+      modalStore.userModal.value = false
+      Message.success('登录成功!')
+      userInfo.value = res.data
+      loading.value = true
+      formLabelAlign.userAccount = ''
+      formLabelAlign.userPassword = ''
+    } else {
+      Message.error(res.message)
+      loading.value = true
+    }
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>

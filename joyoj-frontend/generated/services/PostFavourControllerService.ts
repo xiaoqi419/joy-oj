@@ -2,8 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse_int_ } from '../models/BaseResponse_int_';
-import type { BaseResponse_Page_PostVO_ } from '../models/BaseResponse_Page_PostVO_';
+import type { BaseResponse } from '../models/BaseResponse';
 import type { PostFavourAddRequest } from '../models/PostFavourAddRequest';
 import type { PostFavourQueryRequest } from '../models/PostFavourQueryRequest';
 import type { PostQueryRequest } from '../models/PostQueryRequest';
@@ -14,13 +13,13 @@ export class PostFavourControllerService {
     /**
      * doPostFavour
      * @param postFavourAddRequest postFavourAddRequest
-     * @returns BaseResponse_int_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static doPostFavourUsingPost(
         postFavourAddRequest: PostFavourAddRequest,
-    ): CancelablePromise<BaseResponse_int_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/post_favour/',
@@ -35,13 +34,13 @@ export class PostFavourControllerService {
     /**
      * listFavourPostByPage
      * @param postFavourQueryRequest postFavourQueryRequest
-     * @returns BaseResponse_Page_PostVO_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static listFavourPostByPageUsingPost(
         postFavourQueryRequest: PostFavourQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_PostVO_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/post_favour/list/page',
@@ -56,13 +55,13 @@ export class PostFavourControllerService {
     /**
      * listMyFavourPostByPage
      * @param postQueryRequest postQueryRequest
-     * @returns BaseResponse_Page_PostVO_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static listMyFavourPostByPageUsingPost(
         postQueryRequest: PostQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_PostVO_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/post_favour/my/list/page',

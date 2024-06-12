@@ -6,6 +6,8 @@ import useModalStore from '@/store/modules/modal'
 import useUserStore from '@/store/modules/user'
 import { storeToRefs } from 'pinia'
 import checkAccess from '@/utils/checkAccess'
+import { Message } from '@arco-design/web-vue'
+import { UserControllerService } from '../../../generated'
 
 defineComponent({
   name: 'GlobalNavbar'
@@ -47,6 +49,17 @@ const showRegisterModal = () => {
   modalStore.registerModal = true
 }
 
+// 退出登录
+const doLogout = async () => {
+  const res = await UserControllerService.userLogoutUsingPost()
+  if (res.code === 20000) {
+    useUserStore().resetUserInfo()
+    Message.success('退出登录成功')
+  } else {
+    Message.error('退出登录失败')
+  }
+}
+
 </script>
 
 <template>
@@ -72,13 +85,15 @@ const showRegisterModal = () => {
       <a-col flex="100px">
         <div>
           <a-dropdown trigger="hover">
-            <a-avatar :style="{ backgroundColor: '#3370ff' }">
+            <a-avatar v-if="userInfo.userAvatar === ''" :style="{ backgroundColor: '#3370ff' }">
+              <IconUser/>
+            </a-avatar>
+            <a-avatar v-else>
               <img
-                v-if="userInfo.userAvatar !== ''"
                 alt="avatar"
                 :src="userInfo.userAvatar"
+                style="width: 100%; height: 100%;"
               />
-              <IconUser v-else/>
             </a-avatar>
             <template #content>
               <a-menu v-if="userInfo.userName === ''">
@@ -86,8 +101,8 @@ const showRegisterModal = () => {
                 <a-menu-item key="2" @click="showRegisterModal">去注册</a-menu-item>
               </a-menu>
               <a-menu v-else>
-                <a-menu-item key="1">个人中心</a-menu-item>
-                <a-menu-item key="2">退出登录</a-menu-item>
+                <a-menu-item key="3">个人中心</a-menu-item>
+                <a-menu-item key="4" @click="doLogout">退出登录</a-menu-item>
               </a-menu>
             </template>
           </a-dropdown>

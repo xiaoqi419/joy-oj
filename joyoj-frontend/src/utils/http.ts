@@ -6,6 +6,7 @@ import axios, {
   InternalAxiosRequestConfig
 } from 'axios'
 import { Message as ARMessage } from '@arco-design/web-vue'
+import { useRouter } from 'vue-router'
 
 /**
  * Request: 对 Axios 进行二次封装
@@ -38,8 +39,9 @@ class Request {
       return response
     }, err => {
       if (err && err.response) {
-        if (err.response.status === 401) {
-          // TODO 无权限时的操作
+        if (err.response.code === 40100) {
+          const router = useRouter()
+          router.push('/403')
         }
 
         if (err.response.data) {
@@ -85,8 +87,8 @@ class Request {
 
 // 默认配置
 const defaultConfig: CreateAxiosDefaults = {
-  timeout: 5000
-  // baseURL: import.meta.env.VITE_BASE_API
+  timeout: 5000,
+  baseURL: import.meta.env.VITE_BASE_API
 }
 
 // 导出 Request 类的对象

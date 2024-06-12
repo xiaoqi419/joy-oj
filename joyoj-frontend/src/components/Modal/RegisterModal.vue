@@ -18,6 +18,7 @@
           :rules="rules"
           ref="longinFormRef"
           style="max-width: 400px;"
+          @submit="doVerify"
         >
           <a-form-item field="userAccount" validate-trigger="blur">
             <a-input v-model="formLabelAlign.userAccount" placeholder="用户名" allow-clear>
@@ -54,9 +55,14 @@
               </template>
             </a-input-password>
           </a-form-item>
+          <a-form-item content-flex>
+            <div style="width: 100%;justify-content: center">
+              <!-- 注册 -->
+              <a-button html-type="submit" :loading="loading" type="primary" size="large">注册</a-button>
+            </div>
+
+          </a-form-item>
         </a-form>
-        <!-- 登录 -->
-        <a-button :loading="loading" type="primary" size="large" @click="doVerify">注册</a-button>
 
       </div>
     </a-modal>
@@ -71,9 +77,10 @@
 import useModalStore from '@/store/modules/modal'
 import { storeToRefs } from 'pinia'
 import { defineComponent, reactive, ref, watch } from 'vue'
-import { FieldRule } from '@arco-design/web-vue'
+import { FieldRule, Message } from '@arco-design/web-vue'
 import Verify from '@/components/Verify/verify.vue'
 import '@/assets/userModal.scss'
+import { UserControllerService } from '../../../generated'
 
 defineComponent({
   name: 'RegisterModal',
@@ -174,14 +181,34 @@ const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
     }
   ]
 })
-const doVerify = () => {
-  verifyModal.value = true
+// 校验通过后打开验证码弹窗
+const longinFormRef = ref()
+const doVerify = (value: any) => {
+  if (value.errors === undefined) {
+    verifyModal.value = true
+  }
 }
 // 验证通过后注册
-const doRegister = (e: object) => {
+const doRegister = async (e: object) => {
   console.log(e)
   verifyModal.value = false
   loading.value = true
+  // 注册
+  const res = await UserControllerService.userRegisterUsingPost({
+    userAccount: formLabelAlign.userAccount,
+    userPassword: formLabelAlign.userPassword,
+    checkPassword: formLabelAlign.checkPassword
+  })
+  if (res.code === 20000) {
+    // 注册成功
+    modalStore.registerModal.value = false
+    loading.value = false
+    Message.success('注册成功')
+  } else {
+    // 注册失败
+    loading.value = false
+    Message.error(res.message)
+  }
 }
 </script>
 

@@ -30,7 +30,13 @@ export default defineConfig({
   server: {
     port: 3000,
     cors: true,
-    proxy: {}
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8101/',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
   },
   envDir: path.resolve(__dirname, './env')
 })

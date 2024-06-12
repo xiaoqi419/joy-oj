@@ -6,12 +6,11 @@ const isShow = ref(true)
 const emit = defineEmits(['success', 'fail'])
 
 function onSuccess () {
-  console.log('验证成功')
   emit('success', { success: true })
 }
 
 function onFail () {
-  console.log('验证失败')
+  emit('fail', { success: false })
 }
 </script>
 
