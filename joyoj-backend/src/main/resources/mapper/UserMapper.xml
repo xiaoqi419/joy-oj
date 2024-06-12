@@ -7,8 +7,6 @@
 <mapper namespace="com.ojason.joyoj.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="com.ojason.joyoj.model.entity.User">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="unionId" column="unionId" jdbcType="VARCHAR"/>
-        <result property="mpOpenId" column="mpOpenId" jdbcType="VARCHAR"/>
         <result property="userName" column="userName" jdbcType="VARCHAR"/>
         <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>
         <result property="userProfile" column="userProfile" jdbcType="VARCHAR"/>
@@ -19,8 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,unionId,mpOpenId,
-        userName,userAvatar,userProfile,
+        id,userName,userAvatar,userProfile,
         userRole,createTime,updateTime,isDelete
     </sql>
 </mapper>

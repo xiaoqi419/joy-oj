@@ -27,10 +27,7 @@ import java.util.List;
 import static com.ojason.joyoj.service.impl.UserServiceImpl.SALT;
 
 /**
- * 用户接口
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * 用户相关接口
  */
 @RestController
 @RequestMapping("/user")
@@ -46,8 +43,8 @@ public class UserController {
     /**
      * 用户注册
      *
-     * @param userRegisterRequest
-     * @return
+     * @param userRegisterRequest 用户注册请求
+     * @return 用户 id
      */
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -67,9 +64,9 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param userLoginRequest
-     * @param request
-     * @return
+     * @param userLoginRequest 用户登录请求
+     * @param request          请求
+     * @return 登录用户信息
      */
     @PostMapping("/login")
     public BaseResponse<LoginUserVO> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
@@ -89,15 +86,11 @@ public class UserController {
     /**
      * 用户注销
      *
-     * @param request
-     * @return
+     * @return 是否成功
      */
     @PostMapping("/logout")
-    public BaseResponse<Boolean> userLogout(HttpServletRequest request) {
-        if (request == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        boolean result = userService.userLogout(request);
+    public BaseResponse<Boolean> userLogout() {
+        boolean result = userService.userLogout();
         return ResultUtils.success(result);
     }
 
@@ -107,6 +100,7 @@ public class UserController {
      * @param request
      * @return
      */
+
     @GetMapping("/get/login")
     public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
         User user = userService.getLoginUser(request);
