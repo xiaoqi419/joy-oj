@@ -1,5 +1,7 @@
 package com.ojason.joyoj.service.impl;
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.session.SaSessionCustomUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
@@ -9,6 +11,7 @@ import com.ojason.joyoj.common.ErrorCode;
 import com.ojason.joyoj.constant.CommonConstant;
 import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.mapper.UserMapper;
+import com.ojason.joyoj.model.dto.user.UserForgetPasswordRequest;
 import com.ojason.joyoj.model.dto.user.UserQueryRequest;
 import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.enums.UserRoleEnum;
@@ -21,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ojason.joyoj.constant.RedisConstant.SEND_EMAIL_CODE;
 import static com.ojason.joyoj.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
@@ -48,9 +53,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final VerifyService verifyService;
 
+    private final RedisTemplate<String, Object> redisTemplate;
+
     @Autowired
-    public UserServiceImpl(VerifyService verifyService) {
+    public UserServiceImpl(VerifyService verifyService, RedisTemplate<String, Object> redisTemplate) {
         this.verifyService = verifyService;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -251,15 +259,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public boolean forgetPassword(String userAccount, String userPassword, String checkPassword) {
-        boolean verifyCaptcha = verifyService.verifyCaptcha(checkPassword);
+    public boolean forgetPassword(UserForgetPasswordRequest userForgetPasswordRequest) {
+        boolean verifyCaptcha = verifyService.verifyCaptcha(userForgetPasswordRequest.getCode());
         if (verifyCaptcha) {
-            // 1. 校验
-            if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
+            // 1. 校验邮箱验证码
+            String verifyCode = (String) redisTemplate.opsForValue().get(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
+            System.out.println(verifyCode);
+            if (StringUtils.isBlank(verifyCode) || !verifyCode.equals(userForgetPasswordRequest.getEmailCode())) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱验证码错误");
+            }
+            //  校验
+            String userAccount = userForgetPasswordRequest.getUserAccount();
+            String userPassword = userForgetPasswordRequest.getNewPassword();
+            String userEmail = userForgetPasswordRequest.getUserEmail();
+            if (StringUtils.isAnyBlank(userAccount, userPassword)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
             }
             // 查询当前修改用户是否存在
-            User currentUser = this.getOne(new QueryWrapper<User>().eq("userAccount", userAccount));
+            User currentUser = this.getOne(new QueryWrapper<User>().eq("userAccount", userAccount).eq("userEmail", userEmail));
             if (currentUser == null) {
                 log.info("forget password failed, userAccount cannot match userPassword");
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
@@ -272,6 +289,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             if (!updateResult) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "修改密码失败，数据库错误");
             }
+            // 修改成功删除验证码
+            redisTemplate.delete(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
+            SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
+            session.delete("code");
             return true;
         }
         throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误");

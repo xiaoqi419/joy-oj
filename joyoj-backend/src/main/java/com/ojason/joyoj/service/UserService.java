@@ -2,6 +2,7 @@ package com.ojason.joyoj.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ojason.joyoj.model.dto.user.UserForgetPasswordRequest;
 import com.ojason.joyoj.model.dto.user.UserQueryRequest;
 import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.vo.LoginUserVO;
@@ -112,5 +113,5 @@ public interface UserService extends IService<User> {
     /**
      * 忘记密码
      */
-    boolean forgetPassword(String userAccount, String userPassword, String checkPassword);
+    boolean forgetPassword(UserForgetPasswordRequest userForgetPasswordRequest);
 }

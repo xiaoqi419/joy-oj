@@ -1,5 +1,7 @@
 package com.ojason.joyoj.service;
 
+import com.ojason.joyoj.common.BaseResponse;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -22,4 +24,9 @@ public interface VerifyService {
      * 验证验证码
      */
     boolean verifyCaptcha(String captchaCode);
+
+    /**
+     * 获取邮箱验证码
+     */
+    BaseResponse<Boolean> getEmailCode(String email);
 }

@@ -282,14 +282,7 @@ public class UserController {
         if (userForgetPasswordRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        String userAccount = userForgetPasswordRequest.getUserAccount();
-        String newPassword = userForgetPasswordRequest.getNewPassword();
-        String code = userForgetPasswordRequest.getCode();
-
-        if (StringUtils.isAnyBlank(userAccount, newPassword, code)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        boolean result = userService.forgetPassword(userAccount, newPassword, code);
+        boolean result = userService.forgetPassword(userForgetPasswordRequest);
         if (!result) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR);
         }

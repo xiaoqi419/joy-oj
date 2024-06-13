@@ -1,21 +1,21 @@
 package com.ojason.joyoj.controller;
 
+import com.ojason.joyoj.common.BaseResponse;
+import com.ojason.joyoj.common.ErrorCode;
+import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.service.VerifyService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @program: joyoj-backend
- * @ClassName: VerifyController
- * @description: 验证控制器
- * @author: Jason
- * @create: 2024-06-10 17:15
- * @from: <a href="https://www.ojason.top">我的博客</a>
+ * 验证码接口
  */
 @RestController
 @RequestMapping("/verify")
@@ -35,5 +35,16 @@ public class VerifyController {
     @GetMapping("/captcha")
     public void getArithmetic(HttpServletResponse response) {
         verifyService.getArithmetic(response);
+    }
+
+    /**
+     * 获取邮箱验证码
+     */
+    @GetMapping("/email")
+    public BaseResponse<Boolean> getEmailCode(@RequestParam("email") String email) {
+        if (StringUtils.isBlank(email)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return verifyService.getEmailCode(email);
     }
 }
