@@ -2,14 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
-import type { BaseResponse_LoginUserVO_ } from '../models/BaseResponse_LoginUserVO_';
-import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
-import type { BaseResponse_Page_User_ } from '../models/BaseResponse_Page_User_';
-import type { BaseResponse_Page_UserVO_ } from '../models/BaseResponse_Page_UserVO_';
-import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
-import type { BaseResponse_User_ } from '../models/BaseResponse_User_';
-import type { BaseResponse_UserVO_ } from '../models/BaseResponse_UserVO_';
+import type { BaseResponse } from '../models/BaseResponse';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { UserAddRequest } from '../models/UserAddRequest';
 import type { UserForgetPasswordRequest } from '../models/UserForgetPasswordRequest';
@@ -25,13 +18,13 @@ export class UserControllerService {
     /**
      * addUser
      * @param userAddRequest userAddRequest
-     * @returns BaseResponse_long_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static addUserUsingPost(
         userAddRequest: UserAddRequest,
-    ): CancelablePromise<BaseResponse_long_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/add',
@@ -46,13 +39,13 @@ export class UserControllerService {
     /**
      * deleteUser
      * @param deleteRequest deleteRequest
-     * @returns BaseResponse_boolean_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static deleteUserUsingPost(
         deleteRequest: DeleteRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/delete',
@@ -67,13 +60,13 @@ export class UserControllerService {
     /**
      * forgetPassword
      * @param userForgetPasswordRequest userForgetPasswordRequest
-     * @returns BaseResponse_string_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static forgetPasswordUsingPost(
         userForgetPasswordRequest: UserForgetPasswordRequest,
-    ): CancelablePromise<BaseResponse_string_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/forget',
@@ -88,12 +81,12 @@ export class UserControllerService {
     /**
      * getUserById
      * @param id id
-     * @returns BaseResponse_User_ OK
+     * @returns BaseResponse OK
      * @throws ApiError
      */
     public static getUserByIdUsingGet(
         id?: number,
-    ): CancelablePromise<BaseResponse_User_> {
+    ): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/user/get',
@@ -109,10 +102,10 @@ export class UserControllerService {
     }
     /**
      * getLoginUser
-     * @returns BaseResponse_LoginUserVO_ OK
+     * @returns BaseResponse OK
      * @throws ApiError
      */
-    public static getLoginUserUsingGet(): CancelablePromise<BaseResponse_LoginUserVO_> {
+    public static getLoginUserUsingGet(): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/user/get/login',
@@ -126,12 +119,12 @@ export class UserControllerService {
     /**
      * getUserVOById
      * @param id id
-     * @returns BaseResponse_UserVO_ OK
+     * @returns BaseResponse OK
      * @throws ApiError
      */
     public static getUserVoByIdUsingGet(
         id?: number,
-    ): CancelablePromise<BaseResponse_UserVO_> {
+    ): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/user/get/vo',
@@ -148,13 +141,13 @@ export class UserControllerService {
     /**
      * listUserByPage
      * @param userQueryRequest userQueryRequest
-     * @returns BaseResponse_Page_User_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static listUserByPageUsingPost(
         userQueryRequest: UserQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_User_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/list/page',
@@ -169,13 +162,13 @@ export class UserControllerService {
     /**
      * listUserVOByPage
      * @param userQueryRequest userQueryRequest
-     * @returns BaseResponse_Page_UserVO_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static listUserVoByPageUsingPost(
         userQueryRequest: UserQueryRequest,
-    ): CancelablePromise<BaseResponse_Page_UserVO_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/list/page/vo',
@@ -190,13 +183,13 @@ export class UserControllerService {
     /**
      * userLogin
      * @param userLoginRequest userLoginRequest
-     * @returns BaseResponse_LoginUserVO_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static userLoginUsingPost(
         userLoginRequest: UserLoginRequest,
-    ): CancelablePromise<BaseResponse_LoginUserVO_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/login',
@@ -210,11 +203,11 @@ export class UserControllerService {
     }
     /**
      * userLogout
-     * @returns BaseResponse_boolean_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
-    public static userLogoutUsingPost(): CancelablePromise<BaseResponse_boolean_ | any> {
+    public static userLogoutUsingPost(): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/logout',
@@ -228,13 +221,13 @@ export class UserControllerService {
     /**
      * userRegister
      * @param userRegisterRequest userRegisterRequest
-     * @returns BaseResponse_long_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static userRegisterUsingPost(
         userRegisterRequest: UserRegisterRequest,
-    ): CancelablePromise<BaseResponse_long_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/register',
@@ -249,13 +242,13 @@ export class UserControllerService {
     /**
      * updateUser
      * @param userUpdateRequest userUpdateRequest
-     * @returns BaseResponse_boolean_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static updateUserUsingPost(
         userUpdateRequest: UserUpdateRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/update',
@@ -270,13 +263,13 @@ export class UserControllerService {
     /**
      * updateMyUser
      * @param userUpdateMyRequest userUpdateMyRequest
-     * @returns BaseResponse_boolean_ OK
+     * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
     public static updateMyUserUsingPost(
         userUpdateMyRequest: UserUpdateMyRequest,
-    ): CancelablePromise<BaseResponse_boolean_ | any> {
+    ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/user/update/my',

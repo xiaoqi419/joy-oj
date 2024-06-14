@@ -2,6 +2,7 @@ package com.ojason.joyoj.service.impl;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.session.SaSessionCustomUtil;
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
@@ -126,10 +127,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
         // 3. 记录用户的登录态
-//        request.getSession().setAttribute(USER_LOGIN_STATE, user);
         StpUtil.login(user.getId());
+        SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
         StpUtil.getSession().set("user", user);
-        return this.getLoginUserVO(user);
+        return this.getLoginUserVO(user, tokenInfo);
+    }
+
+    private LoginUserVO getLoginUserVO(User user, SaTokenInfo tokenInfo) {
+        LoginUserVO loginUserVO = new LoginUserVO();
+        BeanUtils.copyProperties(user, loginUserVO);
+        loginUserVO.setTokenInfo(tokenInfo);
+        return loginUserVO;
     }
 
     /**

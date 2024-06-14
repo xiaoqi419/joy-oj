@@ -6,7 +6,11 @@ import ACCESS_ENUM from '@/assets/enum/accessEnum'
 const useUserStore = defineStore('user', () => {
   const userInfo = ref<any>({
     userName: '',
-    userAvatar: ''
+    userAvatar: '',
+    tokenInfo: {
+      tokenName: '',
+      tokenValue: ''
+    }
   })
 
   const updateUserInfo = (obj: any) => {
@@ -27,6 +31,10 @@ const useUserStore = defineStore('user', () => {
       userInfo.value = {
         userName: '',
         userAvatar: '',
+        tokenInfo: {
+          tokenName: '',
+          tokenValue: ''
+        },
         userRole: ACCESS_ENUM.NOT_LOGIN
       }
     }
@@ -41,7 +49,7 @@ const useUserStore = defineStore('user', () => {
 }, {
   persist: {
     key: 'userInfo',
-    storage: sessionStorage
+    storage: localStorage
   }
 })
 
