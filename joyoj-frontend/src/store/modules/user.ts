@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { LoginUserVO, UserControllerService } from '../../../generated'
+import { UserControllerService } from '../../../generated'
 import ACCESS_ENUM from '@/assets/enum/accessEnum'
 
 const useUserStore = defineStore('user', () => {
-  const userInfo = ref<LoginUserVO>({
+  const userInfo = ref<any>({
     userName: '',
     userAvatar: ''
   })

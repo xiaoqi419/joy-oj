@@ -60,7 +60,11 @@ class Request {
    * get 请求
    */
   public get<T> (url: string, params?: AxiosRequestConfig): Promise<T> {
-    return this.axiosInstance!.get(url, params).then(resp => resp.data).catch()
+    return this.axiosInstance!.get(url, params).then(resp => resp.data).catch(
+      (err) => {
+        console.log(err)
+      }
+    )
   }
 
   /**
