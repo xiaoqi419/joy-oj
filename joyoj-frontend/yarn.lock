@@ -689,6 +689,11 @@
   resolved "https://registry.npmmirror.com/@polka/url/-/url-1.0.0-next.25.tgz"
   integrity sha512-j7P6Rgr3mmtdkeDGTe0E/aYyWEWVtc5yFXtHCRHs28/jptDEWfaVOc5T7cblqy1XKPPfCxJc/8DwQ5YgLOZOVQ==
 
+"@pureadmin/utils@^2.4.7":
+  version "2.4.7"
+  resolved "https://registry.npmmirror.com/@pureadmin/utils/-/utils-2.4.7.tgz"
+  integrity sha512-fUHwZm9wEtcxUk//bs8xoDe0XYAeoU/FbvAF9CM4Y5xBmaaXvzN+sSFCUyUKC08q4tmCyaHBeLNolO3I4t3X6Q==
+
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.npmmirror.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz"

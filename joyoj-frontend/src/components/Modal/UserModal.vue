@@ -45,14 +45,14 @@
             <div class="btn-box">
               <a-checkbox v-model="formLabelAlign.type">记住我</a-checkbox>
               <a-space wrap>
-                <a-link type="primary">忘记密码</a-link>
+                <a-link type="primary" @click="doForget">忘记密码</a-link>
                 <a-link type="primary" @click="doRegister">没有账号？</a-link>
               </a-space>
             </div>
           </a-form-item>
           <a-form-item content-flex>
             <!-- 登录 -->
-            <div style="width: 100%;justify-content: center">
+            <div style="width: 92%;justify-content: center">
               <button @submit="doLogin" v-if="loading">
                 <span class="shadow"></span>
                 <span class="edge"></span>
@@ -188,6 +188,11 @@ const doLogin = async ({ errors }: any) => {
   }
 }
 
+// 打开忘记密码模态框
+const doForget = () => {
+  modalStore.userModal.value = false
+  modalStore.forgetModal.value = true
+}
 </script>
 
 <style lang="scss" scoped>
