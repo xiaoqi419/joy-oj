@@ -32,12 +32,14 @@ onMounted(() => {
 
 <template>
   <div id="app">
-    <BasicLayout/>
+    <BasicLayout class="layout"/>
     <UserModal v-if="modalStore.userModal.value"/>
     <RegisterModal v-if="modalStore.registerModal.value"/>
     <ForgetModal v-if="modalStore.forgetModal.value"/>
-    <a-back-top target-container="#app" :style="{position:'absolute'}">
-      <icon-caret-up/>
+    <a-back-top>
+      <a-button type="primary" shape="circle">
+        <icon-caret-up/>
+      </a-button>
     </a-back-top>
   </div>
 </template>

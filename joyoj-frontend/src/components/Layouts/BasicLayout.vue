@@ -14,7 +14,7 @@ defineComponent({
 </script>
 
 <template>
-  <a-layout style="height: 400px;">
+  <a-layout style="height: 400px;" class="layout">
     <a-layout-header>
       <!-- 导航 -->
       <GlobalNavbar/>
@@ -30,5 +30,10 @@ defineComponent({
 </template>
 
 <style scoped lang="scss">
-
+.layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+}
 </style>

@@ -60,6 +60,12 @@ const doLogout = async () => {
   }
 }
 
+// 个人中心
+
+const goProfile = () => {
+  router.push('/profile')
+}
+
 </script>
 
 <template>
@@ -83,7 +89,7 @@ const doLogout = async () => {
         </a-menu>
       </a-col>
       <a-col flex="100px">
-        <div>
+        <div style="width: 100%;background: #fff;height: 60px;display: flex;align-items: center">
           <a-dropdown trigger="hover">
             <a-avatar v-if="userInfo.userAvatar === ''" :style="{ backgroundColor: '#3370ff' }">
               <IconUser/>
@@ -101,7 +107,7 @@ const doLogout = async () => {
                 <a-menu-item key="2" @click="showRegisterModal">去注册</a-menu-item>
               </a-menu>
               <a-menu v-else>
-                <a-menu-item key="3">个人中心</a-menu-item>
+                <a-menu-item key="3" @click="goProfile">个人中心</a-menu-item>
                 <a-menu-item key="4" @click="doLogout">退出登录</a-menu-item>
               </a-menu>
             </template>

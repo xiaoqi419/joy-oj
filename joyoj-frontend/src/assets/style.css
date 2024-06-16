@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  background: rgba(247, 248, 250, 1);
 }
 
 /* 定义滚动条的宽度和背景颜色 */
@@ -10,7 +11,7 @@ body {
 
 /* 定义滚动条滑块的样式 */
 ::-webkit-scrollbar-thumb {
-  
+
   background: linear-gradient(92.06deg, #33c2ff -17.9%, #257cff 43.39%, #165dff 99.4%);
   border-radius: 10px;
 }
@@ -20,6 +21,8 @@ body {
   background: #165dff;
 }
 
-
+.pd-box {
+  padding: 20px 190px
+}
 
 
