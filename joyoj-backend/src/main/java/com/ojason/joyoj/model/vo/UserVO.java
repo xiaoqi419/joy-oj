@@ -43,4 +43,8 @@ public class UserVO implements Serializable {
      * 邮箱
      */
     private String userEmail;
+    /**
+     * 用户性别
+     */
+    private Integer userSex;
 }

@@ -64,4 +64,9 @@ public class User implements Serializable {
      */
     @TableLogic
     private Integer isDelete;
+
+    /**
+     * 用户性别
+     */
+    private Integer userSex;
 }
