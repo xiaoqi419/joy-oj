@@ -46,4 +46,14 @@ public class LoginUserVO implements Serializable {
      * Token信息
      */
     private SaTokenInfo tokenInfo;
+
+    /**
+     * 邮箱
+     */
+    private String userEmail;
+
+    /**
+     * 用户性别
+     */
+    private Integer userSex;
 }
