@@ -55,6 +55,7 @@ const doLogout = async () => {
   if (res.code === 20000) {
     useUserStore().resetUserInfo()
     Message.success('退出登录成功')
+    await router.push('/')
   } else {
     Message.error('退出登录失败')
   }

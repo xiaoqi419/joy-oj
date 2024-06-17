@@ -64,7 +64,11 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: '/profile/info',
         name: 'ProfileInfo',
-        component: () => import('@/views/Profile/ProfileInfo.vue')
+        component: () => import('@/views/Profile/ProfileInfo.vue'),
+        meta: {
+          title: '个人信息',
+          access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+        }
       }
     ]
   }
