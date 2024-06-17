@@ -16,7 +16,8 @@ import java.io.File;
  * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @Component
-public class CosManager {
+public class
+CosManager {
 
     @Resource
     private CosClientConfig cosClientConfig;
@@ -27,7 +28,7 @@ public class CosManager {
     /**
      * 上传对象
      *
-     * @param key 唯一键
+     * @param key           唯一键
      * @param localFilePath 本地文件路径
      * @return
      */
@@ -40,7 +41,7 @@ public class CosManager {
     /**
      * 上传对象
      *
-     * @param key 唯一键
+     * @param key  唯一键
      * @param file 文件
      * @return
      */

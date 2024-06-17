@@ -10,6 +10,7 @@ import com.ojason.joyoj.manager.CosManager;
 import com.ojason.joyoj.model.dto.file.UploadFileRequest;
 import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.enums.FileUploadBizEnum;
+import com.ojason.joyoj.service.FileService;
 import com.ojason.joyoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -40,6 +41,9 @@ public class FileController {
 
     @Resource
     private CosManager cosManager;
+
+    @Resource
+    private FileService fileService;
 
     /**
      * 文件上传
@@ -96,14 +100,26 @@ public class FileController {
         long fileSize = multipartFile.getSize();
         // 文件后缀
         String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
-        final long ONE_M = 1024 * 1024L;
+        final long ONE_M = 1024 * 1024L * 2;
         if (FileUploadBizEnum.USER_AVATAR.equals(fileUploadBizEnum)) {
             if (fileSize > ONE_M) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件大小不能超过 1M");
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件大小不能超过 2M");
             }
             if (!Arrays.asList("jpeg", "jpg", "svg", "png", "webp").contains(fileSuffix)) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件类型错误");
             }
         }
+    }
+
+    /**
+     * 上传用户头像
+     *
+     * @param multipartFile 文件
+     * @return 文件路径
+     */
+    @PostMapping("/uploadAvatar")
+    public BaseResponse<String> uploadUserAvatar(@RequestPart("file") MultipartFile multipartFile) {
+        validFile(multipartFile, FileUploadBizEnum.USER_AVATAR);
+        return ResultUtils.success(fileService.upload(multipartFile));
     }
 }
