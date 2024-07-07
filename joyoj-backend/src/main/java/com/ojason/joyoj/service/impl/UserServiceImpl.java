@@ -147,7 +147,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return
      */
     @Override
-    public User getLoginUser(HttpServletRequest request) {
+    public User getLoginUser() {
         // 先判断是否已登录
         User currentUser = (User) StpUtil.getSession().get("user");
         if (currentUser == null || currentUser.getId() == null) {

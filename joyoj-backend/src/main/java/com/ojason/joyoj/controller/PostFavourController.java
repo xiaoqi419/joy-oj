@@ -48,17 +48,15 @@ public class PostFavourController {
      * 收藏 / 取消收藏
      *
      * @param postFavourAddRequest
-     * @param request
      * @return resultNum 收藏变化数
      */
     @PostMapping("/")
-    public BaseResponse<Integer> doPostFavour(@RequestBody PostFavourAddRequest postFavourAddRequest,
-                                              HttpServletRequest request) {
+    public BaseResponse<Integer> doPostFavour(@RequestBody PostFavourAddRequest postFavourAddRequest) {
         if (postFavourAddRequest == null || postFavourAddRequest.getPostId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 登录才能操作
-        final User loginUser = userService.getLoginUser(request);
+        final User loginUser = userService.getLoginUser();
         long postId = postFavourAddRequest.getPostId();
         int result = postFavourService.doPostFavour(postId, loginUser);
         return ResultUtils.success(result);
@@ -76,7 +74,7 @@ public class PostFavourController {
         if (postQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService.getLoginUser();
         long current = postQueryRequest.getCurrent();
         long size = postQueryRequest.getPageSize();
         // 限制爬虫

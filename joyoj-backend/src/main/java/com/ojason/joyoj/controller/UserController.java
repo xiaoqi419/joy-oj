@@ -99,13 +99,12 @@ public class UserController {
     /**
      * 获取当前登录用户
      *
-     * @param request 请求
      * @return 登录用户信息
      */
     @GetMapping("/get/login")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
-        User user = userService.getLoginUser(request);
+    public BaseResponse<LoginUserVO> getLoginUser() {
+        User user = userService.getLoginUser();
         return ResultUtils.success(userService.getLoginUserVO(user));
     }
 
@@ -256,16 +255,14 @@ public class UserController {
      * 更新个人信息
      *
      * @param userUpdateMyRequest 个人信息更新请求
-     * @param request             请求
      * @return 是否成功
      */
     @PostMapping("/update/my")
-    public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest,
-                                              HttpServletRequest request) {
+    public BaseResponse<Boolean> updateMyUser(@RequestBody UserUpdateMyRequest userUpdateMyRequest) {
         if (userUpdateMyRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
+        User loginUser = userService.getLoginUser();
         User user = new User();
         BeanUtils.copyProperties(userUpdateMyRequest, user);
         user.setId(loginUser.getId());
