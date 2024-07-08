@@ -9,16 +9,38 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Home/Home.vue'),
     meta: {
       title: '首页',
+      icon: 'home',
       access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
     }
   },
   {
-    path: '/tk',
-    name: 'tk',
-    component: () => import('@/views/Home/Home.vue'),
+    path: '/add/question',
+    name: 'AddQuestion',
+    component: () => import('@/views/question/AddQuestionView.vue'),
     meta: {
-      title: '题库',
-      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+      title: '创建题目',
+      icon: 'addQuestion',
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+    }
+  },
+  {
+    path: '/update/question',
+    name: 'UpdateQuestion',
+    component: () => import('@/views/question/AddQuestionView.vue'),
+    meta: {
+      title: '更新题目',
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+      hidden: true
+    }
+  },
+  {
+    path: '/manage/question',
+    name: 'ManageQuestion',
+    component: () => import('@/views/question/ManageQuestionView.vue'),
+    meta: {
+      title: '管理题目',
+      icon: 'manageQuestion',
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
     }
   },
   {
@@ -27,13 +49,14 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/Home/Home.vue'),
     meta: {
       title: '后台管理',
+      icon: 'admin',
       access: [ACCESS_ENUM.ADMIN]
     }
   },
   {
     path: '/403',
     name: '403',
-    component: () => import('@/views/Error/403.vue'),
+    component: () => import('@/views/Status/403.vue'),
     meta: {
       title: '无权限',
       access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
@@ -43,7 +66,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/404',
     name: '404',
-    component: () => import('@/views/Error/404.vue'),
+    component: () => import('@/views/Status/404.vue'),
     meta: {
       title: '找不到页面',
       access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],

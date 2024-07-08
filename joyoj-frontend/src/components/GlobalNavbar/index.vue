@@ -83,8 +83,10 @@ const goProfile = () => {
           </a-menu-item>
           <a-menu-item v-for="item in visibleRoutes" :key="item.path">
             <template #icon>
-              <icon-home/>
-              {{ item.meta?.title }}
+              <div style="display: flex;justify-content: center;align-items: center">
+                <joy-svg-icon :icon="item.meta?.icon" class="mr-1"/>
+                {{ item.meta?.title }}
+              </div>
             </template>
           </a-menu-item>
         </a-menu>

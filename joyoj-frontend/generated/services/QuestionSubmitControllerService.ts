@@ -3,31 +3,26 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse } from '../models/BaseResponse';
+import type { QuestionSubmitAddRequest } from '../models/QuestionSubmitAddRequest';
+import type { QuestionSubmitQueryRequest } from '../models/QuestionSubmitQueryRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-export class FileControllerService {
+export class QuestionSubmitControllerService {
     /**
-     * uploadFile
-     * @param file file
-     * @param biz
+     * doQuestionSubmit
+     * @param questionSubmitAddRequest questionSubmitAddRequest
      * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
-    public static uploadFileUsingPost(
-        file: Blob,
-        biz?: string,
+    public static doQuestionSubmitUsingPost(
+        questionSubmitAddRequest: QuestionSubmitAddRequest,
     ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/file/upload',
-            query: {
-                'biz': biz,
-            },
-            formData: {
-                'file': file,
-            },
+            url: '/api/question_submit/',
+            body: questionSubmitAddRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -36,21 +31,19 @@ export class FileControllerService {
         });
     }
     /**
-     * uploadUserAvatar
-     * @param file file
+     * listQuestionSubmitByPage
+     * @param questionSubmitQueryRequest questionSubmitQueryRequest
      * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
-    public static uploadUserAvatarUsingPost(
-        file: Blob,
+    public static listQuestionSubmitByPageUsingPost(
+        questionSubmitQueryRequest: QuestionSubmitQueryRequest,
     ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/file/uploadAvatar',
-            formData: {
-                'file': file,
-            },
+            url: '/api/question_submit/list/page',
+            body: questionSubmitQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

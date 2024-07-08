@@ -5,8 +5,8 @@ import eslint from 'vite-plugin-eslint'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 import UnoCSS from 'unocss/vite'
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -14,6 +14,7 @@ export default defineConfig({
     vueSetupExtend(),
     vueJsx(),
     eslint(),
+    monacoEditorPlugin({}),
     createSvgIconsPlugin({
       // 要缓存的图标文件夹
       iconDirs: [path.resolve(__dirname, 'src/svg')],

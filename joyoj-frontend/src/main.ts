@@ -10,6 +10,8 @@ import { installAssets } from '@/plugins/assets'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import '@/assets/style.css'
 import 'animate.css'
+// Markdown编辑器样式
+import 'bytemd/dist/index.css'
 
 const startApp = () => {
   const app = createApp(App)
