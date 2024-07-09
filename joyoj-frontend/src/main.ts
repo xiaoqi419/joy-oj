@@ -12,10 +12,13 @@ import '@/assets/style.css'
 import 'animate.css'
 // Markdown编辑器样式
 import 'bytemd/dist/index.css'
+// JsonViewer样式
+import JsonViewer from 'vue-json-viewer'
 
 const startApp = () => {
   const app = createApp(App)
   app.use(ArcoVueIcon)
+  app.use(JsonViewer)
   // 静态资源
   installAssets(app)
   // 路由 VueRouter
