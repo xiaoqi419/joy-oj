@@ -35,7 +35,7 @@ export const installRouterGuards = (router: Router) => {
     // 要跳转的页面必须要登陆
     if (!needAccess.includes(ACCESS_ENUM.NOT_LOGIN)) {
       // 如果没登陆，打开登录弹窗,并跳转回首页
-      if (userInfo.value && userInfo.value.userRole === ACCESS_ENUM.NOT_LOGIN) {
+      if (!userInfo.value || userInfo.value.userRole === ACCESS_ENUM.NOT_LOGIN || !userInfo.value.userRole) {
         next('/')
         Message.warning('请先登录!')
         modalStore.setUserModal(true)
