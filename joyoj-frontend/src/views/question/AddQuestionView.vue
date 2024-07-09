@@ -2,7 +2,7 @@
 import { onMounted, reactive, watch } from 'vue'
 import MdEditor from '@/components/MdEditor/index.vue'
 import { QuestionAddRequest, QuestionControllerService } from '../../../generated'
-import { Message } from '@arco-design/web-vue'
+import { FieldRule, Message } from '@arco-design/web-vue'
 import { useRoute } from 'vue-router'
 
 const form = reactive<QuestionAddRequest>({
@@ -33,6 +33,11 @@ const handleAdd = () => {
 }
 
 const handleDelete = (index: number) => {
+  // 如果是最后一个测试用例则不允许删除
+  if (form.judgeCase && form.judgeCase.length === 1) {
+    Message.error('至少需要一个测试用例')
+    return
+  }
   if (form.judgeCase) {
     form.judgeCase.splice(index, 1)
   }
@@ -71,23 +76,26 @@ const loadData = async () => {
   }
 }
 
-const doSubmit = async () => {
-  if (updatePage) {
-    const res = await QuestionControllerService.updateQuestionUsingPost({
-      ...form,
-      id: route.query.id
-    } as QuestionAddRequest)
-    if (res.code === 20000) {
-      Message.success('更新成功')
+const doSubmit = async ({ errors }: any) => {
+  // 验证表单
+  if (errors === undefined) {
+    if (updatePage) {
+      const res = await QuestionControllerService.updateQuestionUsingPost({
+        ...form,
+        id: route.query.id
+      } as QuestionAddRequest)
+      if (res.code === 20000) {
+        Message.success('更新成功')
+      } else {
+        Message.error('更新失败:' + res.message)
+      }
     } else {
-      Message.error('更新失败:' + res.message)
-    }
-  } else {
-    const res = await QuestionControllerService.addQuestionUsingPost(form)
-    if (res.code === 20000) {
-      Message.success('添加成功')
-    } else {
-      Message.error('创建失败:' + res.message)
+      const res = await QuestionControllerService.addQuestionUsingPost(form)
+      if (res.code === 20000) {
+        Message.success('添加成功')
+      } else {
+        Message.error('创建失败:' + res.message)
+      }
     }
   }
 }
@@ -116,6 +124,67 @@ watch(() => route.path, (path) => {
 onMounted(() => {
   loadData()
 })
+
+const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
+  title: [
+    {
+      required: true,
+      message: '请输入标题'
+    },
+    {
+      maxLength: 512,
+      message: '标题长度不能超过512个字符'
+    },
+    {
+      validator (value, callback) {
+        // 不能是非法字符
+        const reg = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/
+        if (!reg.test(value)) {
+          const errorMsg = '标题不能包含非法字符'
+          return callback(errorMsg)
+        }
+        return callback()
+      }
+    }
+  ],
+  tags: [
+    {
+      required: true,
+      message: '请输入标签'
+    }
+  ],
+  content: [
+    {
+      required: true,
+      message: '请输入题目内容'
+    }
+  ],
+  answer: [
+    {
+      required: true,
+      message: '请输入答案'
+    }
+  ],
+  'judgeConfig.timeLimit': [
+    {
+      required: true,
+      message: '请输入时间限制'
+    }
+  ],
+  'judgeConfig.memoryLimit': [
+    {
+      required: true,
+      message: '请输入堆栈限制'
+    }
+  ],
+  'judgeConfig.stackLimit': [
+    {
+      required: true,
+      message: '请输入内存限制'
+    }
+  ]
+})
+
 </script>
 
 <template>
@@ -123,12 +192,13 @@ onMounted(() => {
     <!--如果是更新就显示更新题目，否则显示创建题目-->
     <h2 v-if="updatePage">更新题目</h2>
     <h2 v-else>创建题目</h2>
-    <a-form :model="form">
+    <a-form :model="form" :rules="rules"
+            ref="addQuestionFormRef" @submit="doSubmit">
       <a-form-item field="title" label="标题">
         <a-input v-model="form.title" placeholder="请输入标题" style="max-width: 640px"/>
       </a-form-item>
       <a-form-item field="tags" label="标签">
-        <a-input-tag v-model="form.tags" placeholder="请输入标签" allow-clear style="max-width: 640px"/>
+        <a-input-tag v-model="form.tags" placeholder="请输入标签（回车确认）" allow-clear style="max-width: 640px"/>
       </a-form-item>
       <a-form-item field="content" label="题目内容">
         <MdEditor :value="form.content" :handle-change="onContentChange"/>
@@ -174,7 +244,7 @@ onMounted(() => {
       </a-form-item>
 
       <a-form-item>
-        <a-button type="primary" size="large" style="min-width: 240px;margin:0 auto" @click="doSubmit">提交</a-button>
+        <a-button type="primary" size="large" style="min-width: 240px;margin:0 auto" html-type="submit">提交</a-button>
       </a-form-item>
     </a-form>
   </div>
