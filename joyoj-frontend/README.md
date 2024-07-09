@@ -1,72 +1,44 @@
-# joyoj-frontend
+# Judge判题系统前端
 
-vite vue3 project
+## 项目介绍
 
+这是一个使用Vue3, TypeScript, Pinia等前沿技术栈开发的Judge判题系统的前端。
 
-### Frameworks
+## 技术栈
 
-- Vue 3.x
-- Vite 4.x
-- TypeScript 4.x
-- TSX
-- Vue Router
-- Pinia
-- Element Plus
-- SVG Icon
-- Axios
-- SASS / SCSS
-- UnoCSS
-- ESLint Standard
+- Vue3: 使用Vue3进行前端开发，利用其Composition API和响应式系统。
+- TypeScript: 使用TypeScript进行类型检查和IDE的特性，提高开发效率和代码质量。
+- Pinia: 使用Pinia作为Vue3的状态管理库，替代Vuex。
+- 其他: 使用其他一些库和工具，如Axios进行HTTP请求，Vue Router进行路由管理，等等。
 
-## Project setup
-```
-pnpm install
-```
+## 功能特性
 
-### Compiles and hot-reloads for development
-```
-# using .env.dev profile by default
-pnpm run dev
-pnpm run dev:dev
+- 功能1
+- 功能2
+- ...
 
-# using .env.uat profile
-pnpm run dev:uat
+## 项目设置和运行
 
-# using .env.prod profile
-pnpm run dev:prod
+```bash
+# 安装依赖
+yarn install
+
+# 在localhost:8080上热重载运行
+yarn serve
+
+# 构建生产环境
+yarn build
 ```
 
-### Compiles and minifies for production
-```
-# using .env.dev profile
-pnpm run build:dev
+## 贡献
 
-# using .env.uat profile
-pnpm run build:uat
+欢迎任何形式的贡献，包括但不限于提交问题和功能请求，或者直接提交PR。
 
-# using .env.prod profile
-pnpm run build:prod
-```
+## 许可证
 
----
-Thanks for using yyg-cli. Development by 程序员优雅哥.
+此项目遵循MIT许可证，详情请见 LICENSE 文件。
 
-If you have any questions, please contact me (heroyyg@126.com).
+## 联系方式
 
----
-***程序员优雅哥***
-
-十年程序员，呆过央企外企私企，做过前端后端架构，分享vue、Java等前后端技术和架构
-
-在公众号上随时更新前后端技术文章及企业级实战项目。可关注公众号程序员优雅哥查看。
-
-与时间赛跑，每天都在进步！！
-
-<img src="https://tva1.sinaimg.cn/large/e6c9d24egy1h5anivz6cmj20ca0c6dgm.jpg" alt="程序员优雅哥" style="width: 120px;" />
-
-yycoder
-
-
-
-
-
+如果你有任何问题或者建议，欢迎联系我们。
+邮箱: zggx261@163.com
