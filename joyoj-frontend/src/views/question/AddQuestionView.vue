@@ -79,6 +79,11 @@ const loadData = async () => {
 const doSubmit = async ({ errors }: any) => {
   // 验证表单
   if (errors === undefined) {
+    // 标签只允许三个
+    if (form.tags!.length > 3) {
+      Message.error('标签最多只能有三个')
+      return
+    }
     if (updatePage) {
       const res = await QuestionControllerService.updateQuestionUsingPost({
         ...form,
@@ -93,6 +98,22 @@ const doSubmit = async ({ errors }: any) => {
       const res = await QuestionControllerService.addQuestionUsingPost(form)
       if (res.code === 20000) {
         Message.success('添加成功')
+        // 清空表单
+        form.answer = ''
+        form.content = ''
+        form.judgeCase = [
+          {
+            input: '',
+            output: ''
+          }
+        ]
+        form.judgeConfig = {
+          memoryLimit: 1000,
+          stackLimit: 1000,
+          timeLimit: 1000
+        }
+        form.tags = []
+        form.title = ''
       } else {
         Message.error('创建失败:' + res.message)
       }
