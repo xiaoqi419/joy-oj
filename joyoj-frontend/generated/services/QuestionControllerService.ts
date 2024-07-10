@@ -98,6 +98,22 @@ export class QuestionControllerService {
         });
     }
     /**
+     * getLanguages
+     * @returns BaseResponse OK
+     * @throws ApiError
+     */
+    public static getLanguagesUsingGet(): CancelablePromise<BaseResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/question/get/languages',
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
      * getQuestionVOById
      * @param id id
      * @returns BaseResponse OK

@@ -14,6 +14,27 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/view/question',
+    name: 'ViewQuestion',
+    component: () => import('@/views/question/QuestionView.vue'),
+    meta: {
+      title: '浏览题目',
+      icon: 'viewQuestion',
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.NOT_LOGIN]
+    }
+  },
+  {
+    path: '/view/question/:id',
+    name: 'QuestionInfo',
+    props: true,
+    component: () => import('@/views/question/QuestionInfoView.vue'),
+    meta: {
+      title: '题目详情',
+      access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+      hidden: true
+    }
+  },
+  {
     path: '/add/question',
     name: 'AddQuestion',
     component: () => import('@/views/question/AddQuestionView.vue'),

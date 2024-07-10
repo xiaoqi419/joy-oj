@@ -43,7 +43,6 @@
       <a-col flex="auto">
         <div>
           <CodeTypeIt/>
-
         </div>
       </a-col>
     </a-row>

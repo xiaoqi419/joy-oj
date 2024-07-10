@@ -1,10 +1,29 @@
 <script setup lang="ts">
 import * as monaco from 'monaco-editor'
-import { onMounted, ref, toRaw } from 'vue'
+import { onMounted, ref, toRaw, watch } from 'vue'
 
+type Props = {
+  value: string
+  language: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  value: () => '',
+  language: () => 'javascript'
+})
 const codeEditorRef = ref()
 const codeEditor = ref()
-const value = ref('hello world')
+
+watch(
+  () => props.language,
+  () => {
+    const lowCase = props.language.toLowerCase()
+    monaco.editor.setModelLanguage(
+      // 踩坑一定要使用toRaw
+      toRaw(codeEditor.value).getModel(),
+      lowCase
+    )
+  }
+)
 
 onMounted(() => {
   if (!codeEditorRef.value) {
@@ -12,8 +31,8 @@ onMounted(() => {
   }
   // Hover on each property to see its docs!
   codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: value.value,
-    language: 'java',
+    value: props.value,
+    language: props.language,
     automaticLayout: true,
     colorDecorators: true,
     minimap: {
@@ -25,16 +44,11 @@ onMounted(() => {
     // roundedSelection: false,
     // scrollBeyondLastLine: false,
   })
-
-  // 编辑 监听内容变化
-  codeEditor.value.onDidChangeModelContent(() => {
-    console.log('目前内容为：', toRaw(codeEditor.value).getValue())
-  })
 })
 </script>
 
 <template>
-  <div id="code-editor" ref="codeEditorRef" style="min-height: 400px"/>
+  <div id="code-editor" ref="codeEditorRef" style="min-height: 600px;height: 70vh"/>
 </template>
 
 <style scoped lang="scss">

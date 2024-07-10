@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 
 defineComponent({
   name: 'HomeGoButton'
 })
+
+const router = useRouter()
+const toQuestionPage = () => {
+  router.push({
+    path: '/view/question'
+  })
+}
 </script>
 
 <template>
   <div class="btn-container">
-    <a class="btn-content" href="#">
+    <a class="btn-content" href="#" @click="toQuestionPage">
       <span class="btn-title">开始</span>
       <span class="icon-arrow">
       <svg width="33px" height="23px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg"
