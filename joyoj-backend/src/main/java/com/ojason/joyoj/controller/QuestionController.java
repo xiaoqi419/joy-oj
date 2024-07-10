@@ -12,8 +12,10 @@ import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.exception.ThrowUtils;
 import com.ojason.joyoj.model.dto.question.*;
 import com.ojason.joyoj.model.entity.Question;
+import com.ojason.joyoj.model.entity.QuestionLanguage;
 import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.vo.QuestionVO;
+import com.ojason.joyoj.service.QuestionLanguageService;
 import com.ojason.joyoj.service.QuestionService;
 import com.ojason.joyoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,9 @@ public class QuestionController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private QuestionLanguageService questionLanguageService;
 
     // region 增删改查
 
@@ -272,6 +277,14 @@ public class QuestionController {
         }
         boolean result = questionService.updateById(question);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 获取支持的编程语言
+     */
+    @GetMapping("/get/languages")
+    public BaseResponse<List<QuestionLanguage>> getLanguages() {
+        return ResultUtils.success(questionLanguageService.getQuestionLanguage());
     }
 
 }
