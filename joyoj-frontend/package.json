@@ -22,6 +22,7 @@
     "@bytemd/vue-next": "^1.21.0",
     "@pureadmin/utils": "^2.4.7",
     "animate.css": "^4.1.1",
+    "artalk": "^2.8.7",
     "axios": "^1.4.0",
     "highlight.js": "^11.9.0",
     "monaco-editor": "^0.50.0",

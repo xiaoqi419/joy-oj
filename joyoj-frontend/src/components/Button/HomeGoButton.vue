@@ -15,8 +15,8 @@ const toQuestionPage = () => {
 </script>
 
 <template>
-  <div class="btn-container">
-    <a class="btn-content" href="#" @click="toQuestionPage">
+  <div class="btn-container" @click="toQuestionPage">
+    <a class="btn-content" style='cursor: pointer'>
       <span class="btn-title">开始</span>
       <span class="icon-arrow">
       <svg width="33px" height="23px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg"

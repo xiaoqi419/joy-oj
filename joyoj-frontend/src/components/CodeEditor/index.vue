@@ -4,11 +4,15 @@ import { onMounted, ref, toRaw, watch } from 'vue'
 
 type Props = {
   value: string
-  language: string
+  language: string,
+  handleChange: (v: string) => void;
 }
 const props = withDefaults(defineProps<Props>(), {
   value: () => '',
-  language: () => 'javascript'
+  language: () => 'java',
+  handleChange: (v: string) => {
+    console.log(v)
+  }
 })
 const codeEditorRef = ref()
 const codeEditor = ref()
@@ -43,6 +47,10 @@ onMounted(() => {
     // lineNumbers: "off",
     // roundedSelection: false,
     // scrollBeyondLastLine: false,
+  })
+  // 编辑 监听内容变化
+  codeEditor.value.onDidChangeModelContent(() => {
+    props.handleChange(toRaw(codeEditor.value).getValue())
   })
 })
 </script>

@@ -9,12 +9,14 @@ import {
 import { Message } from '@arco-design/web-vue'
 import CodeEditor from '@/components/CodeEditor/index.vue'
 import MdViewer from '@/components/MdViewer/index.vue'
+import Artalk from '@/components/Artalk/index.vue'
 
 defineComponent({
   name: 'QuestionInfoView',
   components: {
     CodeEditor,
-    MdViewer
+    MdViewer,
+    Artalk
   }
 })
 
@@ -42,12 +44,9 @@ const getLanguageOptions = async () => {
   const res = await QuestionControllerService.getLanguagesUsingGet()
   languageLoading.value = true
   if (res.code === 20000) {
-    // 处理把数组中的id属性去除
-    res.data.forEach((item: any) => {
-      delete item.id
-    })
     options.value = res.data.map((item: any) => {
-      return item.name
+      // 首字母大写
+      return item.name.charAt(0).toUpperCase() + item.name.slice(1)
     })
     languageLoading.value = false
   } else {
@@ -65,12 +64,25 @@ const form = ref<QuestionSubmitAddRequest>({
 const submitLoading = ref(false)
 const runLoading = ref(false)
 const doSubmit = async () => {
-  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost(form.value)
+  if (!question.value?.id) {
+    return
+  }
+  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
+    ...form.value,
+    questionId: question.value.id
+  })
+  submitLoading.value = true
   if (res.code === 20000) {
     Message.success('提交成功')
+    submitLoading.value = false
   } else {
     Message.error('提交失败:' + res.message)
+    submitLoading.value = false
   }
+}
+
+const changeCode = (value: string) => {
+  form.value.code = value
 }
 
 onMounted(() => {
@@ -120,7 +132,7 @@ onMounted(() => {
                   评论
                 </a-space>
               </template>
-              评论组件
+              <Artalk/>
             </a-tab-pane>
             <a-tab-pane key="answer" title="题解">
               <template #title>
@@ -129,7 +141,13 @@ onMounted(() => {
                   题解
                 </a-space>
               </template>
-              {{ question?.answer }}
+              <a-empty>
+                <template #image>
+                  <icon-exclamation-circle-fill/>
+                </template>
+                暂时无法查看答案！
+              </a-empty>
+
             </a-tab-pane>
           </a-tabs>
         </a-card>
@@ -139,12 +157,12 @@ onMounted(() => {
           <a-form :model="form" layout="inline" class="mb-4">
             <a-form-item field="language" label="编程语言" style="min-width: 280px">
               <a-select v-model="form.language" :options="options" :style="{width:'120px'}" :loading="languageLoading"
-                        placeholder="请选择语言 ..."
+                        placeholder="请选择语言 ..." value-key="id" default-value="java"
                         @search="getLanguageOptions"/>
             </a-form-item>
           </a-form>
           <!-- 代码编辑器 -->
-          <CodeEditor :value="form.code" :language="form.language"/>
+          <CodeEditor :value="form.code" :language="form.language" :handle-change="changeCode"/>
           <a-space style="padding: 4px 0 4px 4px;display: flex;justify-content: space-between">
             <div class="status">
               已存储
