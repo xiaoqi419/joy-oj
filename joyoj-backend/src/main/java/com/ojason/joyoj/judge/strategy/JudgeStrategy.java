@@ -1,6 +1,6 @@
 package com.ojason.joyoj.judge.strategy;
 
-import com.ojason.joyoj.model.dto.questionsubmit.JudgeInfo;
+import com.ojason.joyoj.judge.codesandbox.model.JudgeInfo;
 
 /**
  * @ClassName : JudgeStrategy

@@ -3,7 +3,7 @@ package com.ojason.joyoj.judge.codesandbox.impl;
 import com.ojason.joyoj.judge.codesandbox.CodeSandbox;
 import com.ojason.joyoj.judge.codesandbox.model.ExecuteCodeRequest;
 import com.ojason.joyoj.judge.codesandbox.model.ExecuteCodeResponse;
-import com.ojason.joyoj.model.dto.questionsubmit.JudgeInfo;
+import com.ojason.joyoj.judge.codesandbox.model.JudgeInfo;
 import com.ojason.joyoj.model.enums.JudgeInfoEnum;
 import com.ojason.joyoj.model.enums.QuestionSubmitStatusEnum;
 

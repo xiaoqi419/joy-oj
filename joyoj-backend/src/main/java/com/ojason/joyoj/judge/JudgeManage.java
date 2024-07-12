@@ -1,10 +1,10 @@
 package com.ojason.joyoj.judge;
 
+import com.ojason.joyoj.judge.codesandbox.model.JudgeInfo;
 import com.ojason.joyoj.judge.strategy.DefaultJudgeStrategyImpl;
 import com.ojason.joyoj.judge.strategy.JavaJudgeStrategyImpl;
 import com.ojason.joyoj.judge.strategy.JudgeContext;
 import com.ojason.joyoj.judge.strategy.JudgeStrategy;
-import com.ojason.joyoj.model.dto.questionsubmit.JudgeInfo;
 import com.ojason.joyoj.model.entity.QuestionSubmit;
 import org.springframework.stereotype.Service;
 

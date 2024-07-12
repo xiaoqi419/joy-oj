@@ -1,9 +1,9 @@
 package com.ojason.joyoj.judge.strategy;
 
 import cn.hutool.json.JSONUtil;
+import com.ojason.joyoj.judge.codesandbox.model.JudgeInfo;
 import com.ojason.joyoj.model.dto.question.JudgeCase;
 import com.ojason.joyoj.model.dto.question.JudgeConfig;
-import com.ojason.joyoj.model.dto.questionsubmit.JudgeInfo;
 import com.ojason.joyoj.model.entity.Question;
 import com.ojason.joyoj.model.enums.JudgeInfoEnum;
 
