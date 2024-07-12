@@ -6,6 +6,7 @@ import com.ojason.joyoj.common.BaseResponse;
 import com.ojason.joyoj.common.ErrorCode;
 import com.ojason.joyoj.common.ResultUtils;
 import com.ojason.joyoj.exception.BusinessException;
+import com.ojason.joyoj.judge.JudgeService;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.ojason.joyoj.model.entity.QuestionSubmit;
@@ -14,12 +15,14 @@ import com.ojason.joyoj.model.vo.QuestionSubmitVO;
 import com.ojason.joyoj.service.QuestionSubmitService;
 import com.ojason.joyoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CompletableFuture;
 
 /**
  *
@@ -31,9 +34,12 @@ public class QuestionSubmitController {
 
     @Resource
     private QuestionSubmitService questionSubmitService;
-
     @Resource
     private UserService userService;
+    
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     /**
      * 提交题目
@@ -46,9 +52,14 @@ public class QuestionSubmitController {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 登录才能点赞
+        // 登录才能判题
         final User loginUser = userService.getLoginUser();
         Long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        // 执行判题服务
+        CompletableFuture.runAsync(() -> {
+            judgeService.doJudge(questionSubmitId);
+        });
+
         return ResultUtils.success(questionSubmitId);
     }
 
