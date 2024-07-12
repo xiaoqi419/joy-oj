@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, defineProps, onMounted, ref, withDefaults } from 'vue'
+import { defineComponent, onMounted, ref, withDefaults } from 'vue'
 import {
   QuestionControllerService,
   QuestionEditRequest,
@@ -69,6 +69,7 @@ const doSubmit = async () => {
   }
   const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
     ...form.value,
+    language: form.value.language?.toLowerCase(),
     questionId: question.value.id
   })
   submitLoading.value = true
