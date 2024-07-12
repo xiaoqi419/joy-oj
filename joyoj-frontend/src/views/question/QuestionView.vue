@@ -19,6 +19,11 @@ const percent = ref(0)
 const loadData = async () => {
   const res = await QuestionControllerService.listQuestionVoByPageUsingPost(searchParams.value)
   if (res.code === 20000) {
+    // 将submitNum,acceptedNum转为Number
+    res.data.records.forEach((item: any) => {
+      item.submitNum = Number(item.submitNum)
+      item.acceptedNum = Number(item.acceptedNum)
+    })
     // 处理通过率
     res.data.records.forEach((item: any) => {
       if (item.submitNum === 0) {
@@ -107,12 +112,14 @@ watch(() => searchParams, () => {
             </a-space>
           </template>
         </a-table-column>
-        <a-table-column title="通过率" data-index="submitNum" align="center">
+        <a-table-column title="通过率（通过/提交）" data-index="submitNum" align="center">
           <template #cell="{ record }">
-            {{
-              (`${record.submitNum === 0 ? record.acceptedNum / record.submitNum : '0'}%(${record.acceptedNum}/${record.submitNum})`)
-            }}
-            <a-progress size="mini" type="circle" :percent="percent"/>
+            <a-space>
+              {{
+                `${record.submitNum !== 0 ? Math.ceil((record.acceptedNum / record.submitNum) * 100) : 0}% (${record.acceptedNum}/${record.submitNum})`
+              }}
+              <a-progress type="circle" :percent="percent"/>
+            </a-space>
           </template>
         </a-table-column>
         <a-table-column title="创建时间" data-index="createTime" align="center">
