@@ -7,8 +7,17 @@ type Props = {
   language: string,
   handleChange: (v: string) => void;
 }
+// todo 更改语言时代码不同
+const codeDefault = 'public class Main {\n' +
+  '\n' +
+  '    public static void main(String[] args) {\n' +
+  '       \n' +
+  '    }\n' +
+  '\n' +
+  '}'
+
 const props = withDefaults(defineProps<Props>(), {
-  value: () => '',
+  value: () => codeDefault,
   language: () => 'java',
   handleChange: (v: string) => {
     console.log(v)
@@ -35,8 +44,8 @@ onMounted(() => {
   }
   // Hover on each property to see its docs!
   codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: props.value,
-    language: props.language,
+    value: codeDefault,
+    language: 'java',
     automaticLayout: true,
     colorDecorators: true,
     minimap: {
