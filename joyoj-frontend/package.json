@@ -24,6 +24,7 @@
     "animate.css": "^4.1.1",
     "artalk": "^2.8.7",
     "axios": "^1.4.0",
+    "dayjs": "^1.11.11",
     "highlight.js": "^11.9.0",
     "monaco-editor": "^0.50.0",
     "nprogress": "^0.2.0",

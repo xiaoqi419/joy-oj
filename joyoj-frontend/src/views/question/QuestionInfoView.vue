@@ -49,6 +49,7 @@ const getLanguageOptions = async () => {
       return item.name.charAt(0).toUpperCase() + item.name.slice(1)
     })
     languageLoading.value = false
+    form.value.language = 'Java'
   } else {
     Message.error('获取数据失败:' + res.message)
     languageLoading.value = false
@@ -67,18 +68,18 @@ const doSubmit = async () => {
   if (!question.value?.id) {
     return
   }
+  submitLoading.value = !submitLoading.value
   const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
     ...form.value,
     language: form.value.language?.toLowerCase(),
     questionId: question.value.id
   })
-  submitLoading.value = true
   if (res.code === 20000) {
     Message.success('提交成功')
-    submitLoading.value = false
+    submitLoading.value = !submitLoading.value
   } else {
     Message.error('提交失败:' + res.message)
-    submitLoading.value = false
+    submitLoading.value = !submitLoading.value
   }
 }
 
@@ -158,7 +159,7 @@ onMounted(() => {
           <a-form :model="form" layout="inline" class="mb-4">
             <a-form-item field="language" label="编程语言" style="min-width: 280px">
               <a-select v-model="form.language" :options="options" :style="{width:'120px'}" :loading="languageLoading"
-                        placeholder="请选择语言 ..." value-key="id" default-value="java"
+                        placeholder="请选择语言 ..." value-key="id" default-value="Java"
                         @search="getLanguageOptions"/>
             </a-form-item>
           </a-form>

@@ -6,7 +6,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/Home/Home.vue'),
+    component: () => import('@/views/home/Home.vue'),
     meta: {
       title: '首页',
       icon: 'home',
@@ -67,7 +67,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/admin',
     name: 'Admin',
-    component: () => import('@/views/Home/Home.vue'),
+    component: () => import('@/views/home/Home.vue'),
     meta: {
       title: '后台管理',
       icon: 'admin',
@@ -77,7 +77,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/403',
     name: '403',
-    component: () => import('@/views/Status/403.vue'),
+    component: () => import('@/views/status/403.vue'),
     meta: {
       title: '无权限',
       access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
@@ -87,7 +87,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/404',
     name: '404',
-    component: () => import('@/views/Status/404.vue'),
+    component: () => import('@/views/status/404.vue'),
     meta: {
       title: '找不到页面',
       access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
@@ -108,7 +108,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: '/profile/info',
         name: 'ProfileInfo',
-        component: () => import('@/views/Profile/ProfileInfo.vue'),
+        component: () => import('@/views/profile/ProfileInfo.vue'),
         meta: {
           title: '个人信息',
           access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]

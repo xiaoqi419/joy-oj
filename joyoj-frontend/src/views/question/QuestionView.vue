@@ -3,6 +3,7 @@ import { onMounted, ref, watch, watchEffect } from 'vue'
 import { QuestionControllerService, QuestionEditRequest } from '../../../generated'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
+import dayjs from 'dayjs'
 
 const dataList = ref([])
 const total = ref(0)
@@ -63,7 +64,7 @@ const doSearch = () => {
 }
 
 // 如果查询参数中的tag和title为空则执行一次查询
-watch(() => searchParams, () => {
+watch(() => searchParams.value, () => {
   if (searchParams.value.tags.length === 0 && searchParams.value.title === '') {
     loadData()
   }
@@ -116,7 +117,7 @@ watch(() => searchParams, () => {
         </a-table-column>
         <a-table-column title="创建时间" data-index="createTime" align="center">
           <template #cell="{ record }">
-            {{ new Date(record.createTime).toLocaleString() }}
+            {{ dayjs(record.createTime).format('YYYY/MM/DD') }}
           </template>
         </a-table-column>
         <a-table-column title="" align="center">

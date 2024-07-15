@@ -3,6 +3,7 @@ import { onMounted, ref, watchEffect } from 'vue'
 import { QuestionControllerService, QuestionEditRequest } from '../../../generated'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
+import dayjs from 'dayjs'
 
 const dataList = ref([])
 const total = ref(0)
@@ -123,7 +124,7 @@ const scroll = {
         <a-table-column title="用户id" data-index="userId" align="center"></a-table-column>
         <a-table-column title="创建时间" data-index="createTime" align="center">
           <template #cell="{ record }">
-            {{ new Date(record.createTime).toLocaleString() }}
+            {{ dayjs(record.createTime).format('YYYY/MM/DD') }}
           </template>
         </a-table-column>
         <a-table-column title="操作" align="center">
