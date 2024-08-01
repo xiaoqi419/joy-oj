@@ -8,6 +8,7 @@ import com.ojason.joyoj.model.entity.Question;
 import com.ojason.joyoj.model.enums.JudgeInfoEnum;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @program: joyoj-backend
@@ -23,8 +24,8 @@ public class JavaJudgeStrategyImpl implements JudgeStrategy {
         JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         List<String> inputList = judgeContext.getInputList();
         List<String> outputList = judgeContext.getOutputList();
-        Long memory = judgeInfo.getMemory();
-        Long time = judgeInfo.getTime();
+        Long memory = Optional.ofNullable(judgeInfo.getMemory()).orElse(0L);
+        Long time = Optional.ofNullable(judgeInfo.getTime()).orElse(0L);
         List<JudgeCase> judgeCaseList = judgeContext.getJudgeCaseList();
         JudgeInfoEnum judgeInfoEnum = JudgeInfoEnum.ACCEPTED;
         JudgeInfo judgeInfoResponse = new JudgeInfo();

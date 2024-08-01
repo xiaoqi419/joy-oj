@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -93,6 +94,14 @@ public class JudgeServiceImpl implements JudgeService {
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         update = questionSubmitService.updateById(questionSubmitUpdate);
+        // 如果通过更新题目状态
+        if (Objects.equals(judgeInfo.getMessage(), "Accepted")) {
+            // 更新题目 时通过率加一
+            Question questionUpdate = new Question();
+            questionUpdate.setId(questionId);
+            questionUpdate.setAcceptedNum(question.getAcceptedNum() + 1);
+            update = questionService.updateById(questionUpdate);
+        }
         if (!update) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新题目提交状态失败");
         }

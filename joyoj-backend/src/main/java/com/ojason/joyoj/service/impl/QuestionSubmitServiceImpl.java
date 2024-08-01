@@ -16,17 +16,20 @@ import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.enums.QuestionSubmitLanguageEnum;
 import com.ojason.joyoj.model.enums.QuestionSubmitStatusEnum;
 import com.ojason.joyoj.model.vo.QuestionSubmitVO;
+import com.ojason.joyoj.model.vo.UserVO;
 import com.ojason.joyoj.service.QuestionService;
 import com.ojason.joyoj.service.QuestionSubmitService;
 import com.ojason.joyoj.service.UserService;
 import com.ojason.joyoj.utils.SqlUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -163,9 +166,15 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         // 脱敏：仅本人或者管理员可以看到自己（提交userId和登录用户Id 不同）提交代码等
         Long userId = loginUser.getId();
         // 脱敏
-        if (userId != questionSubmit.getUserId() && !userService.isAdmin(loginUser)) {
+        if (!Objects.equals(userId, questionSubmit.getUserId()) && !userService.isAdmin(loginUser)) {
             questionSubmitVO.setCode(null);
         }
+        // 设置用户信息
+        User user = userService.getById(questionSubmit.getUserId());
+        // 脱敏用户信息
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        questionSubmitVO.setUserVO(userVO);
         return questionSubmitVO;
     }
 
