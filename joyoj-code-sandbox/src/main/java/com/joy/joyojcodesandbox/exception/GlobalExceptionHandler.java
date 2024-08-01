@@ -1,8 +1,8 @@
 package com.joy.joyojcodesandbox.exception;
 
-import com.ojason.joyoj.common.BaseResponse;
-import com.ojason.joyoj.common.ErrorCode;
-import com.ojason.joyoj.common.ResultUtils;
+import com.joy.joyojcodesandbox.common.BaseResponse;
+import com.joy.joyojcodesandbox.common.ErrorCode;
+import com.joy.joyojcodesandbox.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

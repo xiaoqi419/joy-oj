@@ -1,6 +1,7 @@
 package com.joy.joyojcodesandbox.exception;
 
-import com.ojason.joyoj.common.ErrorCode;
+
+import com.joy.joyojcodesandbox.common.ErrorCode;
 
 /**
  * 抛异常工具类

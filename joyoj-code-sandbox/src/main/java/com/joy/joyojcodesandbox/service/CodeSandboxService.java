@@ -4,15 +4,14 @@ import com.joy.joyojcodesandbox.model.ExecuteCodeRequest;
 import com.joy.joyojcodesandbox.model.ExecuteCodeResponse;
 
 /**
- * 代码沙箱接口定义
+ * @ClassName : CodeSandbox
+ * @Description :
+ * @Author : Jason
+ * @Date: 2024-07-15 13:58
  */
-public interface CodeSandbox {
+public interface CodeSandboxService {
 
-    /**
-     * 执行代码
-     *
-     * @param executeCodeRequest
-     * @return
-     */
     ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest);
+
+
 }

@@ -43,7 +43,8 @@ public class ProcessUtils {
                 // 逐行读取
                 String compileOutputLine;
                 while ((compileOutputLine = bufferedReader.readLine()) != null) {
-                    compileOutputStringBuilder.append(compileOutputLine).append("\n");
+                    String cleanedString = compileOutputLine.replace("\n", "");
+                    compileOutputStringBuilder.append(cleanedString);
                 }
                 executeMessage.setMessage(compileOutputStringBuilder.toString());
             } else {
@@ -55,7 +56,8 @@ public class ProcessUtils {
                 // 逐行读取
                 String compileOutputLine;
                 while ((compileOutputLine = bufferedReader.readLine()) != null) {
-                    compileOutputStringBuilder.append(compileOutputLine).append("\n");
+                    String cleanedString = compileOutputLine.replace("\n", "");
+                    compileOutputStringBuilder.append(cleanedString);
                 }
                 executeMessage.setMessage(compileOutputStringBuilder.toString());
 
@@ -66,7 +68,8 @@ public class ProcessUtils {
                 // 逐行读取
                 String errorCompileOutputLine;
                 while ((errorCompileOutputLine = errorBufferedReader.readLine()) != null) {
-                    errorCompileOutputStringBuilder.append(errorCompileOutputLine).append("\n");
+                    String cleanedString = errorCompileOutputLine.replace("\n", "");
+                    errorCompileOutputStringBuilder.append(cleanedString);
                 }
                 executeMessage.setErrorMessage(errorCompileOutputStringBuilder.toString());
             }

@@ -19,5 +19,7 @@ public class ExecuteMessage {
 
     private String errorMessage;
 
+    private Long memory;
+
     private Long time;
 }
