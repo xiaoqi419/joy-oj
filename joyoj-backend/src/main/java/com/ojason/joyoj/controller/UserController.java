@@ -102,7 +102,6 @@ public class UserController {
      * @return 登录用户信息
      */
     @GetMapping("/get/login")
-    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<LoginUserVO> getLoginUser() {
         User user = userService.getLoginUser();
         return ResultUtils.success(userService.getLoginUserVO(user));
