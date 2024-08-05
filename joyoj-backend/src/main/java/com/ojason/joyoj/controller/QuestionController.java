@@ -1,5 +1,6 @@
 package com.ojason.joyoj.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ojason.joyoj.annotation.AuthCheck;
@@ -10,21 +11,29 @@ import com.ojason.joyoj.common.ResultUtils;
 import com.ojason.joyoj.constant.UserConstant;
 import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.exception.ThrowUtils;
+import com.ojason.joyoj.judge.JudgeService;
 import com.ojason.joyoj.model.dto.question.*;
+import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
+import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.ojason.joyoj.model.entity.Question;
 import com.ojason.joyoj.model.entity.QuestionLanguage;
+import com.ojason.joyoj.model.entity.QuestionSubmit;
 import com.ojason.joyoj.model.entity.User;
+import com.ojason.joyoj.model.vo.QuestionSubmitVO;
 import com.ojason.joyoj.model.vo.QuestionVO;
 import com.ojason.joyoj.service.QuestionLanguageService;
 import com.ojason.joyoj.service.QuestionService;
+import com.ojason.joyoj.service.QuestionSubmitService;
 import com.ojason.joyoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 题目接口
@@ -36,12 +45,15 @@ public class QuestionController {
 
     @Resource
     private QuestionService questionService;
-
     @Resource
     private UserService userService;
-
     @Resource
     private QuestionLanguageService questionLanguageService;
+    @Resource
+    private QuestionSubmitService questionSubmitService;
+    @Resource
+    @Lazy
+    private JudgeService judgeService;
 
     // region 增删改查
 
@@ -286,5 +298,69 @@ public class QuestionController {
     public BaseResponse<List<QuestionLanguage>> getLanguages() {
         return ResultUtils.success(questionLanguageService.getQuestionLanguage());
     }
+
+    // region 提交问题
+
+    /**
+     * 提交题目
+     *
+     * @param questionSubmitAddRequest 提交请求
+     * @return resultNum 提交结果
+     */
+    @PostMapping("/question_submit/do")
+    public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest) {
+        if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 登录才能判题
+        final User loginUser = userService.getLoginUser();
+        Long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        // 执行判题服务
+        CompletableFuture.runAsync(() -> judgeService.doJudge(questionSubmitId));
+
+        return ResultUtils.success(questionSubmitId);
+    }
+
+    /**
+     * 分页获取列表（除管理员外，普通用户只能看到非答案，提交代码等公开信息）
+     *
+     * @param questionSubmitQueryRequest
+     * @return
+     */
+    @PostMapping("/question_submit/list/page")
+    @SaCheckLogin
+    public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
+        long current = questionSubmitQueryRequest.getCurrent();
+        long size = questionSubmitQueryRequest.getPageSize();
+        Page<QuestionSubmit> questionPage = questionSubmitService.page(new Page<>(current, size),
+                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        // 获取登录用户信息
+        User loginUser = userService.getLoginUser();
+        // 脱敏
+        return ResultUtils.success(questionSubmitService.getQuestionSubmitVOPage(questionPage, loginUser));
+    }
+
+    /**
+     * 用户提交代码后查询判题状态
+     *
+     * @param questionSubmitQueryRequest
+     * @return
+     */
+    @PostMapping("/question_submit/get")
+    public BaseResponse<String> getQuestionSubmitById(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
+        ThrowUtils.throwIf(questionSubmitQueryRequest == null, ErrorCode.PARAMS_ERROR, "非法请求");
+        long id = questionSubmitQueryRequest.getQuestionId();
+        long userId = questionSubmitQueryRequest.getUserId();
+        ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR, "非法id");
+        ThrowUtils.throwIf(userId <= 0, ErrorCode.PARAMS_ERROR, "非法userId");
+        String result = questionSubmitService.getJudgeResult(questionSubmitQueryRequest);
+        // 判断是否正确、判题中、错误
+        if (result != null) {
+            return ResultUtils.success(result);
+        }
+        return ResultUtils.success("none");
+    }
+
+    // endregion
 
 }

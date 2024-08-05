@@ -50,4 +50,14 @@ public interface QuestionSubmitService extends IService<QuestionSubmit> {
      * @return
      */
     Page<QuestionSubmitVO> getQuestionSubmitVOPage(Page<QuestionSubmit> questionSubmitPage, User loginUser);
+
+
+    /**
+     * 获取判题结果
+     *
+     * @param questionSubmitQueryRequest
+     * @return
+     */
+    String getJudgeResult(QuestionSubmitQueryRequest questionSubmitQueryRequest);
+
 }

@@ -1,12 +1,14 @@
 package com.ojason.joyoj.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ojason.joyoj.common.ErrorCode;
 import com.ojason.joyoj.constant.CommonConstant;
 import com.ojason.joyoj.exception.BusinessException;
+import com.ojason.joyoj.judge.codesandbox.model.JudgeInfo;
 import com.ojason.joyoj.mapper.QuestionSubmitMapper;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
@@ -191,6 +193,20 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
                 .collect(Collectors.toList());
         questionVOPage.setRecords(questionVOList);
         return questionVOPage;
+    }
+
+    @Override
+    public String getJudgeResult(QuestionSubmitQueryRequest questionSubmitQueryRequest) {
+        QueryWrapper<QuestionSubmit> queryWrapper = getQueryWrapper(questionSubmitQueryRequest);
+        queryWrapper.eq("questionId", questionSubmitQueryRequest.getQuestionId());
+        queryWrapper.eq("userId", questionSubmitQueryRequest.getUserId());
+        // 按照时间最新取一个
+        queryWrapper.orderByDesc("createTime");
+        queryWrapper.last("limit 1");
+        QuestionSubmit questionSubmit = this.getOne(queryWrapper);
+        JudgeInfo judgeInfo = JSONUtil.toBean(questionSubmit.getJudgeInfo(), JudgeInfo.class);
+        return judgeInfo.getMessage();
+
     }
 
 
