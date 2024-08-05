@@ -1,6 +1,5 @@
 package com.ojason.joyoj.controller;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ojason.joyoj.annotation.AuthCheck;
@@ -328,7 +327,6 @@ public class QuestionController {
      * @return
      */
     @PostMapping("/question_submit/list/page")
-    @SaCheckLogin
     public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
         long current = questionSubmitQueryRequest.getCurrent();
         long size = questionSubmitQueryRequest.getPageSize();
