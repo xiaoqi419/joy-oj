@@ -60,4 +60,8 @@ public class QuestionSubmit implements Serializable {
      * 是否删除
      */
     private Integer isDelete;
+    /**
+     * 是否删除
+     */
+    private Integer isLocal;
 }

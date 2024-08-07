@@ -34,24 +34,62 @@ import java.util.stream.Collectors;
 @Service
 public class JudgeServiceImpl implements JudgeService {
 
+    private List<String> localOutputList;
     @Value("${codesandbox.type}")
     private String codesandboxType;
-
     @Resource
     private QuestionService questionService;
     @Resource
     private QuestionSubmitService questionSubmitService;
     @Resource
     private JudgeManage judgeManage;
+    private JudgeInfo judgeInfo;
+    private Long questionId;
+    private Question question;
+
+
+    public List<String> getLocaOutputList() {
+        return localOutputList;
+    }
 
     @Override
     public QuestionSubmit doJudge(long questionSubmitId) {
+        boolean update = judgeUtil(questionSubmitId, false);
+        // 如果通过更新题目状态
+        if (Objects.equals(judgeInfo.getMessage(), "Accepted")) {
+            // 更新题目 时通过率加一
+            Question questionUpdate = new Question();
+            questionUpdate.setId(questionId);
+            questionUpdate.setAcceptedNum(question.getAcceptedNum() + 1);
+            update = questionService.updateById(questionUpdate);
+        }
+        if (!update) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新题目提交状态失败");
+        }
+        return questionSubmitService.getById(questionId);
+    }
+
+    @Override
+    public QuestionSubmit doLocalJudge(Long questionSubmitId) {
+        boolean update = judgeUtil(questionSubmitId, true);
+        // 如果通过返回题目
+        QuestionSubmit questionSubmitResult = questionSubmitService.getById(questionId);
+        if (Objects.equals(judgeInfo.getMessage(), "Accepted")) {
+            return questionSubmitResult;
+        }
+        if (!update) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新题目提交状态失败");
+        }
+        return questionSubmitResult;
+    }
+
+    private boolean judgeUtil(Long questionSubmitId, boolean isLocalJudge) {
         QuestionSubmit questionSubmit = questionSubmitService.getById(questionSubmitId);
         if (questionSubmit == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "提交信息不存在");
         }
-        Long questionId = questionSubmit.getQuestionId();
-        Question question = questionService.getById(questionId);
+        questionId = questionSubmit.getQuestionId();
+        question = questionService.getById(questionId);
         if (question == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
@@ -61,6 +99,9 @@ public class JudgeServiceImpl implements JudgeService {
         QuestionSubmit questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.RUNNING.getValue());
+        if (isLocalJudge) {
+            questionSubmitUpdate.setIsLocal(1);
+        }
         boolean update = questionSubmitService.updateById(questionSubmitUpdate);
         if (!update) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新题目提交状态失败");
@@ -86,26 +127,17 @@ public class JudgeServiceImpl implements JudgeService {
         judgeContext.setOutputList(outputList);
         judgeContext.setJudgeCaseList(judgeCaseList);
         judgeContext.setQuestion(question);
+        if (isLocalJudge) {
+            localOutputList = outputList;
+        }
         judgeContext.setQuestionSubmit(questionSubmit);
-        JudgeInfo judgeInfo = judgeManage.doJudge(judgeContext);
+        judgeInfo = judgeManage.doJudge(judgeContext);
         // 修改数据库的判题结果
         questionSubmitUpdate = new QuestionSubmit();
         questionSubmitUpdate.setId(questionSubmitId);
         questionSubmitUpdate.setStatus(QuestionSubmitStatusEnum.SUCCEED.getValue());
         questionSubmitUpdate.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         update = questionSubmitService.updateById(questionSubmitUpdate);
-        // 如果通过更新题目状态
-        if (Objects.equals(judgeInfo.getMessage(), "Accepted")) {
-            // 更新题目 时通过率加一
-            Question questionUpdate = new Question();
-            questionUpdate.setId(questionId);
-            questionUpdate.setAcceptedNum(question.getAcceptedNum() + 1);
-            update = questionService.updateById(questionUpdate);
-        }
-        if (!update) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新题目提交状态失败");
-        }
-        QuestionSubmit questionSubmitResult = questionSubmitService.getById(questionId);
-        return questionSubmitResult;
+        return update;
     }
 }

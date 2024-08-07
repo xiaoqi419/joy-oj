@@ -144,7 +144,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         Set<Long> userIdSet = questionList.stream().map(Question::getUserId).collect(Collectors.toSet());
         Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
                 .collect(Collectors.groupingBy(User::getId));
-        // TODO 获取该题目的点赞、收藏状态、评论信息
+        // TODO 获取该题目的点赞、收藏状态
 
         // 填充信息
         List<QuestionVO> questionVOList = questionList.stream().map(question -> {
@@ -156,7 +156,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             }
             questionVO.setUserVO(userService.getUserVO(user));
             // 获取相同Id的submit条数封装VO中的提交次数
-            Long submitCount = questionSubmitMapper.selectCount(new QueryWrapper<QuestionSubmit>().eq("questionId", question.getId()));
+            Long submitCount = questionSubmitMapper.selectCount(
+                    new QueryWrapper<QuestionSubmit>()
+                            .eq("questionId", question.getId())
+                            .eq("isLocal", 0));
             questionVO.setSubmitNum(submitCount);
             return questionVO;
         }).collect(Collectors.toList());

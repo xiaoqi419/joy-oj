@@ -1,6 +1,8 @@
 package com.ojason.joyoj.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ojason.joyoj.annotation.AuthCheck;
 import com.ojason.joyoj.common.BaseResponse;
@@ -11,6 +13,7 @@ import com.ojason.joyoj.constant.UserConstant;
 import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.exception.ThrowUtils;
 import com.ojason.joyoj.judge.JudgeService;
+import com.ojason.joyoj.judge.JudgeServiceImpl;
 import com.ojason.joyoj.model.dto.question.*;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
@@ -26,6 +29,7 @@ import com.ojason.joyoj.service.QuestionSubmitService;
 import com.ojason.joyoj.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +57,8 @@ public class QuestionController {
     @Resource
     @Lazy
     private JudgeService judgeService;
+    @Autowired
+    private JudgeServiceImpl judgeServiceImpl;
 
     // region 增删改查
 
@@ -307,6 +313,7 @@ public class QuestionController {
      * @return resultNum 提交结果
      */
     @PostMapping("/question_submit/do")
+    @SaCheckLogin
     public BaseResponse<Long> doQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest) {
         if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -330,8 +337,9 @@ public class QuestionController {
     public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
         long current = questionSubmitQueryRequest.getCurrent();
         long size = questionSubmitQueryRequest.getPageSize();
-        Page<QuestionSubmit> questionPage = questionSubmitService.page(new Page<>(current, size),
-                questionSubmitService.getQueryWrapper(questionSubmitQueryRequest));
+        QueryWrapper<QuestionSubmit> queryWrapper = questionSubmitService.getQueryWrapper(questionSubmitQueryRequest);
+        queryWrapper.eq("isLocal", 0);
+        Page<QuestionSubmit> questionPage = questionSubmitService.page(new Page<>(current, size), queryWrapper);
         // 获取登录用户信息
         User loginUser = userService.getLoginUser();
         // 脱敏
@@ -354,9 +362,32 @@ public class QuestionController {
         String result = questionSubmitService.getJudgeResult(questionSubmitQueryRequest);
         // 判断是否正确、判题中、错误
         if (result != null) {
+            // 获取该题目的两个输出
+            System.out.println("output:" + judgeServiceImpl.getLocaOutputList());
+
             return ResultUtils.success(result);
         }
-        return ResultUtils.success("none");
+        return ResultUtils.success("waiting");
+    }
+
+
+    /**
+     * 本地提交
+     *
+     * @param questionSubmitAddRequest
+     * @return
+     */
+    @PostMapping("/question_submit/local/do")
+    @SaCheckLogin
+    public BaseResponse<String> doLocalQuestionSubmit(@RequestBody QuestionSubmitAddRequest questionSubmitAddRequest) {
+        if (questionSubmitAddRequest == null || questionSubmitAddRequest.getQuestionId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "非法请求");
+        }
+        // 执行本地判题服务
+        final User loginUser = userService.getLoginUser();
+        Long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        CompletableFuture.runAsync(() -> judgeService.doLocalJudge(questionSubmitId));
+        return ResultUtils.success("ok");
     }
 
     // endregion

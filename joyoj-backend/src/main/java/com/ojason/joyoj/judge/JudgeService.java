@@ -17,4 +17,6 @@ public interface JudgeService {
      * @return
      */
     QuestionSubmit doJudge(long questionSubmitId);
+
+    QuestionSubmit doLocalJudge(Long questionSubmitId);
 }
