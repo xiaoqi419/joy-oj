@@ -193,7 +193,10 @@ const doSuccess = async (item: any) => {
         <a-col :span="13">
           <a-form-item field="userRole" label="角色">
             <div>
-              <a-tag size="large" color="blue">{{ form.userRole }}</a-tag>
+              <!--  三个角色 admin显示管理员 student显示学生 teacher显示老师  -->
+              <a-tag size="large" color="blue">
+                {{ form.userRole === 'admin' ? '管理员' : form.userRole === 'student' ? '学生' : '老师' }}
+              </a-tag>
               <a-button v-if="form.userRole === 'student'" type="primary" class="ml-2">申请成为老师</a-button>
             </div>
           </a-form-item>

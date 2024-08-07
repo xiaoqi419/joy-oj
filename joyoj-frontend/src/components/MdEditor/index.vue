@@ -40,4 +40,8 @@ const props = withDefaults(defineProps<Props>(), {
 ::v-deep(.bytemd-toolbar-icon.bytemd-tippy.bytemd-tippy-right:last-child) {
   display: none;
 }
+
+::v-deep(.bytemd) {
+  min-height: 600px;
+}
 </style>

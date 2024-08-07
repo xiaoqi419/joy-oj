@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { defineComponent, onMounted, ref, withDefaults } from 'vue'
-import {
-  QuestionControllerService,
-  QuestionEditRequest,
-  QuestionSubmitAddRequest,
-  QuestionSubmitControllerService
-} from '../../../generated'
+import { defineComponent, onMounted, ref, watch, withDefaults } from 'vue'
+import { QuestionControllerService, QuestionEditRequest, QuestionSubmitAddRequest } from '../../../generated'
 import { Message } from '@arco-design/web-vue'
 import CodeEditor from '@/components/CodeEditor/index.vue'
 import MdViewer from '@/components/MdViewer/index.vue'
 import Artalk from '@/components/Artalk/index.vue'
+import ResultModal from '@/components/Modal/ResultModal.vue'
+import useModalStore from '@/store/modules/modal'
 
 defineComponent({
   name: 'QuestionInfoView',
@@ -39,12 +36,12 @@ const loadData = async () => {
 }
 
 const languageLoading = ref(false)
-const options = ref([])
+const options = ref()
 const getLanguageOptions = async () => {
   const res = await QuestionControllerService.getLanguagesUsingGet()
   languageLoading.value = true
   if (res.code === 20000) {
-    options.value = res.data.map((item: any) => {
+    options.value = res.data!.map((item: any) => {
       // 首字母大写
       return item.name.charAt(0).toUpperCase() + item.name.slice(1)
     })
@@ -64,12 +61,15 @@ const form = ref<QuestionSubmitAddRequest>({
  */
 const submitLoading = ref(false)
 const runLoading = ref(false)
+const modalStore = useModalStore()
+const ResultFlag = ref(false)
 const doSubmit = async () => {
+  ResultFlag.value = false
   if (!question.value?.id) {
     return
   }
   submitLoading.value = !submitLoading.value
-  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
+  const res = await QuestionControllerService.doQuestionSubmitUsingPost({
     ...form.value,
     language: form.value.language?.toLowerCase(),
     questionId: question.value.id
@@ -77,6 +77,8 @@ const doSubmit = async () => {
   if (res.code === 20000) {
     Message.success('提交成功')
     submitLoading.value = !submitLoading.value
+    ResultFlag.value = true
+    modalStore.setResultModal(true)
   } else {
     Message.error('提交失败:' + res.message)
     submitLoading.value = !submitLoading.value
@@ -87,10 +89,46 @@ const changeCode = (value: string) => {
   form.value.code = value
 }
 
+// 本地提交代码
+const doLocalJudge = async () => {
+  ResultFlag.value = false
+  if (!question.value?.id) {
+    return
+  }
+  runLoading.value = !runLoading.value
+  const res = await QuestionControllerService.doLocalQuestionSubmitUsingPost({
+    ...form.value,
+    language: form.value.language?.toLowerCase(),
+    questionId: question.value.id
+  })
+  if (res.code === 20000) {
+    Message.success('提交成功')
+    runLoading.value = !runLoading.value
+    ResultFlag.value = true
+    modalStore.setResultModal(true)
+  } else {
+    Message.error('提交失败:' + res.message)
+    runLoading.value = !runLoading.value
+  }
+}
+
 onMounted(() => {
   loadData()
   getLanguageOptions()
+  if (form.value.code === '') {
+    form.value.code = 'public class Main {\n' +
+      '\n' +
+      '    public static void main(String[] args) {\n' +
+      '       \n' +
+      '    }\n' +
+      '\n' +
+      '}'
+  }
 })
+
+watch(() => form.value.code, () => {
+  console.log(form.value.code)
+}, { deep: true })
 </script>
 
 <template>
@@ -170,13 +208,34 @@ onMounted(() => {
               已存储
             </div>
             <div>
-              <a-button class="ml-2" status="success" :loading="runLoading">运行</a-button>
+              <a-button class="ml-2" status="success" :loading="runLoading" @click="doLocalJudge">运行</a-button>
               <a-button class="ml-2" type="primary" @click="doSubmit" :loading="submitLoading">提交</a-button>
             </div>
           </a-space>
         </a-card>
+        <!-- 控制台显示测试用例和输出用例 -->
+        <a-card class="a_card">
+          <a-row :gutter="[24,24]">
+            <a-col :md="7" :xs="24">
+              <a-menu
+                :style="{ width: '200px', borderRadius: '4px' }"
+              >
+                <a-sub-menu key="0">
+                  <template #title>测试用例</template>
+                  <a-menu-item key="0_Navigation 10">Case 1</a-menu-item>
+                  <a-menu-item key="0_1">Case 2</a-menu-item>
+                </a-sub-menu>
+              </a-menu>
+            </a-col>
+            <a-col :md="17" :xs="24">
+
+              <highlightjs code="暂时无法查看"/>
+            </a-col>
+          </a-row>
+        </a-card>
       </a-col>
     </a-row>
+    <ResultModal v-if="ResultFlag"/>
   </div>
 </template>
 

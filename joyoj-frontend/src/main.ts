@@ -14,11 +14,18 @@ import 'animate.css'
 import 'bytemd/dist/index.css'
 // JsonViewer样式
 import JsonViewer from 'vue-json-viewer'
+// 引入依赖和语言
+import 'highlight.js/styles/atom-one-dark.css'
+import hljs from 'highlight.js/lib/core'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
+import java from 'highlight.js/lib/languages/java'
 
 const startApp = () => {
   const app = createApp(App)
   app.use(ArcoVueIcon)
   app.use(JsonViewer)
+  app.use(hljsVuePlugin)
+  hljs.registerLanguage('java', java)
   // 静态资源
   installAssets(app)
   // 路由 VueRouter

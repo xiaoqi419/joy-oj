@@ -20,7 +20,17 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '浏览题目',
       icon: 'viewQuestion',
-      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.NOT_LOGIN]
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT]
+    }
+  },
+  {
+    path: '/view/question_submit',
+    name: 'ViewQuestionSubmit',
+    component: () => import('@/views/question/QuestionSubmitView.vue'),
+    meta: {
+      title: '浏览题目提交',
+      icon: 'viewQuestionSubmit',
+      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.STUDENT]
     }
   },
   {
@@ -65,11 +75,11 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    component: () => import('@/views/home/Home.vue'),
+    path: '/user/manage',
+    name: 'UserManage',
+    component: () => import('@/views/user/UserManageView.vue'),
     meta: {
-      title: '后台管理',
+      title: '用户管理',
       icon: 'admin',
       access: [ACCESS_ENUM.ADMIN]
     }

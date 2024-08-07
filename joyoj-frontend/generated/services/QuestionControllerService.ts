@@ -2,11 +2,21 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse } from '../models/BaseResponse';
+import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
+import type { BaseResponse_List_QuestionLanguage_ } from '../models/BaseResponse_List_QuestionLanguage_';
+import type { BaseResponse_long_ } from '../models/BaseResponse_long_';
+import type { BaseResponse_Page_Question_ } from '../models/BaseResponse_Page_Question_';
+import type { BaseResponse_Page_QuestionSubmitVO_ } from '../models/BaseResponse_Page_QuestionSubmitVO_';
+import type { BaseResponse_Page_QuestionVO_ } from '../models/BaseResponse_Page_QuestionVO_';
+import type { BaseResponse_Question_ } from '../models/BaseResponse_Question_';
+import type { BaseResponse_QuestionVO_ } from '../models/BaseResponse_QuestionVO_';
+import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QuestionAddRequest } from '../models/QuestionAddRequest';
 import type { QuestionEditRequest } from '../models/QuestionEditRequest';
 import type { QuestionQueryRequest } from '../models/QuestionQueryRequest';
+import type { QuestionSubmitAddRequest } from '../models/QuestionSubmitAddRequest';
+import type { QuestionSubmitQueryRequest } from '../models/QuestionSubmitQueryRequest';
 import type { QuestionUpdateRequest } from '../models/QuestionUpdateRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -15,13 +25,13 @@ export class QuestionControllerService {
     /**
      * addQuestion
      * @param questionAddRequest questionAddRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_long_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static addQuestionUsingPost(
         questionAddRequest: QuestionAddRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_long_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/add',
@@ -36,13 +46,13 @@ export class QuestionControllerService {
     /**
      * deleteQuestion
      * @param deleteRequest deleteRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static deleteQuestionUsingPost(
         deleteRequest: DeleteRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/delete',
@@ -57,13 +67,13 @@ export class QuestionControllerService {
     /**
      * editQuestion
      * @param questionEditRequest questionEditRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static editQuestionUsingPost(
         questionEditRequest: QuestionEditRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/edit',
@@ -78,12 +88,12 @@ export class QuestionControllerService {
     /**
      * getQuestionById
      * @param id id
-     * @returns BaseResponse OK
+     * @returns BaseResponse_Question_ OK
      * @throws ApiError
      */
     public static getQuestionByIdUsingGet(
         id?: number,
-    ): CancelablePromise<BaseResponse> {
+    ): CancelablePromise<BaseResponse_Question_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/question/get',
@@ -99,10 +109,10 @@ export class QuestionControllerService {
     }
     /**
      * getLanguages
-     * @returns BaseResponse OK
+     * @returns BaseResponse_List_QuestionLanguage_ OK
      * @throws ApiError
      */
-    public static getLanguagesUsingGet(): CancelablePromise<BaseResponse> {
+    public static getLanguagesUsingGet(): CancelablePromise<BaseResponse_List_QuestionLanguage_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/question/get/languages',
@@ -116,12 +126,12 @@ export class QuestionControllerService {
     /**
      * getQuestionVOById
      * @param id id
-     * @returns BaseResponse OK
+     * @returns BaseResponse_QuestionVO_ OK
      * @throws ApiError
      */
     public static getQuestionVoByIdUsingGet(
         id?: number,
-    ): CancelablePromise<BaseResponse> {
+    ): CancelablePromise<BaseResponse_QuestionVO_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/question/get/vo',
@@ -138,13 +148,13 @@ export class QuestionControllerService {
     /**
      * listQuestionByPage
      * @param questionQueryRequest questionQueryRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_Page_Question_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static listQuestionByPageUsingPost(
         questionQueryRequest: QuestionQueryRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_Page_Question_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/list/page',
@@ -159,13 +169,13 @@ export class QuestionControllerService {
     /**
      * listQuestionVOByPage
      * @param questionQueryRequest questionQueryRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_Page_QuestionVO_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static listQuestionVoByPageUsingPost(
         questionQueryRequest: QuestionQueryRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_Page_QuestionVO_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/list/page/vo',
@@ -180,13 +190,13 @@ export class QuestionControllerService {
     /**
      * listMyQuestionVOByPage
      * @param questionQueryRequest questionQueryRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_Page_QuestionVO_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static listMyQuestionVoByPageUsingPost(
         questionQueryRequest: QuestionQueryRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_Page_QuestionVO_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/my/list/page/vo',
@@ -199,15 +209,99 @@ export class QuestionControllerService {
         });
     }
     /**
+     * doQuestionSubmit
+     * @param questionSubmitAddRequest questionSubmitAddRequest
+     * @returns BaseResponse_long_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static doQuestionSubmitUsingPost(
+        questionSubmitAddRequest: QuestionSubmitAddRequest,
+    ): CancelablePromise<BaseResponse_long_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/do',
+            body: questionSubmitAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * getQuestionSubmitById
+     * @param questionSubmitQueryRequest questionSubmitQueryRequest
+     * @returns BaseResponse_string_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getQuestionSubmitByIdUsingPost(
+        questionSubmitQueryRequest: QuestionSubmitQueryRequest,
+    ): CancelablePromise<BaseResponse_string_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/get',
+            body: questionSubmitQueryRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * listQuestionSubmitByPage
+     * @param questionSubmitQueryRequest questionSubmitQueryRequest
+     * @returns BaseResponse_Page_QuestionSubmitVO_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static listQuestionSubmitByPageUsingPost(
+        questionSubmitQueryRequest: QuestionSubmitQueryRequest,
+    ): CancelablePromise<BaseResponse_Page_QuestionSubmitVO_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/list/page',
+            body: questionSubmitQueryRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * doLocalQuestionSubmit
+     * @param questionSubmitAddRequest questionSubmitAddRequest
+     * @returns BaseResponse_string_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static doLocalQuestionSubmitUsingPost(
+        questionSubmitAddRequest: QuestionSubmitAddRequest,
+    ): CancelablePromise<BaseResponse_string_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/local/do',
+            body: questionSubmitAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
      * updateQuestion
      * @param questionUpdateRequest questionUpdateRequest
-     * @returns BaseResponse OK
+     * @returns BaseResponse_boolean_ OK
      * @returns any Created
      * @throws ApiError
      */
     public static updateQuestionUsingPost(
         questionUpdateRequest: QuestionUpdateRequest,
-    ): CancelablePromise<BaseResponse | any> {
+    ): CancelablePromise<BaseResponse_boolean_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/question/update',

@@ -47,9 +47,9 @@ const onContentChange = (v: string) => {
   form.content = v
 }
 
-const onAnswerChange = (v: string) => {
-  form.answer = v
-}
+// const onAnswerChange = (v: string) => {
+//   form.answer = v
+// }
 
 // 页面复用
 // 如果路由包含update则视为更新页面
@@ -64,12 +64,12 @@ const loadData = async () => {
     const id = route.query.id
     const res = await QuestionControllerService.getQuestionByIdUsingGet(id as any)
     if (res.code === 20000) {
-      form.answer = res.data.answer
-      form.content = res.data.content
+      form.answer = res.data!.answer
+      form.content = res.data!.content
       form.judgeCase = JSON.parse(res.data.judgeCase)
       form.judgeConfig = JSON.parse(res.data.judgeConfig)
       form.tags = JSON.parse(res.data.tags)
-      form.title = res.data.title
+      form.title = res.data!.title
     } else {
       Message.error('获取数据失败:' + res.message)
     }
@@ -221,12 +221,12 @@ const rules = reactive<Record<string, FieldRule | FieldRule[]>>({
       <a-form-item field="tags" label="标签">
         <a-input-tag v-model="form.tags" placeholder="请输入标签（回车确认）" allow-clear style="max-width: 640px"/>
       </a-form-item>
-      <a-form-item field="content" label="题目内容">
+      <a-form-item field="content" label="题目内容" style="min-height: 600px">
         <MdEditor :value="form.content" :handle-change="onContentChange"/>
       </a-form-item>
-      <a-form-item field="answer" label="答案">
-        <MdEditor :value="form.answer" :handle-change="onAnswerChange"/>
-      </a-form-item>
+      <!--      <a-form-item field="answer" label="答案">-->
+      <!--        <MdEditor :value="form.answer" :handle-change="onAnswerChange"/>-->
+      <!--      </a-form-item>-->
       <a-form-item label="判题配置" :content-flex="false" :merge-props="false">
         <a-space direction="vertical" style="min-width: 480px;max-width: 640px">
           <a-form-item field="judgeConfig.timeLimit" label="时间限制" style="min-width: 640px">

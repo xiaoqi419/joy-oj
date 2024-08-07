@@ -2,7 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse } from '../models/BaseResponse';
+import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
@@ -26,12 +26,12 @@ export class VerifyControllerService {
     /**
      * getEmailCode
      * @param email email
-     * @returns BaseResponse OK
+     * @returns BaseResponse_boolean_ OK
      * @throws ApiError
      */
     public static getEmailCodeUsingGet(
         email: string,
-    ): CancelablePromise<BaseResponse> {
+    ): CancelablePromise<BaseResponse_boolean_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/verify/email',

@@ -23,7 +23,7 @@ const goRouter = (path: string) => {
   <div id="profile-box">
     <a-layout style="height: 1200px;">
       <a-layout class="pd-box">
-        <a-layout-sider class='sider'>
+        <a-layout-sider class="sider">
           <div class="top-container">
             <div class="Avatar">
               <a-avatar :size="54" shape="square">
@@ -38,7 +38,7 @@ const goRouter = (path: string) => {
           <div class="menu">
             <div class="menu-item" :class="{'menu-item-check':routeName === 'ProfileInfo'}">
               <joy-svg-icon icon="profile" class="icon"/>
-              <a class="ml-1" @click="goRouter('ProfileInfo')">个人资料</a>
+              <a class="ml-1" @click="goRouter('/profile/info')">个人资料</a>
             </div>
 
           </div>
