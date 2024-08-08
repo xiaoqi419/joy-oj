@@ -137,6 +137,9 @@ const saveCode: any = debounce(async () => {
   }
 }, 1500)
 
+// 获取保存的代码
+const questionId = ref(route.currentRoute.value.params.id.toString())
+
 onMounted(() => {
   loadData()
   getLanguageOptions()
@@ -218,7 +221,8 @@ watch(() => form.value.code, () => {
             </a-form-item>
           </a-form>
           <!-- 代码编辑器 -->
-          <CodeEditor :value="form.code" :language="form.language" :handle-change="changeCode"/>
+          <CodeEditor :question-id="questionId" :value="form.code" :language="form.language"
+                      :handle-change="changeCode"/>
           <a-space style="padding: 4px 0 4px 4px;display: flex;justify-content: space-between">
             <div class="status">
               <a-space v-if="isSave">

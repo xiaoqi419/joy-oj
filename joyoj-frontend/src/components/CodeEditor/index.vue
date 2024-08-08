@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import * as monaco from 'monaco-editor'
 import { onMounted, ref, toRaw, watch } from 'vue'
+import { QuestionControllerService } from '../../../generated'
+import useUserStore from '@/store/modules/user'
 
 type Props = {
   value: string
   language: string,
+  questionId: string,
   handleChange: (v: string) => void;
 }
 // todo 更改语言时代码不同
@@ -27,6 +30,17 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const codeEditorRef = ref()
 const codeEditor = ref()
+const userStore = useUserStore()
+const newCode = ref()
+const getCode = async () => {
+  const res = await QuestionControllerService.getQuestionSaveUsingPost({
+    userId: userStore.userInfo.id,
+    questionId: Number(props.questionId)
+  })
+  if (res.code === 20000) {
+    newCode.value = res.data.code
+  }
+}
 
 watch(
   () => props.language,
@@ -40,25 +54,43 @@ watch(
   }
 )
 
-onMounted(() => {
+onMounted(async () => {
   if (!codeEditorRef.value) {
     return
   }
-  // Hover on each property to see its docs!
-  codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: codeDefault,
-    language: 'java',
-    automaticLayout: true,
-    colorDecorators: true,
-    minimap: {
-      enabled: true
-    },
-    readOnly: false,
-    theme: 'vs-dark'
-    // lineNumbers: "off",
-    // roundedSelection: false,
-    // scrollBeyondLastLine: false,
-  })
+  await getCode()
+  if (newCode.value === null) {
+    codeEditor.value = monaco.editor.create(codeEditorRef.value, {
+      value: codeDefault,
+      language: 'java',
+      automaticLayout: true,
+      colorDecorators: true,
+      minimap: {
+        enabled: true
+      },
+      readOnly: false,
+      theme: 'vs-dark'
+      // lineNumbers: "off",
+      // roundedSelection: false,
+      // scrollBeyondLastLine: false,
+    })
+  } else {
+    codeEditor.value = monaco.editor.create(codeEditorRef.value, {
+      value: newCode.value,
+      language: 'java',
+      automaticLayout: true,
+      colorDecorators: true,
+      minimap: {
+        enabled: true
+      },
+      readOnly: false,
+      theme: 'vs-dark'
+      // lineNumbers: "off",
+      // roundedSelection: false,
+      // scrollBeyondLastLine: false,
+    })
+  }
+
   // 编辑 监听内容变化
   codeEditor.value.onDidChangeModelContent(() => {
     props.handleChange(toRaw(codeEditor.value).getValue())

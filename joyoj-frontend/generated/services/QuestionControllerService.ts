@@ -9,6 +9,7 @@ import type { BaseResponse_Page_Question_ } from '../models/BaseResponse_Page_Qu
 import type { BaseResponse_Page_QuestionSubmitVO_ } from '../models/BaseResponse_Page_QuestionSubmitVO_';
 import type { BaseResponse_Page_QuestionVO_ } from '../models/BaseResponse_Page_QuestionVO_';
 import type { BaseResponse_Question_ } from '../models/BaseResponse_Question_';
+import type { BaseResponse_QuestionSaveVO_ } from '../models/BaseResponse_QuestionSaveVO_';
 import type { BaseResponse_QuestionVO_ } from '../models/BaseResponse_QuestionVO_';
 import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { DeleteRequest } from '../models/DeleteRequest';
@@ -16,6 +17,7 @@ import type { QuestionAddRequest } from '../models/QuestionAddRequest';
 import type { QuestionEditRequest } from '../models/QuestionEditRequest';
 import type { QuestionQueryRequest } from '../models/QuestionQueryRequest';
 import type { QuestionSaveAddRequest } from '../models/QuestionSaveAddRequest';
+import type { QuestionSaveQueryRequest } from '../models/QuestionSaveQueryRequest';
 import type { QuestionSubmitAddRequest } from '../models/QuestionSubmitAddRequest';
 import type { QuestionSubmitQueryRequest } from '../models/QuestionSubmitQueryRequest';
 import type { QuestionUpdateRequest } from '../models/QuestionUpdateRequest';
@@ -307,6 +309,27 @@ export class QuestionControllerService {
             method: 'POST',
             url: '/api/question/question_submit/save',
             body: questionSaveAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * getQuestionSave
+     * @param questionSaveQueryRequest questionSaveQueryRequest
+     * @returns BaseResponse_QuestionSaveVO_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static getQuestionSaveUsingPost(
+        questionSaveQueryRequest: QuestionSaveQueryRequest,
+    ): CancelablePromise<BaseResponse_QuestionSaveVO_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/save/get',
+            body: questionSaveQueryRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
