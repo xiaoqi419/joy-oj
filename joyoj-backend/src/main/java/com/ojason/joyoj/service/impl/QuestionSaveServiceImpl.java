@@ -30,8 +30,8 @@ public class QuestionSaveServiceImpl extends ServiceImpl<QuestionSaveMapper, Que
 
     @Override
     public boolean saveQuestionCodeInRedis(QuestionSaveAddRequest questionSaveAddRequest, User loginUser) {
-        // 1.从redis中查找该用户对应该题目是否记录，有则替换为最新的代码片段，没有则创建新的
-        redisTemplate.opsForValue().set(QUESTION_SAVE + loginUser.getId() + "_" + questionSaveAddRequest.getQuestionId(), questionSaveAddRequest.getCode());
+        // 1.从redis中查找该用户对应该题目是否记录，有则替换为最新的代码片段，没有则创建新的,设置有效期为1天
+        redisTemplate.opsForValue().set(QUESTION_SAVE + loginUser.getId() + "_" + questionSaveAddRequest.getQuestionId(), questionSaveAddRequest.getCode(), 1, java.util.concurrent.TimeUnit.DAYS);
         return true;
     }
 
