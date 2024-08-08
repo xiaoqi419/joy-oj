@@ -15,6 +15,7 @@ import com.ojason.joyoj.exception.ThrowUtils;
 import com.ojason.joyoj.judge.JudgeService;
 import com.ojason.joyoj.judge.JudgeServiceImpl;
 import com.ojason.joyoj.model.dto.question.*;
+import com.ojason.joyoj.model.dto.questionsave.QuestionSaveAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.ojason.joyoj.model.entity.Question;
@@ -23,13 +24,9 @@ import com.ojason.joyoj.model.entity.QuestionSubmit;
 import com.ojason.joyoj.model.entity.User;
 import com.ojason.joyoj.model.vo.QuestionSubmitVO;
 import com.ojason.joyoj.model.vo.QuestionVO;
-import com.ojason.joyoj.service.QuestionLanguageService;
-import com.ojason.joyoj.service.QuestionService;
-import com.ojason.joyoj.service.QuestionSubmitService;
-import com.ojason.joyoj.service.UserService;
+import com.ojason.joyoj.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,8 +54,10 @@ public class QuestionController {
     @Resource
     @Lazy
     private JudgeService judgeService;
-    @Autowired
+    @Resource
     private JudgeServiceImpl judgeServiceImpl;
+    @Resource
+    private QuestionSaveService questionSaveService;
 
     // region 增删改查
 
@@ -389,6 +388,25 @@ public class QuestionController {
         CompletableFuture.runAsync(() -> judgeService.doLocalJudge(questionSubmitId));
         return ResultUtils.success("ok");
     }
+
+    /**
+     * 保存用户编辑的代码片段到redis中
+     */
+    @PostMapping("/question_submit/save")
+    @SaCheckLogin
+    public BaseResponse<Boolean> saveQuestionSubmit(@RequestBody QuestionSaveAddRequest questionSaveAddRequest) {
+        if (questionSaveAddRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "非法请求");
+        }
+        // 如果questionId和userId为空则抛异常
+        ThrowUtils.throwIf(questionSaveAddRequest.getQuestionId() <= 0, ErrorCode.PARAMS_ERROR, "非法请求");
+        ThrowUtils.throwIf(questionSaveAddRequest.getUserId() <= 0, ErrorCode.PARAMS_ERROR, "非法请求");
+        // 登录才能保存
+        final User loginUser = userService.getLoginUser();
+        boolean result = questionSaveService.saveQuestionCode(questionSaveAddRequest, loginUser);
+        return ResultUtils.success(result);
+    }
+
 
     // endregion
 
