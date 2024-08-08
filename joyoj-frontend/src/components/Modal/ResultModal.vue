@@ -14,9 +14,11 @@ const loading = ref(true)
 const resultFlag = ref(false)
 const route = useRouter()
 const userStore = useUserStore()
+const invocationNum = ref(0)
 
 // 查询判题结果
 const queryJudgeResult = async () => {
+  invocationNum.value++
   // 获取当前题目id
   const questionId = route.currentRoute.value.params.id
   // 获取当前用户id
@@ -34,11 +36,17 @@ const queryJudgeResult = async () => {
       loading.value = false
       resultFlag.value = false
     }
-    if (res.data === 'waiting') {
-      // 判题中隔一段时间再调用本身
-      setTimeout(() => {
-        queryJudgeResult()
-      }, 3000)
+    if (invocationNum.value < 5) {
+      if (res.data === 'waiting') {
+        // 判题中隔一段时间再调用本身
+        setTimeout(() => {
+          queryJudgeResult()
+        }, 3000)
+      }
+    } else {
+      loading.value = false
+      resultFlag.value = false
+      Message.error('请前往详情查看或稍后重试:' + res.message)
     }
   } else {
     Message.error('获取数据失败:' + res.message)

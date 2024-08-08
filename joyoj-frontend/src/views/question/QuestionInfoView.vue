@@ -139,10 +139,22 @@ const saveCode: any = debounce(async () => {
 
 // 获取保存的代码
 const questionId = ref(route.currentRoute.value.params.id.toString())
+const getCode = async () => {
+  const res = await QuestionControllerService.getQuestionSaveUsingPost({
+    userId: userStore.userInfo.id,
+    questionId: Number(route.currentRoute.value.params.id)
+  })
+  if (res.code === 20000) {
+    if (res.data.code !== null) {
+      form.value.code = res.data.code
+    }
+  }
+}
 
 onMounted(() => {
   loadData()
   getLanguageOptions()
+  getCode()
 })
 
 watch(() => form.value.code, () => {
