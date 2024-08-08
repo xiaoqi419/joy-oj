@@ -16,12 +16,14 @@ import com.ojason.joyoj.judge.JudgeService;
 import com.ojason.joyoj.judge.JudgeServiceImpl;
 import com.ojason.joyoj.model.dto.question.*;
 import com.ojason.joyoj.model.dto.questionsave.QuestionSaveAddRequest;
+import com.ojason.joyoj.model.dto.questionsave.QuestionSaveQueryRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.ojason.joyoj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.ojason.joyoj.model.entity.Question;
 import com.ojason.joyoj.model.entity.QuestionLanguage;
 import com.ojason.joyoj.model.entity.QuestionSubmit;
 import com.ojason.joyoj.model.entity.User;
+import com.ojason.joyoj.model.vo.QuestionSaveVO;
 import com.ojason.joyoj.model.vo.QuestionSubmitVO;
 import com.ojason.joyoj.model.vo.QuestionVO;
 import com.ojason.joyoj.service.*;
@@ -265,12 +267,11 @@ public class QuestionController {
     /**
      * 编辑（用户）
      *
-     * @param questionEditRequest
-     * @param request
-     * @return
+     * @param questionEditRequest 编辑请求
+     * @return 是否成功
      */
     @PostMapping("/edit")
-    public BaseResponse<Boolean> editQuestion(@RequestBody QuestionEditRequest questionEditRequest, HttpServletRequest request) {
+    public BaseResponse<Boolean> editQuestion(@RequestBody QuestionEditRequest questionEditRequest) {
         if (questionEditRequest == null || questionEditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -329,8 +330,8 @@ public class QuestionController {
     /**
      * 分页获取列表（除管理员外，普通用户只能看到非答案，提交代码等公开信息）
      *
-     * @param questionSubmitQueryRequest
-     * @return
+     * @param questionSubmitQueryRequest 查询请求
+     * @return 题目列表
      */
     @PostMapping("/question_submit/list/page")
     public BaseResponse<Page<QuestionSubmitVO>> listQuestionSubmitByPage(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
@@ -348,8 +349,8 @@ public class QuestionController {
     /**
      * 用户提交代码后查询判题状态
      *
-     * @param questionSubmitQueryRequest
-     * @return
+     * @param questionSubmitQueryRequest 查询请求
+     * @return 判题结果
      */
     @PostMapping("/question_submit/get")
     public BaseResponse<String> getQuestionSubmitById(@RequestBody QuestionSubmitQueryRequest questionSubmitQueryRequest) {
@@ -373,8 +374,8 @@ public class QuestionController {
     /**
      * 本地提交
      *
-     * @param questionSubmitAddRequest
-     * @return
+     * @param questionSubmitAddRequest 提交请求
+     * @return 提交结果
      */
     @PostMapping("/question_submit/local/do")
     @SaCheckLogin
@@ -391,6 +392,9 @@ public class QuestionController {
 
     /**
      * 保存用户编辑的代码片段到redis中
+     *
+     * @param questionSaveAddRequest 保存请求
+     * @return 保存结果
      */
     @PostMapping("/question_submit/save")
     @SaCheckLogin
@@ -403,8 +407,24 @@ public class QuestionController {
         ThrowUtils.throwIf(questionSaveAddRequest.getUserId() <= 0, ErrorCode.PARAMS_ERROR, "非法请求");
         // 登录才能保存
         final User loginUser = userService.getLoginUser();
-        boolean result = questionSaveService.saveQuestionCode(questionSaveAddRequest, loginUser);
+        boolean result = questionSaveService.saveQuestionCodeInRedis(questionSaveAddRequest, loginUser);
         return ResultUtils.success(result);
+    }
+
+    /**
+     * 获取保存的代码片段
+     *
+     * @param questionSaveQueryRequest 查询请求
+     * @return 保存的代码片段
+     */
+    @PostMapping("/question_submit/save/get")
+    @SaCheckLogin
+    public BaseResponse<QuestionSaveVO> getQuestionSave(@RequestBody QuestionSaveQueryRequest questionSaveQueryRequest) {
+        ThrowUtils.throwIf(questionSaveQueryRequest == null, ErrorCode.PARAMS_ERROR, "非法请求");
+        ThrowUtils.throwIf(questionSaveQueryRequest.getQuestionId() <= 0, ErrorCode.PARAMS_ERROR, "非法请求");
+        ThrowUtils.throwIf(questionSaveQueryRequest.getUserId() <= 0, ErrorCode.PARAMS_ERROR, "非法请求");
+        QuestionSaveVO questionSaveVO = questionSaveService.getQuestionSaveVO(questionSaveQueryRequest);
+        return ResultUtils.success(questionSaveVO);
     }
 
 

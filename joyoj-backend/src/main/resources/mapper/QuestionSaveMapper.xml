@@ -5,14 +5,16 @@
 <mapper namespace="com.ojason.joyoj.mapper.QuestionSaveMapper">
 
     <resultMap id="BaseResultMap" type="com.ojason.joyoj.model.entity.QuestionSave">
-        <id property="id" column="id" jdbcType="INTEGER"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="questionId" column="questionId" jdbcType="INTEGER"/>
         <result property="userId" column="userId" jdbcType="INTEGER"/>
         <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,questionId,userId,
-        code
+        code,createTime,updateTime
     </sql>
 </mapper>

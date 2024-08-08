@@ -2,8 +2,10 @@ package com.ojason.joyoj.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ojason.joyoj.model.dto.questionsave.QuestionSaveAddRequest;
+import com.ojason.joyoj.model.dto.questionsave.QuestionSaveQueryRequest;
 import com.ojason.joyoj.model.entity.QuestionSave;
 import com.ojason.joyoj.model.entity.User;
+import com.ojason.joyoj.model.vo.QuestionSaveVO;
 
 /**
  * @author 26504
@@ -14,11 +16,28 @@ public interface QuestionSaveService extends IService<QuestionSave> {
 
 
     /**
-     * 保存用户代码
+     * 保存用户代码到Redis
      *
      * @param questionSaveAddRequest
      * @param loginUser
      * @return
      */
-    boolean saveQuestionCode(QuestionSaveAddRequest questionSaveAddRequest, User loginUser);
+    boolean saveQuestionCodeInRedis(QuestionSaveAddRequest questionSaveAddRequest, User loginUser);
+
+
+    /**
+     * 保存用户代码到Mysql
+     *
+     * @param questionSaveAddRequest
+     * @return
+     */
+    boolean saveQuestionCodeInMysql(QuestionSaveAddRequest questionSaveAddRequest);
+
+    /**
+     * 获取用户对于该题目保存的代码片段
+     *
+     * @param questionSaveQueryRequest
+     * @return
+     */
+    QuestionSaveVO getQuestionSaveVO(QuestionSaveQueryRequest questionSaveQueryRequest);
 }

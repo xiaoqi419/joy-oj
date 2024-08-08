@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 题目代码保存
@@ -22,7 +23,7 @@ public class QuestionSave implements Serializable {
      * id
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
     /**
      * 题目id
      */
@@ -35,4 +36,12 @@ public class QuestionSave implements Serializable {
      * 代码片段
      */
     private String code;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }
