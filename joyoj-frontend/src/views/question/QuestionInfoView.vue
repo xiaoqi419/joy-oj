@@ -7,6 +7,9 @@ import MdViewer from '@/components/MdViewer/index.vue'
 import Artalk from '@/components/Artalk/index.vue'
 import ResultModal from '@/components/Modal/ResultModal.vue'
 import useModalStore from '@/store/modules/modal'
+import useUserStore from '@/store/modules/user'
+import { useRouter } from 'vue-router'
+import { debounce } from '@pureadmin/utils'
 
 defineComponent({
   name: 'QuestionInfoView',
@@ -112,22 +115,35 @@ const doLocalJudge = async () => {
   }
 }
 
+const userStore = useUserStore()
+const route = useRouter()
+const isSave = ref(false)
+
+// 防抖保存代码
+const saveCode: any = debounce(async () => {
+  isSave.value = true
+  const res = await QuestionControllerService.saveQuestionSubmitUsingPost({
+    ...form.value,
+    userId: userStore.userInfo.id,
+    language: form.value.language?.toLowerCase(),
+    questionId: Number(route.currentRoute.value.params.id)
+  })
+  if (res.code === 20000) {
+    Message.success('保存成功')
+    isSave.value = false
+  } else {
+    Message.error('保存失败:' + res.message)
+    isSave.value = false
+  }
+}, 1500)
+
 onMounted(() => {
   loadData()
   getLanguageOptions()
-  if (form.value.code === '') {
-    form.value.code = 'public class Main {\n' +
-      '\n' +
-      '    public static void main(String[] args) {\n' +
-      '       \n' +
-      '    }\n' +
-      '\n' +
-      '}'
-  }
 })
 
 watch(() => form.value.code, () => {
-  console.log(form.value.code)
+  saveCode()
 }, { deep: true })
 </script>
 
@@ -205,7 +221,15 @@ watch(() => form.value.code, () => {
           <CodeEditor :value="form.code" :language="form.language" :handle-change="changeCode"/>
           <a-space style="padding: 4px 0 4px 4px;display: flex;justify-content: space-between">
             <div class="status">
-              已存储
+              <a-space v-if="isSave">
+                <a-spin>
+                  <template #icon>
+                    <icon-sync/>
+                  </template>
+                </a-spin>
+                存储中
+              </a-space>
+              <span v-else>已存储</span>
             </div>
             <div>
               <a-button class="ml-2" status="success" :loading="runLoading" @click="doLocalJudge">运行</a-button>

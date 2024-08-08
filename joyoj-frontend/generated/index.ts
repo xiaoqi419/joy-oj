@@ -52,6 +52,7 @@ export type { QuestionAddRequest } from './models/QuestionAddRequest';
 export type { QuestionEditRequest } from './models/QuestionEditRequest';
 export type { QuestionLanguage } from './models/QuestionLanguage';
 export type { QuestionQueryRequest } from './models/QuestionQueryRequest';
+export type { QuestionSaveAddRequest } from './models/QuestionSaveAddRequest';
 export type { QuestionSubmitAddRequest } from './models/QuestionSubmitAddRequest';
 export type { QuestionSubmitQueryRequest } from './models/QuestionSubmitQueryRequest';
 export type { QuestionSubmitVO } from './models/QuestionSubmitVO';

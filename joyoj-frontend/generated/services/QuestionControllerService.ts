@@ -15,6 +15,7 @@ import type { DeleteRequest } from '../models/DeleteRequest';
 import type { QuestionAddRequest } from '../models/QuestionAddRequest';
 import type { QuestionEditRequest } from '../models/QuestionEditRequest';
 import type { QuestionQueryRequest } from '../models/QuestionQueryRequest';
+import type { QuestionSaveAddRequest } from '../models/QuestionSaveAddRequest';
 import type { QuestionSubmitAddRequest } from '../models/QuestionSubmitAddRequest';
 import type { QuestionSubmitQueryRequest } from '../models/QuestionSubmitQueryRequest';
 import type { QuestionUpdateRequest } from '../models/QuestionUpdateRequest';
@@ -285,6 +286,27 @@ export class QuestionControllerService {
             method: 'POST',
             url: '/api/question/question_submit/local/do',
             body: questionSubmitAddRequest,
+            errors: {
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                404: `Not Found`,
+            },
+        });
+    }
+    /**
+     * saveQuestionSubmit
+     * @param questionSaveAddRequest questionSaveAddRequest
+     * @returns BaseResponse_boolean_ OK
+     * @returns any Created
+     * @throws ApiError
+     */
+    public static saveQuestionSubmitUsingPost(
+        questionSaveAddRequest: QuestionSaveAddRequest,
+    ): CancelablePromise<BaseResponse_boolean_ | any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/question/question_submit/save',
+            body: questionSaveAddRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

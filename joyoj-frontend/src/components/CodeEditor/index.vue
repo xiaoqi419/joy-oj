@@ -10,6 +10,8 @@ type Props = {
 // todo 更改语言时代码不同
 const codeDefault = 'public class Main {\n' +
   '\n' +
+  '    ' + '//' + ' ' + '请勿修改类名和方法名等代码' +
+  '\n' +
   '    public static void main(String[] args) {\n' +
   '       \n' +
   '    }\n' +
