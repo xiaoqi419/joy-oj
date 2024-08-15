@@ -34,7 +34,7 @@
                 <HomeGoButton/>
               </a-col>
               <a-col :span="12">
-                <a-button size="large" class="button-about">关于我们</a-button>
+                <a-button size="large" class="button-about" @click="() => router.push('/about')">关于我们</a-button>
               </a-col>
             </a-row>
           </div>
@@ -54,6 +54,7 @@ import { defineComponent } from 'vue'
 import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
 import HomeGoButton from '@/components/Button/HomeGoButton.vue'
 import CodeTypeIt from '@/components/Home/CodeTypeIt.vue'
+import router from '@/router'
 
 defineComponent({
   name: 'home',

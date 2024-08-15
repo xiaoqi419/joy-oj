@@ -38,21 +38,17 @@ const loadData = async () => {
   }
 }
 
-const languageLoading = ref(false)
 const options = ref()
 const getLanguageOptions = async () => {
   const res = await QuestionControllerService.getLanguagesUsingGet()
-  languageLoading.value = true
   if (res.code === 20000) {
     options.value = res.data!.map((item: any) => {
       // 首字母大写
       return item.name.charAt(0).toUpperCase() + item.name.slice(1)
     })
-    languageLoading.value = false
     form.value.language = 'Java'
   } else {
     Message.error('获取数据失败:' + res.message)
-    languageLoading.value = false
   }
 }
 const form = ref<QuestionSubmitAddRequest>({
@@ -227,7 +223,7 @@ watch(() => form.value.code, () => {
         <a-card class="a_card" hoverable :style="{ marginBottom: '20px' }">
           <a-form :model="form" layout="inline" class="mb-4">
             <a-form-item field="language" label="编程语言" style="min-width: 280px">
-              <a-select v-model="form.language" :options="options" :style="{width:'120px'}" :loading="languageLoading"
+              <a-select v-model="form.language" :options="options" :style="{width:'120px'}"
                         placeholder="请选择语言 ..." value-key="id" default-value="Java"
                         @search="getLanguageOptions"/>
             </a-form-item>

@@ -8,10 +8,10 @@
       <div class="footer-section links">
         <h2>Quick Links</h2>
         <a-space>
-          <a-link href="/about">关于我们</a-link>
-          <a-link href="/view/question">浏览题目</a-link>
-          <a-link href="https://www.ojason.top">我的博客</a-link>
-          <a-link href="https://ojason.top">个人主页</a-link>
+          <a-link style="color: darkgray" href="/about">关于我们</a-link>
+          <a-link style="color: darkgray" href="/view/question">浏览题目</a-link>
+          <a-link style="color: darkgray" href="https://www.ojason.top">我的博客</a-link>
+          <a-link style="color: darkgray" href="https://ojason.top">个人主页</a-link>
         </a-space>
       </div>
       <div class="footer-section social">

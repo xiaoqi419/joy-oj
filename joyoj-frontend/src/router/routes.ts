@@ -14,6 +14,16 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/home/About.vue'),
+    meta: {
+      title: '关于我们',
+      hidden: true,
+      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+    }
+  },
+  {
     path: '/view/question',
     name: 'ViewQuestion',
     component: () => import('@/views/question/QuestionView.vue'),
