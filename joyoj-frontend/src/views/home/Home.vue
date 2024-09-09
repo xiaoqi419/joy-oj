@@ -47,10 +47,40 @@
       </a-col>
     </a-row>
   </div>
+  <hr/>
+  <div class="stepBox" id="home-container">
+    <div class="step-first">
+      <span class="bg-text pink-blue">🥕 开始</span>
+      <p class="id-text">
+        在首页点击开始按钮跳转到浏览题目页面
+        <br/>
+        尽情浏览来自五湖四海的题目
+      </p>
+      <img src="../../assets/images/step-question-view.png">
+    </div>
+    <div class="step-second step">
+      <span class="bg-text pink-blue">🍺 答题</span>
+      <p class="id-text">
+        选中心仪的题目点击做题按钮跳转到答题页面
+        <br/>
+        在代码编辑器中输入题目答案
+      </p>
+      <img class="mt-4" src="../../assets/images/step-question-submit.png" height="551px" width="1200px">
+    </div>
+    <div class="step-third step" style="margin-top: 200px">
+      <span class="bg-text pink-blue">🐇 评测</span>
+      <p class="id-text">
+        你已经完成了答题请前往浏览题目提交界面
+        <br/>
+        查看你的“得分”情况吧
+      </p>
+      <img class="mt-5" src="../../assets/images/step-question-submit-view.png">
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
 import HomeGoButton from '@/components/Button/HomeGoButton.vue'
 import CodeTypeIt from '@/components/Home/CodeTypeIt.vue'
@@ -73,12 +103,57 @@ const options: TypeItOptions = {
   speed: 600,
   deleteSpeed: 200
 }
+const observer: any = ref(null)
+onMounted(() => {
+  observer.value = new IntersectionObserver((entries, instance) => {
+    entries.forEach(entry => {
+      const target = entry.target as HTMLElement
+      if (entry.isIntersecting) {
+        // Add `visible` to the first element and remove from the second when scrolling down
+        if (target.classList.contains('step-first')) {
+          target.classList.add('visible')
+        }
+        if (target.classList.contains('step-second')) {
+          target.classList.add('visible')
+        }
+        if (target.classList.contains('step-third')) {
+          target.classList.add('visible')
+        }
+      } else {
+        // Remove `visible` from the first element when it goes out of view
+        if (target.classList.contains('step-first')) {
+          target.classList.remove('visible')
+        }
+        if (target.classList.contains('step-second')) {
+          target.classList.remove('visible')
+        }
+        if (target.classList.contains('step-third')) {
+          target.classList.remove('visible')
+        }
+      }
+    })
+  }, {
+    root: null,
+    threshold: 0.6 // Adjust the threshold value as needed
+  }) as any
+
+  // Observe both elements
+  const firstElement = document.querySelector('.step-first') as HTMLElement
+  const secondElement = document.querySelector('.step-second') as HTMLElement
+  const thirdElement = document.querySelector('.step-third') as HTMLElement
+  if (firstElement && secondElement) {
+    observer.value.observe(firstElement)
+    observer.value.observe(secondElement)
+    observer.value.observe(thirdElement)
+  }
+})
+
 </script>
 
 <style scoped lang="scss">
 
 #home-container {
-  padding: 120px;
+  padding: 180px 120px 120px 120px;
   margin: 0 20px;
 
   .home-wrapper-slogan {
@@ -156,6 +231,51 @@ const options: TypeItOptions = {
         }
       }
     }
+  }
+}
+
+.stepBox {
+  text-align: center;
+
+  .bg-text {
+    font-size: 48px;
+    font-weight: 600;
+    letter-spacing: -1.2px;
+    line-height: 48px;
+    text-decoration: none solid rgba(0, 0, 0, 0);
+    word-spacing: 0px;
+    // 渐变 从粉色到蓝色
+    background: linear-gradient(92.06deg, #ec4899 -17.9%, #165dff 99.4%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .id-text {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    line-height: 24px;
+    text-decoration: none solid rgba(0, 0, 0, 0);
+    word-spacing: 0px;
+    margin-top: 40px;
+  }
+
+  .step-first,
+  .step-second {
+    opacity: 0;
+    transform: translateY(20px); /* Starts below the screen */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+
+  .step-first.visible,
+  .step-second.visible {
+    opacity: 1;
+    transform: translateY(0); /* Moves up into view */
+  }
+
+  .step {
+    margin-top: 160px;
   }
 }
 
