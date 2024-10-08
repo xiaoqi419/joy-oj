@@ -64,11 +64,12 @@ const loadData = async () => {
     const id = route.query.id
     const res = await QuestionControllerService.getQuestionByIdUsingGet(id as any)
     if (res.code === 20000) {
+      const data = res.data! as any
       form.answer = res.data!.answer
       form.content = res.data!.content
-      form.judgeCase = JSON.parse(res.data.judgeCase)
-      form.judgeConfig = JSON.parse(res.data.judgeConfig)
-      form.tags = JSON.parse(res.data.tags)
+      form.judgeCase = JSON.parse(data.judgeCase)
+      form.judgeConfig = JSON.parse(data.judgeConfig)
+      form.tags = JSON.parse(data.tags)
       form.title = res.data!.title
     } else {
       Message.error('获取数据失败:' + res.message)

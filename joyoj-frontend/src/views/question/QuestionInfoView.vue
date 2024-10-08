@@ -10,13 +10,15 @@ import useModalStore from '@/store/modules/modal'
 import useUserStore from '@/store/modules/user'
 import { useRouter } from 'vue-router'
 import { debounce } from '@pureadmin/utils'
+import Solution from '@/components/Solution/index.vue'
 
 defineComponent({
   name: 'QuestionInfoView',
   components: {
     CodeEditor,
     MdViewer,
-    Artalk
+    Artalk,
+    Solution
   }
 })
 
@@ -161,8 +163,8 @@ watch(() => form.value.code, () => {
 <template>
   <div id="QuestionInfoView">
     <a-row :gutter="[24,24]">
-      <a-col :md="11" :xs="24">
-        <a-card class="a_card" hoverable :style="{  marginBottom: '20px' }" :loading="loading" style="padding: 10px">
+      <a-col :md="12" :xs="24">
+        <a-card class="a_card" hoverable :style="{  marginBottom: '20px' }" :loading="loading" style="padding: 5px">
           <a-tabs default-active-key="questionInfo">
             <a-tab-pane key="questionInfo">
               <template #title>
@@ -208,18 +210,12 @@ watch(() => form.value.code, () => {
                   题解
                 </a-space>
               </template>
-              <a-empty>
-                <template #image>
-                  <icon-exclamation-circle-fill/>
-                </template>
-                暂时无法查看答案！
-              </a-empty>
-
+              <Solution/>
             </a-tab-pane>
           </a-tabs>
         </a-card>
       </a-col>
-      <a-col :md="13" :xs="24">
+      <a-col :md="12" :xs="24">
         <a-card class="a_card" hoverable :style="{ marginBottom: '20px' }">
           <a-form :model="form" layout="inline" class="mb-4">
             <a-form-item field="language" label="编程语言" style="min-width: 280px">
@@ -277,9 +273,8 @@ watch(() => form.value.code, () => {
 
 <style scoped lang="scss">
 #QuestionInfoView {
-  width: 1400px;
-  max-width: 1480px;
-  margin: 20px auto;
+  width: 95vw;
+  margin: 10px auto;
 
   .a_card {
     border-radius: 12px;

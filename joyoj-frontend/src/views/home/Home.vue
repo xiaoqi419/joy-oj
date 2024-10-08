@@ -153,7 +153,7 @@ onMounted(() => {
 <style scoped lang="scss">
 
 #home-container {
-  padding: 180px 120px 120px 120px;
+  padding: 180px 120px 170px 120px;
   margin: 0 20px;
 
   .home-wrapper-slogan {
