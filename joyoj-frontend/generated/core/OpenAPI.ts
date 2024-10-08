@@ -3,9 +3,12 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ApiRequestOptions } from './ApiRequestOptions'
+import * as process from 'node:process'
 
 type Resolver<T> = (options: ApiRequestOptions) => Promise<T>;
 type Headers = Record<string, string>;
+
+const isDev: boolean = process.env.NODE_ENV === 'development'
 
 export type OpenAPIConfig = {
   BASE: string;
@@ -20,7 +23,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: 'http://localhost:8101',
+  BASE: isDev ? 'http://localhost:8101' : 'http://110.40.61.114:8101',
   VERSION: '1.0',
   WITH_CREDENTIALS: true,
   CREDENTIALS: 'include',
