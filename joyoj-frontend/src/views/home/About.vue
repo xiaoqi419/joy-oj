@@ -29,7 +29,7 @@ const router = useRouter()
           :style="{
           width: '100%',
         }"
-        />
+         alt=""/>
       </a-carousel-item>
     </a-carousel>
     <div class="card-box">
