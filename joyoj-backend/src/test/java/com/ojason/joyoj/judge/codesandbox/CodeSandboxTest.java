@@ -20,6 +20,7 @@ import java.util.Scanner;
 @SpringBootTest
 class CodeSandboxTest {
 
+
     @Value("${codesandbox.type}")
     private String codesandboxType;
 
@@ -44,7 +45,13 @@ class CodeSandboxTest {
     void executeCode() {
         String type = codesandboxType;
         CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
-        String code = "int main(){}";
+        String code = "public class Main {\n" +
+                "    public static void main(String[] args) {\n" +
+                "        int a = Integer.parseInt(args[0]);\n" +
+                "        int b = Integer.parseInt(args[1]);\n" +
+                "        System.out.println(\"结果：\" + a + b);\n" +
+                "    }\n" +
+                "}";
         String language = QuestionSubmitLanguageEnum.JAVA.getValue();
         List<String> inputList = new ArrayList<>();
         ExecuteCodeRequest executeCodeRequest = ExecuteCodeRequest.builder()
@@ -53,5 +60,7 @@ class CodeSandboxTest {
                 .inputList(inputList)
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
+        System.out.println(executeCodeResponse);
     }
 }
+

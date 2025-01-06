@@ -61,6 +61,7 @@ public class QuestionController {
     @Resource
     private QuestionSaveService questionSaveService;
 
+
     // region 增删改查
 
     /**
@@ -261,8 +262,6 @@ public class QuestionController {
         return ResultUtils.success(questionService.getQuestionVOPage(questionPage, request));
     }
 
-    // endregion
-
 
     /**
      * 编辑（用户）
@@ -303,6 +302,8 @@ public class QuestionController {
     public BaseResponse<List<QuestionLanguage>> getLanguages() {
         return ResultUtils.success(questionLanguageService.getQuestionLanguage());
     }
+    // endregion
+
 
     // region 提交问题
 
@@ -360,14 +361,11 @@ public class QuestionController {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR, "非法id");
         ThrowUtils.throwIf(userId <= 0, ErrorCode.PARAMS_ERROR, "非法userId");
         String result = questionSubmitService.getJudgeResult(questionSubmitQueryRequest);
-        // 判断是否正确、判题中、错误
         if (result != null) {
-            // 获取该题目的两个输出
-            System.out.println("output:" + judgeServiceImpl.getLocaOutputList());
-
             return ResultUtils.success(result);
+        } else {
+            return ResultUtils.success("waiting");
         }
-        return ResultUtils.success("waiting");
     }
 
 

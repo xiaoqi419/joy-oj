@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.joy</groupId>
     <artifactId>joyoj-code-sandbox</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>joyoj-code-sandbox</name>
     <description>joyoj-code-sandbox</description>
     <properties>
@@ -52,6 +52,11 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.25</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2.1</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -83,7 +88,7 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.joy.joyojcodesandbox.JoyojCodeSandboxApplication</mainClass>
-                    <skip>true</skip>
+                    <skip>false</skip>
                 </configuration>
                 <executions>
                     <execution>

@@ -36,7 +36,7 @@ const queryJudgeResult = async () => {
       loading.value = false
       resultFlag.value = false
     }
-    if (invocationNum.value < 5) {
+    if (invocationNum.value < 10) {
       if (res.data === 'waiting') {
         // 判题中隔一段时间再调用本身
         setTimeout(() => {

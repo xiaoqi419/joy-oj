@@ -117,24 +117,6 @@ const userStore = useUserStore()
 const route = useRouter()
 const isSave = ref(false)
 
-// 防抖保存代码
-const saveCode: any = debounce(async () => {
-  isSave.value = true
-  const res = await QuestionControllerService.saveQuestionSubmitUsingPost({
-    ...form.value,
-    userId: userStore.userInfo.id,
-    language: form.value.language?.toLowerCase(),
-    questionId: Number(route.currentRoute.value.params.id)
-  })
-  if (res.code === 20000) {
-    Message.success('保存成功')
-    isSave.value = false
-  } else {
-    Message.error('保存失败:' + res.message)
-    isSave.value = false
-  }
-}, 1500)
-
 // 获取保存的代码
 const questionId = ref(route.currentRoute.value.params.id.toString())
 const getCode = async () => {
@@ -148,15 +130,40 @@ const getCode = async () => {
     }
   }
 }
-
+// 防抖保存代码
+const saveCode: any = debounce(async () => {
+  isSave.value = true
+  const res = await QuestionControllerService.saveQuestionSubmitUsingPost({
+    ...form.value,
+    userId: userStore.userInfo.id,
+    language: form.value.language?.toLowerCase(),
+    questionId: Number(route.currentRoute.value.params.id)
+  })
+  if (res.code === 20000) {
+    Message.success('保存成功')
+    isSave.value = false
+    // 重新渲染页面
+    await getCode()
+  }
+  // else {
+  //   Message.error('保存失败:' + res.message)
+  //   isSave.value = false
+  //   // 重新渲染页面
+  //   await getCode()
+  // }
+}, 1500)
 onMounted(() => {
   loadData()
   getLanguageOptions()
   getCode()
+  saveCode()
 })
 
 watch(() => form.value.code, () => {
-  saveCode()
+  // 如果路由值存在
+  if (route.currentRoute.value.params.id) {
+    saveCode()
+  }
 }, { deep: true })
 </script>
 

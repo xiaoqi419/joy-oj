@@ -35,7 +35,7 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
     private static final String GLOBAL_CODE_DIR_NAME = "tmpCode";
     private static final String GLOBAL_JAVA_CLASS_NAME = "Main.java";
     private static final Boolean FIRST_INIT = true;
-//    private static final Long TIME_OUT = 5000L;
+    private static final Long TIME_OUT = 5000L;
 
     private File userCodeFile;
     private String userCodeParentPath;
@@ -77,6 +77,19 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
 
     @Override
     protected void uploadToContainer() {
+        // 拼接路径
+//        DockerClientConfig config = DefaultDockerClientConfig
+//                .createDefaultConfigBuilder()
+//                .withDockerHost("tcp://110.40.61.114:2375")
+//                .withDockerTlsVerify(false)
+//                .build();
+//        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+//                .dockerHost(config.getDockerHost())
+//                .sslConfig(config.getSSLConfig())
+//                .maxConnections(100)
+//                .connectionTimeout(Duration.ofSeconds(30))
+//                .responseTimeout(Duration.ofSeconds(45))
+//                .build();
         dockerClient = DockerClientBuilder.getInstance().build();
         String image = "openjdk:8-alpine";
         if (Boolean.TRUE.equals(FIRST_INIT)) {
@@ -104,8 +117,9 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
         hostConfig.withCpuCount(1L);
         hostConfig.withMemorySwap(0L);
         hostConfig.setBinds(new Bind(userCodeParentPath, new Volume("/home/oj")));
+        UUID randomUUID = UUID.randomUUID();
         CreateContainerResponse containerResponse = containerCmd
-                .withName("joy-docker-java")
+                .withName("joy-docker-java" + "-" + randomUUID)
                 .withHostConfig(hostConfig)
                 .withAttachStdin(true)
                 .withAttachStderr(true)
@@ -139,7 +153,7 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
             final String[] message = {null};
             final String[] errorMessage = {null};
             final CountDownLatch latch = new CountDownLatch(1);
-            long time;
+            long time = 0L;
             final boolean[] timeout = {true};
             ExecStartResultCallback execStartResultCallback = new ExecStartResultCallback() {
 
@@ -240,9 +254,13 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
                 maxMemory = Math.max(maxMemory, memory);
             }
         }
-        outputList = outputList.stream()
-                .map(line -> line.replace("\n", "").replace("\r", ""))
-                .collect(Collectors.toList());
+        try {
+            outputList = outputList.stream()
+                    .map(line -> line.replace("\n", "").replace("\r", ""))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            executeCodeResponse = handleError(e);
+        }
         executeCodeResponse.setOutputList(outputList);
         executeCodeResponse.setMessage("");
         // 正常运行
@@ -269,14 +287,14 @@ public class JavaCodeExecution extends JavaCodeSandboxTemplate {
     }
 
     @Override
-    protected void handleError(Exception e) {
+    protected ExecuteCodeResponse handleError(Exception e) {
         ExecuteCodeResponse executeCodeResponse = new ExecuteCodeResponse();
         executeCodeResponse.setOutputList(new ArrayList<>());
         executeCodeResponse.setMessage(e.getMessage());
         // 代码沙箱错误
         executeCodeResponse.setStatus(2);
         executeCodeResponse.setJudgeInfo(new JudgeInfo());
-        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "代码沙箱错误:" + executeCodeResponse);
+        return executeCodeResponse;
     }
 
 }

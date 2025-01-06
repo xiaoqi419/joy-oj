@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -33,8 +34,8 @@ public class VerifyController {
      * 获取验证码
      */
     @GetMapping("/captcha")
-    public void getArithmetic(HttpServletResponse response) {
-        verifyService.getArithmetic(response);
+    public BaseResponse<String> getArithmetic(HttpServletRequest request, HttpServletResponse response) {
+        return verifyService.getArithmetic(request, response);
     }
 
     /**

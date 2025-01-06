@@ -1,7 +1,5 @@
 package com.ojason.joyoj.service.impl;
 
-import cn.dev33.satoken.session.SaSession;
-import cn.dev33.satoken.session.SaSessionCustomUtil;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -143,7 +141,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取当前登录用户
      *
-     * @param request
      * @return
      */
     @Override
@@ -165,11 +162,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 获取当前登录用户（允许未登录）
      *
-     * @param request
      * @return
      */
     @Override
-    public User getLoginUserPermitNull(HttpServletRequest request) {
+    public User getLoginUserPermitNull() {
         // 先判断是否已登录
         User currentUser = (User) StpUtil.getSession().get("user");
         if (currentUser == null || currentUser.getId() == null) {
@@ -268,41 +264,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean forgetPassword(UserForgetPasswordRequest userForgetPasswordRequest) {
-        boolean verifyCaptcha = verifyService.verifyCaptcha(userForgetPasswordRequest.getCode());
-        if (verifyCaptcha) {
-            // 1. 校验邮箱验证码
-            String verifyCode = (String) redisTemplate.opsForValue().get(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
-            System.out.println(verifyCode);
-            if (StringUtils.isBlank(verifyCode) || !verifyCode.equals(userForgetPasswordRequest.getEmailCode())) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱验证码错误");
-            }
-            //  校验
-            String userAccount = userForgetPasswordRequest.getUserAccount();
-            String userPassword = userForgetPasswordRequest.getNewPassword();
-            String userEmail = userForgetPasswordRequest.getUserEmail();
-            if (StringUtils.isAnyBlank(userAccount, userPassword)) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
-            }
-            // 查询当前修改用户是否存在
-            User currentUser = this.getOne(new QueryWrapper<User>().eq("userAccount", userAccount).eq("userEmail", userEmail));
-            if (currentUser == null) {
-                log.info("forget password failed, userAccount cannot match userPassword");
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
-            }
-            // 2. 加密
-            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
-            // 3. 更新密码
-            currentUser.setUserPassword(encryptPassword);
-            boolean updateResult = this.updateById(currentUser);
-            if (!updateResult) {
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "修改密码失败，数据库错误");
-            }
-            // 修改成功删除验证码
-            redisTemplate.delete(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
-            SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
-            session.delete("code");
-            return true;
+//        boolean verifyCaptcha = verifyService.verifyCaptcha(userForgetPasswordRequest.getCode());
+        // 1. 校验邮箱验证码
+        String verifyCode = (String) redisTemplate.opsForValue().get(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
+        System.out.println(verifyCode);
+        if (StringUtils.isBlank(verifyCode) || !verifyCode.equals(userForgetPasswordRequest.getEmailCode())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱验证码错误");
         }
-        throw new BusinessException(ErrorCode.PARAMS_ERROR, "验证码错误");
+        //  校验
+        String userAccount = userForgetPasswordRequest.getUserAccount();
+        String userPassword = userForgetPasswordRequest.getNewPassword();
+        String userEmail = userForgetPasswordRequest.getUserEmail();
+        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
+        }
+        // 查询当前修改用户是否存在
+        User currentUser = this.getOne(new QueryWrapper<User>().eq("userAccount", userAccount).eq("userEmail", userEmail));
+        if (currentUser == null) {
+            log.info("forget password failed, userAccount cannot match userPassword");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+        // 2. 加密
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        // 3. 更新密码
+        currentUser.setUserPassword(encryptPassword);
+        boolean updateResult = this.updateById(currentUser);
+        if (!updateResult) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "修改密码失败，数据库错误");
+        }
+        // 修改成功删除验证码
+        redisTemplate.delete(SEND_EMAIL_CODE + userForgetPasswordRequest.getUserEmail());
+//            SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
+//            session.delete("code");
+        return true;
     }
 }

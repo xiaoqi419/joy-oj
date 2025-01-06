@@ -200,7 +200,6 @@ public class QuestionSubmitServiceImpl extends ServiceImpl<QuestionSubmitMapper,
         QueryWrapper<QuestionSubmit> queryWrapper = getQueryWrapper(questionSubmitQueryRequest);
         queryWrapper.eq("questionId", questionSubmitQueryRequest.getQuestionId());
         queryWrapper.eq("userId", questionSubmitQueryRequest.getUserId());
-        queryWrapper.eq("isLocal", 1);
         // 按照时间最新取一个
         queryWrapper.orderByDesc("createTime");
         queryWrapper.last("limit 1");

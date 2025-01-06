@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue'
 import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
+import 'animate.css'
 
 defineComponent({
   name: 'CodeTypeIt',
@@ -109,5 +110,6 @@ const codeEditor = ref(null)
   .maximize {
     background-color: #27c93f;
   }
+
 }
 </style>

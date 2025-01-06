@@ -5,7 +5,6 @@ import com.joy.joyojcodesandbox.model.ExecuteCodeResponse;
 import com.joy.joyojcodesandbox.model.ExecuteMessage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 使用模板方法设计模式方便多语言调用
@@ -21,6 +20,7 @@ public abstract class JavaCodeSandboxTemplate {
 
     // 定义流程
     public ExecuteCodeResponse execute() {
+
         saveCodeToFile();
         compileCode();
         uploadToContainer();
@@ -29,7 +29,7 @@ public abstract class JavaCodeSandboxTemplate {
         if (outputResponse.getOutputList() != null) {
             cleanup();
         }
-        System.out.println("判题结果： "+outputResponse);
+        System.out.println("判题结果： " + outputResponse);
         return outputResponse;
     }
 
@@ -68,5 +68,5 @@ public abstract class JavaCodeSandboxTemplate {
      *
      * @param e 错误
      */
-    protected abstract void handleError(Exception e);
+    protected abstract ExecuteCodeResponse handleError(Exception e);
 }

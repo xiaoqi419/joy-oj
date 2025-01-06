@@ -2,8 +2,6 @@ package com.ojason.joyoj.service.impl;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.session.SaSessionCustomUtil;
-import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.CircleCaptcha;
 import com.ojason.joyoj.common.BaseResponse;
 import com.ojason.joyoj.common.ErrorCode;
 import com.ojason.joyoj.common.ResultUtils;
@@ -11,6 +9,8 @@ import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.service.VerifyService;
 import com.ojason.joyoj.utils.RandomSmsNumUtils;
 import com.ojason.joyoj.utils.RegExpUtil;
+import io.springboot.captcha.GifCaptcha;
+import io.springboot.captcha.base.Captcha;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,9 +23,8 @@ import org.thymeleaf.context.Context;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -53,18 +52,18 @@ public class VerifyServiceImpl implements VerifyService {
     private String username;
 
     @Override
-    public void getArithmetic(HttpServletResponse response) {
-        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 4, 20);
-        response.setContentType("image/png");
-        // 重新生成code
-        captcha.createCode();
-        // 输出code到浏览器的流
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
-            captcha.write(outputStream);
+    public BaseResponse<String> getArithmetic(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            // 三个参数分别为宽、高、位数
+            GifCaptcha captcha = new GifCaptcha(130, 48, 4);
+            // 设置类型,字母数字混合
+            captcha.setCharType(Captcha.TYPE_NUM_AND_UPPER);
             SaSession session = SaSessionCustomUtil.getSessionById("CaptchaCode");
-            session.set("code", captcha.getCode());
-        } catch (IOException e) {
-            throw new IllegalArgumentException("验证码获取失败");
+            session.set("code", captcha.text());
+            // 输出图片流
+            return ResultUtils.success(captcha.toBase64());
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, e.getMessage());
         }
 
     }
@@ -77,6 +76,8 @@ public class VerifyServiceImpl implements VerifyService {
         if (!code.equalsIgnoreCase(captchaCode)) {
             throw new IllegalArgumentException("验证码错误");
         }
+        // 如果验证码正确，清除session
+        session.clear();
         return true;
     }
 

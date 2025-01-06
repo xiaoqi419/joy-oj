@@ -1,5 +1,6 @@
+给我
 <template>
-  <div id="home-container">
+  <div id="home-container" class="header">
     <a-row class="home-wrapper" style="margin-bottom: 16px;">
       <!--   左侧标语   -->
       <a-col flex="500px">
@@ -47,9 +48,10 @@
       </a-col>
     </a-row>
   </div>
-  <hr/>
+  <!--  <hr/>-->
+  <icon-double-down class="foldDown" @click="startStep"/>
   <div class="stepBox" id="home-container">
-    <div class="step-first">
+    <div class="step-first" id="start-step">
       <span class="bg-text pink-blue">🥕 开始</span>
       <p class="id-text">
         在首页点击开始按钮跳转到浏览题目页面
@@ -147,6 +149,19 @@ onMounted(() => {
     observer.value.observe(thirdElement)
   }
 })
+const scrollToElement = (elementId: string) => {
+  const element = document.getElementById(elementId)
+  if (element) {
+    const topPosition = element.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({
+      top: topPosition - 28,
+      behavior: 'smooth'
+    })
+  }
+}
+const startStep = () => {
+  scrollToElement('start-step')
+}
 
 </script>
 
@@ -154,7 +169,6 @@ onMounted(() => {
 
 #home-container {
   padding: 180px 120px 170px 120px;
-  margin: 0 20px;
 
   .home-wrapper-slogan {
     .home-wrapper-slogan-title {
@@ -231,6 +245,30 @@ onMounted(() => {
         }
       }
     }
+  }
+
+}
+
+.foldDown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 38px;
+  margin: 0 auto;
+  animation: float 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* Keyframes for floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px); /* Adjust floating height */
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 

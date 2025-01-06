@@ -27,7 +27,7 @@ public class UserForgetPasswordRequest implements Serializable {
     /**
      * 验证码
      */
-    private String code;
+//    private String code;
 
     /**
      * 邮箱

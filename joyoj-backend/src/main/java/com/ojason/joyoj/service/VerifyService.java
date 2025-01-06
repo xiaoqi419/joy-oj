@@ -2,6 +2,7 @@ package com.ojason.joyoj.service;
 
 import com.ojason.joyoj.common.BaseResponse;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -15,10 +16,8 @@ public interface VerifyService {
 
     /**
      * 获取验证码
-     *
-     * @param response 响应
      */
-    void getArithmetic(HttpServletResponse response);
+    BaseResponse<String> getArithmetic(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 验证验证码

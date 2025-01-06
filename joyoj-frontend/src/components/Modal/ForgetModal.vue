@@ -59,15 +59,15 @@
             </a-button>
             <a-button type="primary" disabled v-else>{{ counter }}秒后获取</a-button>
           </a-form-item>
-          <a-form-item field="code" validate-trigger="blur">
-            <a-input placeholder="验证码" v-model="formLabelAlign.code" :max-length="4">
-              <template #prefix>
-                <icon-exclamation-circle/>
-              </template>
-            </a-input>
-            <!-- 从后端获取图片验证码并展示 -->
-            <img :src="imgSrc" @click="getVerifyCode" alt="验证码" style="width: 100px;height:50px"/>
-          </a-form-item>
+          <!--          <a-form-item field="code" validate-trigger="blur">-->
+          <!--            <a-input placeholder="验证码" v-model="formLabelAlign.code" :max-length="4">-->
+          <!--              <template #prefix>-->
+          <!--                <icon-exclamation-circle/>-->
+          <!--              </template>-->
+          <!--            </a-input>-->
+          <!--            &lt;!&ndash; 从后端获取图片验证码并展示 &ndash;&gt;-->
+          <!--            <img :src="imgSrc" @click="getVerifyCode" alt="验证码" style="width: 100px;height:50px"/>-->
+          <!--          </a-form-item>-->
           <a-form-item content-flex>
             <div style="width: 100%;justify-content: center">
               <!-- 忘记密码 -->
@@ -238,7 +238,6 @@ const doForgetPassword = async (value: any) => {
     const res = await UserControllerService.forgetPasswordUsingPost({
       userAccount: formLabelAlign.userAccount,
       newPassword: formLabelAlign.newPassword,
-      code: formLabelAlign.code,
       userEmail: formLabelAlign.userEmail,
       emailCode: formLabelAlign.emailCode
     })
@@ -297,10 +296,12 @@ const getEmailCode = async () => {
 }
 
 // 获取验证码
-const imgSrc = ref(import.meta.env.VITE_CAPTCHA_URL)
+const imgSrc = ref()
 const getVerifyCode = async () => {
   // 当方法被执行时重新获取验证码
-  imgSrc.value = import.meta.env.VITE_CAPTCHA_URL + `?${Math.random()}`
+  const res = await VerifyControllerService.getArithmeticUsingGet()
+
+  imgSrc.value = res.data
 }
 // 每次打开重新获取验证码
 onMounted(() => {

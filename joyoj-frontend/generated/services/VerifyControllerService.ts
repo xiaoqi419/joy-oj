@@ -3,16 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
+import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class VerifyControllerService {
     /**
      * getArithmetic
-     * @returns any OK
+     * @returns BaseResponse_string_ OK
      * @throws ApiError
      */
-    public static getArithmeticUsingGet(): CancelablePromise<any> {
+    public static getArithmeticUsingGet(): CancelablePromise<BaseResponse_string_> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/verify/captcha',

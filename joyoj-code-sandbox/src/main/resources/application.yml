@@ -50,7 +50,7 @@ spring:
 server:
   #  todo 需替换配置
   address: # ip
-  port: 8102
+  port: 8105
   servlet:
     context-path: /api
     # cookie 30 天过期

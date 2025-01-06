@@ -2,18 +2,19 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.PostFavourMapper">
+<mapper namespace="com.ojason.joyoj.mapper.PostSolutionMapper">
 
-    <resultMap id="BaseResultMap" type="com.ojason.joyoj.model.entity.PostFavour">
+    <resultMap id="BaseResultMap" type="com.ojason.joyoj.model.entity.PostSolution">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="postId" column="postId" jdbcType="BIGINT"/>
-        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="questionId" column="questionId" jdbcType="BIGINT"/>
         <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,postId,userId,
-        createTime,updateTime
+        id,postId,questionId,
+        createTime,updateTime,isDelete
     </sql>
 </mapper>
