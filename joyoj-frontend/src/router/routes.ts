@@ -1,139 +1,164 @@
-import { RouteRecordRaw } from 'vue-router'
-import ACCESS_ENUM from '@/assets/enum/accessEnum'
+import { RouteRecordRaw } from "vue-router";
+import ACCESS_ENUM from "@/assets/enum/accessEnum";
 
 // 提取出路由配置
 export const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'Home',
-    component: () => import('@/views/home/Home.vue'),
+    path: "/",
+    name: "Home",
+    component: () => import("@/views/home/Home.vue"),
     meta: {
-      title: '首页',
-      icon: 'home',
-      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+      title: "首页",
+      icon: "home",
+      access: [
+        ACCESS_ENUM.NOT_LOGIN,
+        ACCESS_ENUM.STUDENT,
+        ACCESS_ENUM.TEACHER,
+        ACCESS_ENUM.ADMIN
+      ]
     }
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import('@/views/home/About.vue'),
+    path: "/about",
+    name: "About",
+    component: () => import("@/views/home/About.vue"),
     meta: {
-      title: '关于我们',
+      title: "关于我们",
       hidden: true,
-      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
+      access: [
+        ACCESS_ENUM.NOT_LOGIN,
+        ACCESS_ENUM.STUDENT,
+        ACCESS_ENUM.TEACHER,
+        ACCESS_ENUM.ADMIN
+      ]
     }
   },
   {
-    path: '/view/question',
-    name: 'ViewQuestion',
-    component: () => import('@/views/question/QuestionView.vue'),
+    path: "/view/question",
+    name: "ViewQuestion",
+    component: () => import("@/views/question/QuestionView.vue"),
     meta: {
-      title: '浏览题目',
-      icon: 'viewQuestion',
-      access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT]
+      title: "浏览题目",
+      icon: "viewQuestion",
+      access: [
+        ACCESS_ENUM.TEACHER,
+        ACCESS_ENUM.ADMIN,
+        ACCESS_ENUM.NOT_LOGIN,
+        ACCESS_ENUM.STUDENT
+      ]
     }
   },
   {
-    path: '/view/question_submit',
-    name: 'ViewQuestionSubmit',
-    component: () => import('@/views/question/QuestionSubmitView.vue'),
+    path: "/view/question_submit",
+    name: "ViewQuestionSubmit",
+    component: () => import("@/views/question/QuestionSubmitView.vue"),
     meta: {
-      title: '浏览题目提交',
-      icon: 'viewQuestionSubmit',
+      title: "浏览题目提交",
+      icon: "viewQuestionSubmit",
       access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN, ACCESS_ENUM.STUDENT]
     }
   },
   {
-    path: '/view/question/:id',
-    name: 'QuestionInfo',
+    path: "/view/question/:id",
+    name: "QuestionInfo",
     props: true,
-    component: () => import('@/views/question/QuestionInfoView.vue'),
+    component: () => import("@/views/question/QuestionInfoView.vue"),
     meta: {
-      title: '题目详情',
+      title: "题目详情",
       access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
       hidden: true
     }
   },
   {
-    path: '/add/question',
-    name: 'AddQuestion',
-    component: () => import('@/views/question/AddQuestionView.vue'),
+    path: "/add/question",
+    name: "AddQuestion",
+    component: () => import("@/views/question/AddQuestionView.vue"),
     meta: {
-      title: '创建题目',
-      icon: 'addQuestion',
+      title: "创建题目",
+      icon: "addQuestion",
       access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
     }
   },
   {
-    path: '/update/question',
-    name: 'UpdateQuestion',
-    component: () => import('@/views/question/AddQuestionView.vue'),
+    path: "/update/question",
+    name: "UpdateQuestion",
+    component: () => import("@/views/question/AddQuestionView.vue"),
     meta: {
-      title: '更新题目',
+      title: "更新题目",
       access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
       hidden: true
     }
   },
   {
-    path: '/manage/question',
-    name: 'ManageQuestion',
-    component: () => import('@/views/question/ManageQuestionView.vue'),
+    path: "/manage/question",
+    name: "ManageQuestion",
+    component: () => import("@/views/question/ManageQuestionView.vue"),
     meta: {
-      title: '管理题目',
-      icon: 'manageQuestion',
+      title: "管理题目",
+      icon: "manageQuestion",
       access: [ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
     }
   },
   {
-    path: '/user/manage',
-    name: 'UserManage',
-    component: () => import('@/views/user/UserManageView.vue'),
+    path: "/user/manage",
+    name: "UserManage",
+    component: () => import("@/views/user/UserManageView.vue"),
     meta: {
-      title: '用户管理',
-      icon: 'admin',
+      title: "用户管理",
+      icon: "admin",
       access: [ACCESS_ENUM.ADMIN]
     }
   },
   {
-    path: '/403',
-    name: '403',
-    component: () => import('@/views/status/403.vue'),
+    path: "/403",
+    name: "403",
+    component: () => import("@/views/status/403.vue"),
     meta: {
-      title: '无权限',
-      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+      title: "无权限",
+      access: [
+        ACCESS_ENUM.NOT_LOGIN,
+        ACCESS_ENUM.STUDENT,
+        ACCESS_ENUM.TEACHER,
+        ACCESS_ENUM.ADMIN
+      ],
       hidden: true
     }
   },
   {
-    path: '/404',
-    name: '404',
-    component: () => import('@/views/status/404.vue'),
+    path: "/404",
+    name: "404",
+    component: () => import("@/views/status/404.vue"),
     meta: {
-      title: '找不到页面',
-      access: [ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+      title: "找不到页面",
+      access: [
+        ACCESS_ENUM.NOT_LOGIN,
+        ACCESS_ENUM.STUDENT,
+        ACCESS_ENUM.TEACHER,
+        ACCESS_ENUM.ADMIN
+      ],
       hidden: true
     }
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    redirect: '/profile/info',
-    component: () => import('@/components/Layouts/ProfileLayout.vue'),
+    path: "/profile",
+    name: "Profile",
+    redirect: "/profile/info",
+    component: () => import("@/components/Layouts/ProfileLayout.vue"),
     meta: {
-      title: '个人中心',
+      title: "个人中心",
       access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
       hidden: true
     },
     children: [
       {
-        path: '/profile/info',
-        name: 'ProfileInfo',
-        component: () => import('@/views/profile/ProfileInfo.vue'),
+        path: "/profile/info",
+        name: "ProfileInfo",
+        component: () => import("@/views/profile/ProfileInfo.vue"),
         meta: {
-          title: '个人信息',
+          title: "个人信息",
           access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN]
         }
       }
     ]
   }
-]
+];

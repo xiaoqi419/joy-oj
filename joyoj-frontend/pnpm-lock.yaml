@@ -30,7 +30,7 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1
       artalk:
-        specifier: ^2.8.7
+        specifier: 2.9.1
         version: 2.9.1(marked@14.1.4)
       axios:
         specifier: ^1.4.0
@@ -38,6 +38,9 @@ importers:
       dayjs:
         specifier: ^1.11.11
         version: 1.11.13
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@8.42.0)
       highlight.js:
         specifier: ^11.9.0
         version: 11.11.1
@@ -129,6 +132,9 @@ importers:
       openapi-typescript-codegen:
         specifier: ^0.29.0
         version: 0.29.0
+      prettier:
+        specifier: ^3.4.2
+        version: 3.4.2
       sass:
         specifier: ^1.63.3
         version: 1.63.3
@@ -1632,6 +1638,12 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
+  eslint-config-prettier@9.1.0:
+    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
+
   eslint-config-standard@17.1.0:
     resolution: {integrity: sha512-IwHwmaBNtDK4zDHQukFDW5u/aTb8+meQWZvNFWkiGmbWjD6bqyuSSBxxXKkCftCUzc1zwCH2m/baCNDLGmuO5Q==}
     engines: {node: '>=12.0.0'}
@@ -3055,6 +3067,11 @@ packages:
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  prettier@3.4.2:
+    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   property-information@6.5.0:
     resolution: {integrity: sha512-PgTgs/BlvHxOu8QuEN7wi5A0OmXaBcHpmCSTehcs6Uuu9IkDIEo13Hy7n898RHfrQ49vKCoGeWZSaAK01nwVig==}
@@ -5596,6 +5613,10 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
+  eslint-config-prettier@9.1.0(eslint@8.42.0):
+    dependencies:
+      eslint: 8.42.0
+
   eslint-config-standard@17.1.0(eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.59.9(eslint@8.42.0)(typescript@4.9.5))(eslint@8.42.0))(eslint-plugin-n@15.7.0(eslint@8.42.0))(eslint-plugin-promise@6.1.1(eslint@8.42.0))(eslint@8.42.0):
     dependencies:
       eslint: 8.42.0
@@ -7285,6 +7306,8 @@ snapshots:
       posthtml-render: 1.4.0
 
   prelude-ls@1.2.1: {}
+
+  prettier@3.4.2: {}
 
   property-information@6.5.0: {}
 

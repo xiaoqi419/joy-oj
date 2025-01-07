@@ -1,46 +1,48 @@
 <script setup lang="ts">
-import { defineComponent } from 'vue'
-import useUserStore from '@/store/modules/user'
-import { storeToRefs } from 'pinia'
-import { useRoute, useRouter } from 'vue-router'
+import { defineComponent } from "vue";
+import useUserStore from "@/store/modules/user";
+import { storeToRefs } from "pinia";
+import { useRoute, useRouter } from "vue-router";
 
 defineComponent({
-  name: 'ProfileLayout',
+  name: "ProfileLayout",
   components: {}
-})
+});
 
 // topInfo
-const route = useRoute()
-const router = useRouter()
-const { userInfo } = storeToRefs(useUserStore())
-const routeName = route.name
+const route = useRoute();
+const router = useRouter();
+const { userInfo } = storeToRefs(useUserStore());
+const routeName = route.name;
 const goRouter = (path: string) => {
-  router.push(path)
-}
+  router.push(path);
+};
 </script>
 
 <template>
   <div id="profile-box">
-    <a-layout style="height: 1200px;">
+    <a-layout style="height: 1200px">
       <a-layout class="pd-box">
         <a-layout-sider class="sider">
           <div class="top-container">
             <div class="Avatar">
               <a-avatar :size="54" shape="square">
-                <img :src="userInfo.userAvatar"/>
+                <img :src="userInfo.userAvatar" />
               </a-avatar>
             </div>
             <div class="NameRow">Jason</div>
             <div class="PremiumNotice">加入 Plus 会员，尊享特权</div>
             <a-button type="primary" shape="round">升级Plus会员</a-button>
           </div>
-          <hr/>
+          <hr />
           <div class="menu">
-            <div class="menu-item" :class="{'menu-item-check':routeName === 'ProfileInfo'}">
-              <joy-svg-icon icon="profile" class="icon"/>
+            <div
+              class="menu-item"
+              :class="{ 'menu-item-check': routeName === 'ProfileInfo' }"
+            >
+              <joy-svg-icon icon="profile" class="icon" />
               <a class="ml-1" @click="goRouter('/profile/info')">个人资料</a>
             </div>
-
           </div>
         </a-layout-sider>
         <a-layout-content class="content">
@@ -88,7 +90,6 @@ hr {
         color: #b2a4ae;
         margin-bottom: 10px;
       }
-
     }
 
     .menu {
@@ -116,6 +117,5 @@ hr {
       }
     }
   }
-
 }
 </style>

@@ -1,26 +1,26 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
 const useModalStore = defineStore(
-  'modal',
+  "modal",
   () => {
-    const userModal = ref(false)
-    const registerModal = ref(false)
-    const forgetModal = ref(false)
-    const resultModal = ref(false)
+    const userModal = ref(false);
+    const registerModal = ref(false);
+    const forgetModal = ref(false);
+    const resultModal = ref(false);
 
     const setUserModal = (value: boolean) => {
-      userModal.value = value
-    }
+      userModal.value = value;
+    };
     const setRegisterModal = (value: boolean) => {
-      registerModal.value = value
-    }
+      registerModal.value = value;
+    };
     const setForgetModal = (value: boolean) => {
-      forgetModal.value = value
-    }
+      forgetModal.value = value;
+    };
     const setResultModal = (value: boolean) => {
-      resultModal.value = value
-    }
+      resultModal.value = value;
+    };
 
     return {
       userModal,
@@ -31,14 +31,14 @@ const useModalStore = defineStore(
       setRegisterModal,
       setUserModal,
       setForgetModal
-    }
+    };
   },
   {
     persist: {
-      key: 'modal',
+      key: "modal",
       storage: sessionStorage
     }
   }
-)
+);
 
-export default useModalStore
+export default useModalStore;

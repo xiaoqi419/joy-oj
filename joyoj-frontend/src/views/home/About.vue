@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
 const images = [
-  'https://upload.ojason.top/hexo/2550f202882711ebb6edd017c2d2eca2.jpg',
-  'https://upload.ojason.top/hexo/01e32cc90dd34191a09a4f866dd6ab31.jpg',
-  'https://upload.ojason.top/hexo/file_1723625958964_315.png'
-]
+  "https://upload.ojason.top/hexo/2550f202882711ebb6edd017c2d2eca2.jpg",
+  "https://upload.ojason.top/hexo/01e32cc90dd34191a09a4f866dd6ab31.jpg",
+  "https://upload.ojason.top/hexo/file_1723625958964_315.png"
+];
 
-const router = useRouter()
+const router = useRouter();
 </script>
 
 <template>
@@ -19,21 +19,29 @@ const router = useRouter()
       indicator-position="outer"
       indicator-type="never"
       :style="{
-      width: '100%',
-      height: '340px',
-    }"
+        width: '100%',
+        height: '340px'
+      }"
     >
-      <a-carousel-item v-for="image in images" :style="{ width: '60%' }" :key="image">
+      <a-carousel-item
+        v-for="image in images"
+        :style="{ width: '60%' }"
+        :key="image"
+      >
         <img
           :src="image"
           :style="{
-          width: '100%',
-        }"
-         alt=""/>
+            width: '100%'
+          }"
+          alt=""
+        />
       </a-carousel-item>
     </a-carousel>
     <div class="card-box">
-      <a-card hoverable :style="{ width: '1040px', marginBottom: '20px', borderRadius:'12px' }">
+      <a-card
+        hoverable
+        :style="{ width: '1040px', marginBottom: '20px', borderRadius: '12px' }"
+      >
         <div class="card-content">
           <!-- 关于我们 -->
           <div class="info-box">
@@ -46,7 +54,8 @@ const router = useRouter()
               </a-col>
               <a-col :span="14">
                 <div class="right-info">
-                  Joy Judge 是一个专为编程竞赛和技术评估提供判题服务的平台，同时也是为全球程序员提供职业技能提升的平台。
+                  Joy Judge
+                  是一个专为编程竞赛和技术评估提供判题服务的平台，同时也是为全球程序员提供职业技能提升的平台。
                   我们的使命是为开发者提供进阶所需的工具和资源，帮助他们在技术行业中脱颖而出。
                 </div>
               </a-col>
@@ -61,11 +70,25 @@ const router = useRouter()
                   <a-timeline mode="alternate" labelPosition="relative">
                     <a-timeline-item label="2024-08-07" lineType="dashed">
                       <template #dot>
-                        <div class="dot" style="background-color: #EE3A8C"></div>
+                        <div
+                          class="dot"
+                          style="background-color: #ee3a8c"
+                        ></div>
                       </template>
-                      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
-                        <span :style="{ marginRight: '16px', marginBottom: '12px',fontSize:'30px' }">
-                       🌟
+                      <a-row
+                        :style="{
+                          display: 'inline-flex',
+                          alignItems: 'center'
+                        }"
+                      >
+                        <span
+                          :style="{
+                            marginRight: '16px',
+                            marginBottom: '12px',
+                            fontSize: '30px'
+                          }"
+                        >
+                          🌟
                         </span>
                         <div :style="{ marginBottom: '12px' }">
                           前端重大更新
@@ -79,9 +102,20 @@ const router = useRouter()
                       <template #dot>
                         <div class="dot"></div>
                       </template>
-                      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
-                        <span :style="{ marginRight: '16px', marginBottom: '12px',fontSize:'30px' }">
-                        ⏰
+                      <a-row
+                        :style="{
+                          display: 'inline-flex',
+                          alignItems: 'center'
+                        }"
+                      >
+                        <span
+                          :style="{
+                            marginRight: '16px',
+                            marginBottom: '12px',
+                            fontSize: '30px'
+                          }"
+                        >
+                          ⏰
                         </span>
                         <div :style="{ marginBottom: '12px' }">
                           判题服务重大更新
@@ -93,11 +127,25 @@ const router = useRouter()
                     </a-timeline-item>
                     <a-timeline-item label="2024-08-02" lineType="dashed">
                       <template #dot>
-                        <div class="dot" style="background-color: #F4A460"></div>
+                        <div
+                          class="dot"
+                          style="background-color: #f4a460"
+                        ></div>
                       </template>
-                      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
-                        <span :style="{ marginRight: '16px', marginBottom: '12px',fontSize:'30px' }">
-                        ☃️
+                      <a-row
+                        :style="{
+                          display: 'inline-flex',
+                          alignItems: 'center'
+                        }"
+                      >
+                        <span
+                          :style="{
+                            marginRight: '16px',
+                            marginBottom: '12px',
+                            fontSize: '30px'
+                          }"
+                        >
+                          ☃️
                         </span>
                         <div :style="{ marginBottom: '12px' }">
                           后端重大更新
@@ -109,11 +157,25 @@ const router = useRouter()
                     </a-timeline-item>
                     <a-timeline-item label="2024-06-04" lineType="dashed">
                       <template #dot>
-                        <div class="dot" style="background-color: #3491fa"></div>
+                        <div
+                          class="dot"
+                          style="background-color: #3491fa"
+                        ></div>
                       </template>
-                      <a-row :style="{ display: 'inline-flex', alignItems: 'center' }">
-                        <span :style="{ marginRight: '16px', marginBottom: '12px',fontSize:'30px' }">
-                        🌏
+                      <a-row
+                        :style="{
+                          display: 'inline-flex',
+                          alignItems: 'center'
+                        }"
+                      >
+                        <span
+                          :style="{
+                            marginRight: '16px',
+                            marginBottom: '12px',
+                            fontSize: '30px'
+                          }"
+                        >
+                          🌏
                         </span>
                         <div :style="{ marginBottom: '12px' }">
                           项目开始
@@ -124,12 +186,11 @@ const router = useRouter()
                       </a-row>
                     </a-timeline-item>
                   </a-timeline>
-
                 </div>
               </a-col>
               <a-col :span="12">
                 <div class="develop-box-right">
-                  <joy-svg-icon icon="time-bg" className="time-bg"/>
+                  <joy-svg-icon icon="time-bg" className="time-bg" />
                 </div>
               </a-col>
             </a-row>
@@ -142,38 +203,45 @@ const router = useRouter()
                 <h3>
                   <a-space>
                     成就用户
-                    <joy-svg-icon icon="flash"/>
+                    <joy-svg-icon icon="flash" />
                   </a-space>
                 </h3>
-                <p>我们始终以用户的需求为导向，致力于提供最优质的判题服务，帮助用户提升技术能力，实现自我价值。</p>
+                <p>
+                  我们始终以用户的需求为导向，致力于提供最优质的判题服务，帮助用户提升技术能力，实现自我价值。
+                </p>
               </div>
               <div class="value-item">
                 <h3>
                   <a-space>
                     极致匠心
-                    <joy-svg-icon icon="code"/>
+                    <joy-svg-icon icon="code" />
                   </a-space>
                 </h3>
-                <p>我们追求技术的极致，注重每一个细节，以匠心精神打造最优秀的判题系统。</p>
+                <p>
+                  我们追求技术的极致，注重每一个细节，以匠心精神打造最优秀的判题系统。
+                </p>
               </div>
               <div class="value-item">
                 <h3>
                   <a-space>
                     信任敢为
-                    <joy-svg-icon icon="yang"/>
+                    <joy-svg-icon icon="yang" />
                   </a-space>
                 </h3>
                 <p>
-                  我们相信每一个用户，鼓励他们敢于挑战，敢于创新，我们提供的不仅仅是一个判题系统，更是一个信任和支持的平台。</p>
+                  我们相信每一个用户，鼓励他们敢于挑战，敢于创新，我们提供的不仅仅是一个判题系统，更是一个信任和支持的平台。
+                </p>
               </div>
               <div class="value-item">
                 <h3>
                   <a-space>
                     冠军意识
-                    <joy-svg-icon icon="sketch"/>
+                    <joy-svg-icon icon="sketch" />
                   </a-space>
                 </h3>
-                <p>我们有冠军的意识，始终追求第一，我们希望通过我们的平台，培养出更多的编程冠军。</p>
+                <p>
+                  我们有冠军的意识，始终追求第一，我们希望通过我们的平台，培养出更多的编程冠军。
+                </p>
               </div>
             </div>
           </div>
@@ -199,7 +267,6 @@ const router = useRouter()
     }
 
     .card-content {
-
       .left-logo {
         font-size: 28px;
         font-weight: bold;
@@ -283,14 +350,11 @@ const router = useRouter()
           .time-bg {
             width: 100%;
             height: 100%;
-
           }
         }
-
       }
 
       .brand-concept {
-
         padding: 30px 60px 40px 60px;
 
         h2 {
@@ -324,10 +388,8 @@ const router = useRouter()
             line-height: 1.5;
           }
         }
-
       }
     }
-
   }
 }
 </style>

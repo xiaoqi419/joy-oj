@@ -1,7 +1,7 @@
 给我
 <template>
   <div id="home-container" class="header">
-    <a-row class="home-wrapper" style="margin-bottom: 16px;">
+    <a-row class="home-wrapper" style="margin-bottom: 16px">
       <!--   左侧标语   -->
       <a-col flex="500px">
         <div class="home-wrapper-slogan">
@@ -12,30 +12,47 @@
               </a-col>
               <a-col flex="200px">
                 <!-- 打字机 -->
-                <TypeIt :options="options"/>
+                <TypeIt :options="options" />
               </a-col>
             </a-row>
           </div>
           <div class="home-wrapper-slogan-line-black">连接轻盈体验</div>
           <div class="home-wrapper-introduce">
-            <span>Joy Judge 是一个<a style="color:#3491FA">开源</a>的在线评测系统，支持多种编程语言</span>
+            <span
+              >Joy Judge 是一个<a style="color: #3491fa">开源</a
+              >的在线评测系统，支持多种编程语言</span
+            >
             <span>本平台采用Vue3 + SpringBoot 前后端分离</span>
 
-            <div style="display: flex;justify-content: center;align-items: center">
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              "
+            >
               <div class="home-wrapper-bubble">
-                <joy-svg-icon icon="bubble"/>
-                <span class="bubble-title" style="color:#999999">#</span>
+                <joy-svg-icon icon="bubble" />
+                <span class="bubble-title" style="color: #999999">#</span>
               </div>
-              <span style="margin-left: 10px">支持自定义题目，支持多种<a style="color:#3491FA">评测</a>方式</span>
+              <span style="margin-left: 10px"
+                >支持自定义题目，支持多种<a style="color: #3491fa">评测</a
+                >方式</span
+              >
             </div>
           </div>
           <div class="btn-box">
             <a-row :gutter="24">
               <a-col :span="12">
-                <HomeGoButton/>
+                <HomeGoButton />
               </a-col>
               <a-col :span="12">
-                <a-button size="large" class="button-about" @click="() => router.push('/about')">关于我们</a-button>
+                <a-button
+                  size="large"
+                  class="button-about"
+                  @click="() => router.push('/about')"
+                  >关于我们</a-button
+                >
               </a-col>
             </a-row>
           </div>
@@ -43,136 +60,144 @@
       </a-col>
       <a-col flex="auto">
         <div>
-          <CodeTypeIt/>
+          <CodeTypeIt />
         </div>
       </a-col>
     </a-row>
   </div>
   <!--  <hr/>-->
-  <icon-double-down class="foldDown" @click="startStep"/>
+  <icon-double-down class="foldDown" @click="startStep" />
   <div class="stepBox" id="home-container">
     <div class="step-first" id="start-step">
       <span class="bg-text pink-blue">🥕 开始</span>
       <p class="id-text">
         在首页点击开始按钮跳转到浏览题目页面
-        <br/>
+        <br />
         尽情浏览来自五湖四海的题目
       </p>
-      <img src="../../assets/images/step-question-view.png">
+      <img src="../../assets/images/step-question-view.png" />
     </div>
     <div class="step-second step">
       <span class="bg-text pink-blue">🍺 答题</span>
       <p class="id-text">
         选中心仪的题目点击做题按钮跳转到答题页面
-        <br/>
+        <br />
         在代码编辑器中输入题目答案
       </p>
-      <img class="mt-4" src="../../assets/images/step-question-submit.png" height="551px" width="1200px">
+      <img
+        class="mt-4"
+        src="../../assets/images/step-question-submit.png"
+        height="551px"
+        width="1200px"
+      />
     </div>
     <div class="step-third step" style="margin-top: 200px">
       <span class="bg-text pink-blue">🐇 评测</span>
       <p class="id-text">
         你已经完成了答题请前往浏览题目提交界面
-        <br/>
+        <br />
         查看你的“得分”情况吧
       </p>
-      <img class="mt-5" src="../../assets/images/step-question-submit-view.png">
+      <img
+        class="mt-5"
+        src="../../assets/images/step-question-submit-view.png"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
-import HomeGoButton from '@/components/Button/HomeGoButton.vue'
-import CodeTypeIt from '@/components/Home/CodeTypeIt.vue'
-import router from '@/router'
+import { defineComponent, onMounted, ref } from "vue";
+import { TypeIt, type TypeItOptions } from "@/components/ReTypeit";
+import HomeGoButton from "@/components/Button/HomeGoButton.vue";
+import CodeTypeIt from "@/components/Home/CodeTypeIt.vue";
+import router from "@/router";
 
 defineComponent({
-  name: 'home',
+  name: "home",
   components: {
     TypeIt,
     HomeGoButton,
     CodeTypeIt
   }
-})
+});
 
 const options: TypeItOptions = {
-  strings: ['评测', '教学', '比赛'],
+  strings: ["评测", "教学", "比赛"],
   loop: true,
   breakLines: false,
-  cursorChar: '|',
+  cursorChar: "|",
   speed: 600,
   deleteSpeed: 200
-}
-const observer: any = ref(null)
+};
+const observer: any = ref(null);
 onMounted(() => {
-  observer.value = new IntersectionObserver((entries, instance) => {
-    entries.forEach(entry => {
-      const target = entry.target as HTMLElement
-      if (entry.isIntersecting) {
-        // Add `visible` to the first element and remove from the second when scrolling down
-        if (target.classList.contains('step-first')) {
-          target.classList.add('visible')
+  observer.value = new IntersectionObserver(
+    (entries, instance) => {
+      entries.forEach(entry => {
+        const target = entry.target as HTMLElement;
+        if (entry.isIntersecting) {
+          // Add `visible` to the first element and remove from the second when scrolling down
+          if (target.classList.contains("step-first")) {
+            target.classList.add("visible");
+          }
+          if (target.classList.contains("step-second")) {
+            target.classList.add("visible");
+          }
+          if (target.classList.contains("step-third")) {
+            target.classList.add("visible");
+          }
+        } else {
+          // Remove `visible` from the first element when it goes out of view
+          if (target.classList.contains("step-first")) {
+            target.classList.remove("visible");
+          }
+          if (target.classList.contains("step-second")) {
+            target.classList.remove("visible");
+          }
+          if (target.classList.contains("step-third")) {
+            target.classList.remove("visible");
+          }
         }
-        if (target.classList.contains('step-second')) {
-          target.classList.add('visible')
-        }
-        if (target.classList.contains('step-third')) {
-          target.classList.add('visible')
-        }
-      } else {
-        // Remove `visible` from the first element when it goes out of view
-        if (target.classList.contains('step-first')) {
-          target.classList.remove('visible')
-        }
-        if (target.classList.contains('step-second')) {
-          target.classList.remove('visible')
-        }
-        if (target.classList.contains('step-third')) {
-          target.classList.remove('visible')
-        }
-      }
-    })
-  }, {
-    root: null,
-    threshold: 0.6 // Adjust the threshold value as needed
-  }) as any
+      });
+    },
+    {
+      root: null,
+      threshold: 0.6 // Adjust the threshold value as needed
+    }
+  ) as any;
 
   // Observe both elements
-  const firstElement = document.querySelector('.step-first') as HTMLElement
-  const secondElement = document.querySelector('.step-second') as HTMLElement
-  const thirdElement = document.querySelector('.step-third') as HTMLElement
+  const firstElement = document.querySelector(".step-first") as HTMLElement;
+  const secondElement = document.querySelector(".step-second") as HTMLElement;
+  const thirdElement = document.querySelector(".step-third") as HTMLElement;
   if (firstElement && secondElement) {
-    observer.value.observe(firstElement)
-    observer.value.observe(secondElement)
-    observer.value.observe(thirdElement)
+    observer.value.observe(firstElement);
+    observer.value.observe(secondElement);
+    observer.value.observe(thirdElement);
   }
-})
+});
 const scrollToElement = (elementId: string) => {
-  const element = document.getElementById(elementId)
+  const element = document.getElementById(elementId);
   if (element) {
-    const topPosition = element.getBoundingClientRect().top + window.scrollY
+    const topPosition = element.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({
       top: topPosition - 28,
-      behavior: 'smooth'
-    })
+      behavior: "smooth"
+    });
   }
-}
+};
 const startStep = () => {
-  scrollToElement('start-step')
-}
-
+  scrollToElement("start-step");
+};
 </script>
 
 <style scoped lang="scss">
-
 #home-container {
   padding: 180px 120px 170px 120px;
 
   .home-wrapper-slogan {
     .home-wrapper-slogan-title {
-
       :deep(.type-it) {
         font-size: 48px;
         color: #165dff;
@@ -212,7 +237,12 @@ const startStep = () => {
     .home-wrapper-slogan-line {
       text-align: center;
       margin-bottom: 20px;
-      background: linear-gradient(92.06deg, #33c2ff -17.9%, #257cff 43.39%, #165dff 99.4%);
+      background: linear-gradient(
+        92.06deg,
+        #33c2ff -17.9%,
+        #257cff 43.39%,
+        #165dff 99.4%
+      );
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -223,7 +253,12 @@ const startStep = () => {
     .home-wrapper-slogan-line-black {
       text-align: center;
       margin-bottom: 50px;
-      background: linear-gradient(92.06deg, #000000 -17.9%, #000000 43.39%, #000000 99.4%);
+      background: linear-gradient(
+        92.06deg,
+        #000000 -17.9%,
+        #000000 43.39%,
+        #000000 99.4%
+      );
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -246,7 +281,6 @@ const startStep = () => {
       }
     }
   }
-
 }
 
 .foldDown {
@@ -303,7 +337,9 @@ const startStep = () => {
   .step-second {
     opacity: 0;
     transform: translateY(20px); /* Starts below the screen */
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition:
+      opacity 0.5s ease-in-out,
+      transform 0.5s ease-in-out;
   }
 
   .step-first.visible,
@@ -316,5 +352,4 @@ const startStep = () => {
     margin-top: 160px;
   }
 }
-
 </style>

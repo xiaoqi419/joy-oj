@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
 defineOptions({
-  name: '403'
-})
+  name: "403"
+});
 
-const router = useRouter()
+const router = useRouter();
 </script>
 
 <template>
-  <div class="flex justify-center items-center h-[640px] ">
+  <div class="flex justify-center items-center h-[640px]">
     <joy-svg-icon
       class="mr-12 animate__animated animate__fadeInUp"
       icon="403"
@@ -17,7 +17,6 @@ const router = useRouter()
     />
     <div class="ml-12 animate__animated animate__fadeInUp">
       <p
-
         class="font-medium text-4xl mb-4 dark:text-white"
         :initial="{
           opacity: 0,
@@ -34,7 +33,6 @@ const router = useRouter()
         403
       </p>
       <p
-
         class="mb-4 text-gray-500"
         :initial="{
           opacity: 0,
@@ -51,7 +49,6 @@ const router = useRouter()
         抱歉，你无权访问该页面
       </p>
       <a-button
-
         type="primary"
         :initial="{
           opacity: 0,

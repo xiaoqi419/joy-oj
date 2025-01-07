@@ -1,26 +1,31 @@
 <script setup lang="ts">
-import { defineComponent, ref } from 'vue'
-import { TypeIt, type TypeItOptions } from '@/components/ReTypeit'
-import 'animate.css'
+import { defineComponent, ref } from "vue";
+import { TypeIt, type TypeItOptions } from "@/components/ReTypeit";
+import "animate.css";
 
 defineComponent({
-  name: 'CodeTypeIt',
+  name: "CodeTypeIt",
   components: {
     TypeIt
   }
-})
+});
 
 const options: TypeItOptions = {
   strings: [
-    '<span class="function">console.log</span>(<span class="string">"Hello, world!"</span>);', ' ', '<span class="function">print</span>("<span class="string">Hello, World!</span>")', ' ', '<span class="public">public class</span> HelloWorld {\n' +
-    '    <span class="public">public static void</span> main(<span class="keyword">String[]</span> args) {\n' +
-    '        <span class="function">System.out.println</span>("<span class="string">Hello, World!</span>");\n' +
-    '    }\n' +
-    '}'],
+    '<span class="function">console.log</span>(<span class="string">"Hello, world!"</span>);',
+    " ",
+    '<span class="function">print</span>("<span class="string">Hello, World!</span>")',
+    " ",
+    '<span class="public">public class</span> HelloWorld {\n' +
+      '    <span class="public">public static void</span> main(<span class="keyword">String[]</span> args) {\n' +
+      '        <span class="function">System.out.println</span>("<span class="string">Hello, World!</span>");\n' +
+      "    }\n" +
+      "}"
+  ],
   speed: 30,
   html: true
-}
-const codeEditor = ref(null)
+};
+const codeEditor = ref(null);
 </script>
 
 <template>
@@ -31,19 +36,18 @@ const codeEditor = ref(null)
       <div class="mac-button maximize"></div>
     </div>
     <div class="code-editor" ref="codeEditor">
-      <TypeIt :options="options"/>
+      <TypeIt :options="options" />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-
 .code-container {
   background-color: #1e1e1e;
   border-radius: 10px;
   padding: 20px;
   color: #abb2bf;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 16px;
   line-height: 1.5;
   white-space: pre;
@@ -56,7 +60,7 @@ const codeEditor = ref(null)
   border-radius: 5px;
   padding: 20px;
   color: #abb2bf;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 16px;
   line-height: 1.5;
   white-space: pre;
@@ -110,6 +114,5 @@ const codeEditor = ref(null)
   .maximize {
     background-color: #27c93f;
   }
-
 }
 </style>

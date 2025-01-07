@@ -1,17 +1,21 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { defineStore } from "pinia";
+import { ref } from "vue";
 
-const useUtilsStore = defineStore('utils', () => {
-  const counter = ref(60)
+const useUtilsStore = defineStore(
+  "utils",
+  () => {
+    const counter = ref(60);
 
-  return {
-    counter
+    return {
+      counter
+    };
+  },
+  {
+    persist: {
+      key: "utils",
+      storage: sessionStorage
+    }
   }
-}, {
-  persist: {
-    key: 'utils',
-    storage: sessionStorage
-  }
-})
+);
 
-export default useUtilsStore
+export default useUtilsStore;

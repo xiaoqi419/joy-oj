@@ -1,42 +1,42 @@
 <script lang="ts" setup>
-import Artalk from 'artalk'
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import Artalk from "artalk";
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
-import 'artalk/dist/Artalk.css'
-import { useRoute } from 'vue-router'
+import "artalk/dist/Artalk.css";
+import { useRoute } from "vue-router";
 
-const el = ref<HTMLElement>()
-const route = useRoute()
+const el = ref<HTMLElement>();
+const route = useRoute();
 
-let artalk: Artalk
+let artalk: Artalk;
 
 onMounted(() => {
   artalk = Artalk.init({
     el: el.value,
     pageKey: route.path,
     pageTitle: document.title,
-    server: 'https://artalk.ojason.top',
-    site: 'Joy Judge'
+    server: "https://artalk.ojason.top",
+    site: "Joy Judge"
     // ...
-  })
-})
+  });
+});
 
 watch(
   () => route.path,
-  (path) => {
+  path => {
     nextTick(() => {
       artalk.update({
         pageKey: path,
         pageTitle: document.title
-      })
-      artalk.reload()
-    })
+      });
+      artalk.reload();
+    });
   }
-)
+);
 
 onBeforeUnmount(() => {
-  artalk.destroy()
-})
+  artalk.destroy();
+});
 </script>
 
 <template>

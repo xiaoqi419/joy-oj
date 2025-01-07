@@ -20,7 +20,8 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: 'https://oj.ojason.top',
+  // BASE: 'https://oj.ojason.top',
+  BASE: 'http://localhost:8104',
   VERSION: '1.0',
   WITH_CREDENTIALS: true,
   CREDENTIALS: 'include',

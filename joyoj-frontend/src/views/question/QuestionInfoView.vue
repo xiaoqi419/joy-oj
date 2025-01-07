@@ -1,149 +1,155 @@
 <script setup lang="ts">
-import { defineComponent, onMounted, ref, watch, withDefaults } from 'vue'
-import { QuestionControllerService, QuestionEditRequest, QuestionSubmitAddRequest } from '../../../generated'
-import { Message } from '@arco-design/web-vue'
-import CodeEditor from '@/components/CodeEditor/index.vue'
-import MdViewer from '@/components/MdViewer/index.vue'
-import Artalk from '@/components/Artalk/index.vue'
-import ResultModal from '@/components/Modal/ResultModal.vue'
-import useModalStore from '@/store/modules/modal'
-import useUserStore from '@/store/modules/user'
-import { useRouter } from 'vue-router'
-import { debounce } from '@pureadmin/utils'
-import Solution from '@/components/Solution/index.vue'
+import { defineComponent, onMounted, ref, watch, withDefaults } from "vue";
+import {
+  QuestionControllerService,
+  QuestionEditRequest,
+  QuestionSubmitAddRequest
+} from "../../../generated";
+import { Message } from "@arco-design/web-vue";
+import CodeEditor from "@/components/CodeEditor/index.vue";
+import MdViewer from "@/components/MdViewer/index.vue";
+import Artalk from "@/components/Artalk/index.vue";
+import ResultModal from "@/components/Modal/ResultModal.vue";
+import useModalStore from "@/store/modules/modal";
+import useUserStore from "@/store/modules/user";
+import { useRouter } from "vue-router";
+import { debounce } from "@pureadmin/utils";
+import Solution from "@/components/Solution/index.vue";
 
 defineComponent({
-  name: 'QuestionInfoView',
+  name: "QuestionInfoView",
   components: {
     CodeEditor,
     MdViewer,
     Artalk,
     Solution
   }
-})
+});
 
 type Props = {
-  id: String
-}
+  id: String;
+};
 const props = withDefaults(defineProps<Props>(), {
-  id: () => ''
-})
-const question = ref<QuestionEditRequest>()
-const loading = ref(true)
+  id: () => ""
+});
+const question = ref<QuestionEditRequest>();
+const loading = ref(true);
 const loadData = async () => {
-  const res = await QuestionControllerService.getQuestionVoByIdUsingGet(props.id as any)
+  const res = await QuestionControllerService.getQuestionVoByIdUsingGet(
+    props.id as any
+  );
   if (res.code === 20000) {
-    question.value = res.data
-    loading.value = false
+    question.value = res.data;
+    loading.value = false;
   } else {
-    Message.error('获取数据失败:' + res.message)
+    Message.error("获取数据失败:" + res.message);
   }
-}
+};
 
-const options = ref()
+const options = ref();
 const getLanguageOptions = async () => {
-  const res = await QuestionControllerService.getLanguagesUsingGet()
+  const res = await QuestionControllerService.getLanguagesUsingGet();
   if (res.code === 20000) {
     options.value = res.data!.map((item: any) => {
       // 首字母大写
-      return item.name.charAt(0).toUpperCase() + item.name.slice(1)
-    })
-    form.value.language = 'Java'
+      return item.name.charAt(0).toUpperCase() + item.name.slice(1);
+    });
+    form.value.language = "Java";
   } else {
-    Message.error('获取数据失败:' + res.message)
+    Message.error("获取数据失败:" + res.message);
   }
-}
+};
 const form = ref<QuestionSubmitAddRequest>({
-  language: '',
-  code: ''
-})
+  language: "",
+  code: ""
+});
 /**
  * 提交代码
  */
-const submitLoading = ref(false)
-const runLoading = ref(false)
-const modalStore = useModalStore()
-const ResultFlag = ref(false)
+const submitLoading = ref(false);
+const runLoading = ref(false);
+const modalStore = useModalStore();
+const ResultFlag = ref(false);
 const doSubmit = async () => {
-  ResultFlag.value = false
+  ResultFlag.value = false;
   if (!question.value?.id) {
-    return
+    return;
   }
-  submitLoading.value = !submitLoading.value
+  submitLoading.value = !submitLoading.value;
   const res = await QuestionControllerService.doQuestionSubmitUsingPost({
     ...form.value,
     language: form.value.language?.toLowerCase(),
     questionId: question.value.id
-  })
+  });
   if (res.code === 20000) {
-    Message.success('提交成功')
-    submitLoading.value = !submitLoading.value
-    ResultFlag.value = true
-    modalStore.setResultModal(true)
+    Message.success("提交成功");
+    submitLoading.value = !submitLoading.value;
+    ResultFlag.value = true;
+    modalStore.setResultModal(true);
   } else {
-    Message.error('提交失败:' + res.message)
-    submitLoading.value = !submitLoading.value
+    Message.error("提交失败:" + res.message);
+    submitLoading.value = !submitLoading.value;
   }
-}
+};
 
 const changeCode = (value: string) => {
-  form.value.code = value
-}
+  form.value.code = value;
+};
 
 // 本地提交代码
 const doLocalJudge = async () => {
-  ResultFlag.value = false
+  ResultFlag.value = false;
   if (!question.value?.id) {
-    return
+    return;
   }
-  runLoading.value = !runLoading.value
+  runLoading.value = !runLoading.value;
   const res = await QuestionControllerService.doLocalQuestionSubmitUsingPost({
     ...form.value,
     language: form.value.language?.toLowerCase(),
     questionId: question.value.id
-  })
+  });
   if (res.code === 20000) {
-    Message.success('提交成功')
-    runLoading.value = !runLoading.value
-    ResultFlag.value = true
-    modalStore.setResultModal(true)
+    Message.success("提交成功");
+    runLoading.value = !runLoading.value;
+    ResultFlag.value = true;
+    modalStore.setResultModal(true);
   } else {
-    Message.error('提交失败:' + res.message)
-    runLoading.value = !runLoading.value
+    Message.error("提交失败:" + res.message);
+    runLoading.value = !runLoading.value;
   }
-}
+};
 
-const userStore = useUserStore()
-const route = useRouter()
-const isSave = ref(false)
+const userStore = useUserStore();
+const route = useRouter();
+const isSave = ref(false);
 
 // 获取保存的代码
-const questionId = ref(route.currentRoute.value.params.id.toString())
+const questionId = ref(route.currentRoute.value.params.id.toString());
 const getCode = async () => {
   const res = await QuestionControllerService.getQuestionSaveUsingPost({
     userId: userStore.userInfo.id,
     questionId: Number(route.currentRoute.value.params.id)
-  })
+  });
   if (res.code === 20000) {
     if (res.data.code !== null) {
-      form.value.code = res.data.code
+      form.value.code = res.data.code;
     }
   }
-}
+};
 // 防抖保存代码
 const saveCode: any = debounce(async () => {
-  isSave.value = true
+  isSave.value = true;
   const res = await QuestionControllerService.saveQuestionSubmitUsingPost({
     ...form.value,
     userId: userStore.userInfo.id,
     language: form.value.language?.toLowerCase(),
     questionId: Number(route.currentRoute.value.params.id)
-  })
+  });
   if (res.code === 20000) {
-    Message.success('保存成功')
-    isSave.value = false
+    Message.success("保存成功");
+    isSave.value = false;
     // 重新渲染页面
-    await getCode()
+    await getCode();
   }
   // else {
   //   Message.error('保存失败:' + res.message)
@@ -151,43 +157,60 @@ const saveCode: any = debounce(async () => {
   //   // 重新渲染页面
   //   await getCode()
   // }
-}, 1500)
+}, 1500);
 onMounted(() => {
-  loadData()
-  getLanguageOptions()
-  getCode()
-  saveCode()
-})
+  loadData();
+  getLanguageOptions();
+  getCode();
+  saveCode();
+});
 
-watch(() => form.value.code, () => {
-  // 如果路由值存在
-  if (route.currentRoute.value.params.id) {
-    saveCode()
-  }
-}, { deep: true })
+watch(
+  () => form.value.code,
+  () => {
+    // 如果路由值存在
+    if (route.currentRoute.value.params.id) {
+      saveCode();
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <template>
   <div id="QuestionInfoView">
-    <a-row :gutter="[24,24]">
+    <a-row :gutter="[24, 24]">
       <a-col :md="12" :xs="24">
-        <a-card class="a_card" hoverable :style="{  marginBottom: '20px' }" :loading="loading" style="padding: 5px">
+        <a-card
+          class="a_card"
+          hoverable
+          :style="{ marginBottom: '20px' }"
+          :loading="loading"
+          style="padding: 5px"
+        >
           <a-tabs default-active-key="questionInfo">
             <a-tab-pane key="questionInfo">
               <template #title>
                 <a-space>
-                  <joy-svg-icon icon="question"/>
+                  <joy-svg-icon icon="question" />
                   题目详情
                 </a-space>
               </template>
               <h1>{{ question?.title }}</h1>
               <!-- 标签 -->
-              <a-tag style="border-radius: 12px" v-for="tag in question?.tags" :key="tag" color="arcoblue">{{
-                  tag
-                }}
+              <a-tag
+                style="border-radius: 12px"
+                v-for="tag in question?.tags"
+                :key="tag"
+                color="arcoblue"
+                >{{ tag }}
               </a-tag>
-              <a-divider/>
-              <a-descriptions title="判题条件" :column="{xs:1,md:2,lg:3}" v-if="question">
+              <a-divider />
+              <a-descriptions
+                title="判题条件"
+                :column="{ xs: 1, md: 2, lg: 3 }"
+                v-if="question"
+              >
                 <a-descriptions-item label="时间限制">
                   {{ question.judgeConfig?.timeLimit }}
                 </a-descriptions-item>
@@ -198,26 +221,26 @@ watch(() => form.value.code, () => {
                   {{ question.judgeConfig?.stackLimit }}
                 </a-descriptions-item>
               </a-descriptions>
-              <div style="margin-bottom: 10px;height: 10px"/>
-              <MdViewer :value="question?.content" ref="mdViewerRef"/>
+              <div style="margin-bottom: 10px; height: 10px" />
+              <MdViewer :value="question?.content" ref="mdViewerRef" />
             </a-tab-pane>
             <a-tab-pane key="comment" title="评论">
               <template #title>
                 <a-space>
-                  <joy-svg-icon icon="comment"/>
+                  <joy-svg-icon icon="comment" />
                   评论
                 </a-space>
               </template>
-              <Artalk/>
+              <Artalk />
             </a-tab-pane>
             <a-tab-pane key="answer" title="题解">
               <template #title>
                 <a-space>
-                  <joy-svg-icon icon="flask"/>
+                  <joy-svg-icon icon="flask" />
                   题解
                 </a-space>
               </template>
-              <Solution/>
+              <Solution />
             </a-tab-pane>
           </a-tabs>
         </a-card>
@@ -225,21 +248,41 @@ watch(() => form.value.code, () => {
       <a-col :md="12" :xs="24">
         <a-card class="a_card" hoverable :style="{ marginBottom: '20px' }">
           <a-form :model="form" layout="inline" class="mb-4">
-            <a-form-item field="language" label="编程语言" style="min-width: 280px">
-              <a-select v-model="form.language" :options="options" :style="{width:'120px'}"
-                        placeholder="请选择语言 ..." value-key="id" default-value="Java"
-                        @search="getLanguageOptions"/>
+            <a-form-item
+              field="language"
+              label="编程语言"
+              style="min-width: 280px"
+            >
+              <a-select
+                v-model="form.language"
+                :options="options"
+                :style="{ width: '120px' }"
+                placeholder="请选择语言 ..."
+                value-key="id"
+                default-value="Java"
+                @search="getLanguageOptions"
+              />
             </a-form-item>
           </a-form>
           <!-- 代码编辑器 -->
-          <CodeEditor :question-id="questionId" :value="form.code" :language="form.language"
-                      :handle-change="changeCode"/>
-          <a-space style="padding: 4px 0 4px 4px;display: flex;justify-content: space-between">
+          <CodeEditor
+            :question-id="questionId"
+            :value="form.code"
+            :language="form.language"
+            :handle-change="changeCode"
+          />
+          <a-space
+            style="
+              padding: 4px 0 4px 4px;
+              display: flex;
+              justify-content: space-between;
+            "
+          >
             <div class="status">
               <a-space v-if="isSave">
                 <a-spin>
                   <template #icon>
-                    <icon-sync/>
+                    <icon-sync />
                   </template>
                 </a-spin>
                 存储中
@@ -247,18 +290,28 @@ watch(() => form.value.code, () => {
               <span v-else>已存储</span>
             </div>
             <div>
-              <a-button class="ml-2" status="success" :loading="runLoading" @click="doLocalJudge">运行</a-button>
-              <a-button class="ml-2" type="primary" @click="doSubmit" :loading="submitLoading">提交</a-button>
+              <a-button
+                class="ml-2"
+                status="success"
+                :loading="runLoading"
+                @click="doLocalJudge"
+                >运行</a-button
+              >
+              <a-button
+                class="ml-2"
+                type="primary"
+                @click="doSubmit"
+                :loading="submitLoading"
+                >提交</a-button
+              >
             </div>
           </a-space>
         </a-card>
         <!-- 控制台显示测试用例和输出用例 -->
         <a-card class="a_card">
-          <a-row :gutter="[24,24]">
+          <a-row :gutter="[24, 24]">
             <a-col :md="7" :xs="24">
-              <a-menu
-                :style="{ width: '200px', borderRadius: '4px' }"
-              >
+              <a-menu :style="{ width: '200px', borderRadius: '4px' }">
                 <a-sub-menu key="0">
                   <template #title>测试用例</template>
                   <a-menu-item key="0_Navigation 10">Case 1</a-menu-item>
@@ -267,14 +320,13 @@ watch(() => form.value.code, () => {
               </a-menu>
             </a-col>
             <a-col :md="17" :xs="24">
-
-              <highlightjs code="暂时无法查看"/>
+              <highlightjs code="暂时无法查看" />
             </a-col>
           </a-row>
         </a-card>
       </a-col>
     </a-row>
-    <ResultModal v-if="ResultFlag"/>
+    <ResultModal v-if="ResultFlag" />
   </div>
 </template>
 

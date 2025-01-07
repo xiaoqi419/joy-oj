@@ -13,7 +13,7 @@
     "build:uat": "vue-tsc --noEmit && vite build --mode uat",
     "build:prod": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
-    "lint": "eslint \"src/**/*.{js,ts,vue,jsx,tsx}\" --fix"
+    "lint": "eslint \"src/**/*.{js,ts,vue,jsx,tsx}\" \"generated/**/*.{js,ts,vue,jsx,tsx}\" --fix"
   },
   "dependencies": {
     "@bytemd/plugin-gemoji": "^1.21.0",
@@ -26,6 +26,7 @@
     "artalk": "2.9.1",
     "axios": "^1.4.0",
     "dayjs": "^1.11.11",
+    "eslint-config-prettier": "^9.1.0",
     "highlight.js": "^11.9.0",
     "monaco-editor": "^0.50.0",
     "nprogress": "^0.2.0",
@@ -53,11 +54,13 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.14.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "openapi-typescript-codegen": "^0.29.0",
+    "prettier": "^3.4.2",
     "sass": "^1.63.3",
     "typescript": "~4.9.5",
     "unocss": "^0.53.1",

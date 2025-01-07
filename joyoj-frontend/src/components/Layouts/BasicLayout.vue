@@ -1,32 +1,30 @@
 <script setup lang="ts">
-import { defineComponent } from 'vue'
-import GlobalNavbar from '@/components/GlobalNavbar/index.vue'
-import GlobalFooter from '@/components/Footer/index.vue'
+import { defineComponent } from "vue";
+import GlobalNavbar from "@/components/GlobalNavbar/index.vue";
+import GlobalFooter from "@/components/Footer/index.vue";
 
 defineComponent({
-  name: 'BasicLayout',
+  name: "BasicLayout",
   components: {
     GlobalNavbar,
     GlobalFooter
   }
-})
-
+});
 </script>
 
 <template>
-  <a-layout style="height: 400px;" class="layout">
+  <a-layout style="height: 400px" class="layout">
     <a-layout-header>
       <!-- 导航 -->
-      <GlobalNavbar/>
+      <GlobalNavbar />
     </a-layout-header>
     <a-layout-content>
-      <router-view/>
+      <router-view />
     </a-layout-content>
     <a-layout-footer>
-      <GlobalFooter/>
+      <GlobalFooter />
     </a-layout-footer>
   </a-layout>
-
 </template>
 
 <style scoped lang="scss">

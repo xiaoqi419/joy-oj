@@ -3,37 +3,55 @@
     <div class="container">
       <div class="footer-section about">
         <h2>About Us</h2>
-        <p>We provide the best services to our customers. Our mission is to empower individuals and organizations.</p>
+        <p>
+          We provide the best services to our customers. Our mission is to
+          empower individuals and organizations.
+        </p>
       </div>
       <div class="footer-section links">
         <h2>Quick Links</h2>
         <a-space>
           <a-link style="color: darkgray" href="/about">关于我们</a-link>
-          <a-link style="color: darkgray" href="/view/question">浏览题目</a-link>
-          <a-link style="color: darkgray" href="https://www.ojason.top">我的博客</a-link>
-          <a-link style="color: darkgray" href="https://ojason.top">个人主页</a-link>
+          <a-link style="color: darkgray" href="/view/question"
+            >浏览题目</a-link
+          >
+          <a-link style="color: darkgray" href="https://www.ojason.top"
+            >我的博客</a-link
+          >
+          <a-link style="color: darkgray" href="https://ojason.top"
+            >个人主页</a-link
+          >
         </a-space>
       </div>
       <div class="footer-section social">
         <h2>Follow Us</h2>
         <ul class="social-icons">
-          <li><a href="#">
-            <icon-twitter/>
-          </a></li>
-          <li><a href="#">
-            <icon-github/>
-          </a></li>
-          <li><a href="#">
-            <icon-weibo-circle-fill/>
-          </a></li>
-          <li><a href="#">
-            <icon-qq-circle-fill/>
-          </a></li>
+          <li>
+            <a href="#">
+              <icon-twitter />
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <icon-github />
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <icon-weibo-circle-fill />
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <icon-qq-circle-fill />
+            </a>
+          </li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2024 Powered By
+      <p>
+        © 2024 Powered By
         <a-link href="https://github.com/xiaoqi419">Jason</a-link>
         | All Rights Reserved.
       </p>
@@ -41,9 +59,7 @@
   </footer>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .footer {
