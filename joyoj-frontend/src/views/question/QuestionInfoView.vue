@@ -150,19 +150,21 @@ const saveCode: any = debounce(async () => {
     isSave.value = false;
     // 重新渲染页面
     await getCode();
+  } else {
+    Message.error("保存失败:" + res.message);
+    isSave.value = false;
+    // 重新渲染页面
+    await getCode();
   }
-  // else {
-  //   Message.error('保存失败:' + res.message)
-  //   isSave.value = false
-  //   // 重新渲染页面
-  //   await getCode()
-  // }
 }, 1500);
-onMounted(() => {
-  loadData();
-  getLanguageOptions();
-  getCode();
-  saveCode();
+onMounted(async () => {
+  await loadData();
+  await getLanguageOptions();
+  await getCode();
+  await saveCode();
+  // 确保 form.code 初始化为一个空字符串或之前保存的值
+  form.value.code = form.value.code || "";
+  form.value.language = form.value.language || "Java"; // 默认语言
 });
 
 watch(
@@ -270,6 +272,7 @@ watch(
             :value="form.code"
             :language="form.language"
             :handle-change="changeCode"
+            :user-id="userStore.userInfo.id"
           />
           <a-space
             style="
@@ -295,15 +298,15 @@ watch(
                 status="success"
                 :loading="runLoading"
                 @click="doLocalJudge"
-                >运行</a-button
-              >
+                >运行
+              </a-button>
               <a-button
                 class="ml-2"
                 type="primary"
                 @click="doSubmit"
                 :loading="submitLoading"
-                >提交</a-button
-              >
+                >提交
+              </a-button>
             </div>
           </a-space>
         </a-card>

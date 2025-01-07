@@ -3,12 +3,14 @@ import * as monaco from "monaco-editor";
 import { onMounted, ref, toRaw, watch } from "vue";
 import { QuestionControllerService } from "../../../generated";
 import useUserStore from "@/store/modules/user";
+import { Message } from "@arco-design/web-vue";
 
 type Props = {
   value: string;
   language: string;
   questionId: string;
   handleChange: (v: string) => void;
+  userId: string;
 };
 // todo 更改语言时代码不同
 const codeDefault =
@@ -30,7 +32,9 @@ const props = withDefaults(defineProps<Props>(), {
   language: () => "java",
   handleChange: (v: string) => {
     console.log(v);
-  }
+  },
+  questionId: () => "",
+  userId: () => ""
 });
 const codeEditorRef = ref();
 const codeEditor = ref();
@@ -41,8 +45,37 @@ const getCode = async () => {
     userId: userStore.userInfo.id,
     questionId: Number(props.questionId)
   });
+
   if (res.code === 20000) {
-    newCode.value = res.data.code;
+    if (res.data === null) {
+      // 为所有用户保存一个默认的代码
+      const res = await QuestionControllerService.saveQuestionSubmitUsingPost({
+        code:
+          "public class Main {\n" +
+          "\n" +
+          "    " +
+          "//" +
+          " " +
+          "请勿修改类名和方法名等代码" +
+          "\n" +
+          "    public static void main(String[] args) {\n" +
+          "       \n" +
+          "    }\n" +
+          "\n" +
+          "}",
+        userId: userStore.userInfo.id,
+        language: props.language,
+        questionId: Number(props.questionId)
+      });
+      if (res.code === 20000) {
+        await getCode();
+      }
+      if (res.code !== 20000) {
+        Message.success(res.message);
+      }
+    } else {
+      newCode.value = res.data.code;
+    }
   }
 };
 
@@ -62,6 +95,7 @@ onMounted(async () => {
   if (!codeEditorRef.value) {
     return;
   }
+
   await getCode();
   if (newCode.value === null) {
     codeEditor.value = monaco.editor.create(codeEditorRef.value, {
