@@ -33,6 +33,12 @@ public class ProcessUtils {
             stopWatch.start();
             // 等待程序执行，获取错误码
             int exitValue = runProcess.waitFor();
+            // 获取当前JVM的运行时对象
+            Runtime runtime = Runtime.getRuntime();
+            // 获取当前内存总量
+            long totalMemory = runtime.totalMemory();
+            // 获取当前空闲内存
+            long freeMemory = runtime.freeMemory();
             executeMessage.setExitValue(exitValue);
             // 正常退出
             if (exitValue == 0) {
@@ -47,6 +53,9 @@ public class ProcessUtils {
                     compileOutputStringBuilder.append(cleanedString);
                 }
                 executeMessage.setMessage(compileOutputStringBuilder.toString());
+                // 再次查看内存占用情况
+                long usedMemory = totalMemory - freeMemory;
+                executeMessage.setMemory(usedMemory / 1024 / 1024);
             } else {
                 // 异常退出
                 System.out.println(opName + "失败，错误码： " + exitValue);

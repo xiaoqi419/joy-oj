@@ -1,7 +1,6 @@
 package com.joy.joyojcodesandbox.service.impl;
 
-import com.joy.joyojcodesandbox.docker.JavaCodeExecution;
-import com.joy.joyojcodesandbox.docker.JavaCodeSandboxTemplate;
+import com.joy.joyojcodesandbox.docker.JavaNativeCodeSandbox;
 import com.joy.joyojcodesandbox.model.ExecuteCodeRequest;
 import com.joy.joyojcodesandbox.model.ExecuteCodeResponse;
 import com.joy.joyojcodesandbox.service.CodeSandbox;
@@ -21,7 +20,8 @@ public class JavaNativeCodeSandboxImpl implements CodeSandbox {
 
     @Override
     public ExecuteCodeResponse executeCode(ExecuteCodeRequest executeCodeRequest) {
-        JavaCodeSandboxTemplate javaCodeSandboxTemplate = new JavaCodeExecution(executeCodeRequest);
-        return javaCodeSandboxTemplate.execute();
+//        JavaDockerCodeSandbox codeSandbox = new JavaDockerCodeSandbox();
+        JavaNativeCodeSandbox codeSandbox = new JavaNativeCodeSandbox();
+        return codeSandbox.executeCode(executeCodeRequest);
     }
 }
