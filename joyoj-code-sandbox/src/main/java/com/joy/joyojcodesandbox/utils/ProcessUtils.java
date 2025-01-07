@@ -53,9 +53,6 @@ public class ProcessUtils {
                     compileOutputStringBuilder.append(cleanedString);
                 }
                 executeMessage.setMessage(compileOutputStringBuilder.toString());
-                // 再次查看内存占用情况
-                long usedMemory = totalMemory - freeMemory;
-                executeMessage.setMemory(usedMemory / 1024 / 1024);
             } else {
                 // 异常退出
                 System.out.println(opName + "失败，错误码： " + exitValue);
@@ -84,6 +81,9 @@ public class ProcessUtils {
             }
             stopWatch.stop();
             executeMessage.setTime(stopWatch.getTotalTimeMillis());
+            // 再次查看内存占用情况
+            long usedMemory = totalMemory - freeMemory;
+            executeMessage.setMemory(usedMemory / 1024 / 1024);
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, e.getMessage());
         }
