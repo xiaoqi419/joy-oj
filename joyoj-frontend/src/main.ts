@@ -20,11 +20,15 @@ import hljsVuePlugin from "@highlightjs/vue-plugin";
 import java from "highlight.js/lib/languages/java";
 import "animate.css";
 
+// 跑马灯插件
+import Vue3Marquee from "vue3-marquee";
+
 const startApp = () => {
   const app = createApp(App);
   app.use(ArcoVueIcon);
   app.use(JsonViewer);
   app.use(hljsVuePlugin);
+  app.use(Vue3Marquee);
   hljs.registerLanguage("java", java);
   // 静态资源
   installAssets(app);

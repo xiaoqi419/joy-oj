@@ -1,5 +1,15 @@
 给我
 <template>
+  <div class="notices-container">
+    <Vue3Marquee>
+      <a-space>
+        <joy-svg-icon icon="notice" class="mr-1" />
+        <p v-for="(notice, index) in notices" :key="index" class="notices">
+          {{ notice }}
+        </p>
+      </a-space>
+    </Vue3Marquee>
+  </div>
   <div id="home-container" class="header">
     <a-row class="home-wrapper" style="margin-bottom: 16px">
       <!--   左侧标语   -->
@@ -51,8 +61,8 @@
                   size="large"
                   class="button-about"
                   @click="() => router.push('/about')"
-                  >关于我们</a-button
-                >
+                  >关于我们
+                </a-button>
               </a-col>
             </a-row>
           </div>
@@ -112,13 +122,15 @@ import { TypeIt, type TypeItOptions } from "@/components/ReTypeit";
 import HomeGoButton from "@/components/Button/HomeGoButton.vue";
 import CodeTypeIt from "@/components/Home/CodeTypeIt.vue";
 import router from "@/router";
+import { Vue3Marquee } from "vue3-marquee";
 
 defineComponent({
   name: "home",
   components: {
     TypeIt,
     HomeGoButton,
-    CodeTypeIt
+    CodeTypeIt,
+    Vue3Marquee
   }
 });
 
@@ -190,6 +202,15 @@ const scrollToElement = (elementId: string) => {
 const startStep = () => {
   scrollToElement("start-step");
 };
+
+// 公告配置
+const notices = [
+  "Joy Judge 是一个开源的在线评测系统，支持多种编程语言",
+  "本平台采用Vue3 + SpringBoot 前后端分离",
+  "支持自定义题目，支持多种评测方式",
+  "支持多种在线评测，包括在线编译，在线判题，在线测试"
+];
+// todo 获取接口
 </script>
 
 <style scoped lang="scss">
@@ -350,6 +371,17 @@ const startStep = () => {
 
   .step {
     margin-top: 160px;
+  }
+}
+
+.notices-container {
+  .notices {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0px;
+    line-height: 24px;
+    text-decoration: none solid rgba(0, 0, 0, 0);
+    word-spacing: 0px;
   }
 }
 </style>

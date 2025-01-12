@@ -36,6 +36,7 @@
     "vue": "^3.3.4",
     "vue-json-viewer": "3",
     "vue-router": "^4.2.2",
+    "vue3-marquee": "^4.2.2",
     "vue3-puzzle-vcode": "^1.1.7"
   },
   "devDependencies": {

@@ -7088,7 +7088,7 @@ vue-tsc@^1.6.5:
     "@vue/language-core" "1.8.27"
     semver "^7.5.4"
 
-"vue@^2.6.14 || ^3.3.0", vue@^3, vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.1.0, vue@^3.2.0, vue@^3.2.2, vue@^3.2.25, vue@^3.3.4, vue@3.4.27:
+"vue@^2.6.14 || ^3.3.0", vue@^3, vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.1.0, vue@^3.2, vue@^3.2.0, vue@^3.2.2, vue@^3.2.25, vue@^3.3.4, vue@3.4.27:
   version "3.4.27"
   resolved "https://registry.npmmirror.com/vue/-/vue-3.4.27.tgz"
   integrity sha512-8s/56uK6r01r1icG/aEOHqyMVxd1bkYcSe9j8HcKtr/xTOFWvnzIVTehNW+5Yt89f+DLBe4A569pnZLS5HzAMA==
@@ -7098,6 +7098,11 @@ vue-tsc@^1.6.5:
     "@vue/runtime-dom" "3.4.27"
     "@vue/server-renderer" "3.4.27"
     "@vue/shared" "3.4.27"
+
+vue3-marquee@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.npmmirror.com/vue3-marquee/-/vue3-marquee-4.2.2.tgz"
+  integrity sha512-FeFvGUVInKfFilXFcnl8sDRBJBZCZSNLlQDquJErB9db6W2xICRVqbRV/jtdzsEP0rftarLQhx9MeEAU0+TPuQ==
 
 vue3-puzzle-vcode@^1.1.7:
   version "1.1.7"
