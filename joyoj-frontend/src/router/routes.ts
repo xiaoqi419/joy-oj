@@ -110,6 +110,24 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/system/config",
+    name: "SystemConfig",
+    component: () => import("@/views/system/SystemConfigView.vue"),
+    meta: {
+      title: "系统配置",
+      icon: "config",
+      access: [ACCESS_ENUM.ADMIN]
+    },
+    children: [
+      {
+        path: "/system/config/announce-settings",
+        name: "AnnounceSettings",
+        component: () =>
+          import("@/views/system/children/AnnounceSettingsView.vue")
+      }
+    ]
+  },
+  {
     path: "/403",
     name: "403",
     component: () => import("@/views/status/403.vue"),
