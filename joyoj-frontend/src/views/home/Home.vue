@@ -3,10 +3,14 @@
   <div class="notices-container">
     <Vue3Marquee>
       <a-space>
-        <joy-svg-icon icon="notice" class="mr-1" />
-        <p v-for="(notice, index) in notices" :key="index" class="notices">
-          {{ notice }}
-        </p>
+        <a-alert v-for="(notice, index) in notices" :key="index">
+          <template #icon>
+            <joy-svg-icon icon="notice" class="mr-1" />
+          </template>
+          <p class="notices">
+            {{ notice }}
+          </p>
+        </a-alert>
       </a-space>
     </Vue3Marquee>
   </div>
@@ -204,12 +208,7 @@ const startStep = () => {
 };
 
 // 公告配置
-const notices = [
-  "Joy Judge 是一个开源的在线评测系统，支持多种编程语言",
-  "本平台采用Vue3 + SpringBoot 前后端分离",
-  "支持自定义题目，支持多种评测方式",
-  "支持多种在线评测，包括在线编译，在线判题，在线测试"
-];
+const notices = ["Joy Judge 是一个开源的在线评测系统，支持多种编程语言"];
 // todo 获取接口
 </script>
 
@@ -376,7 +375,7 @@ const notices = [
 
 .notices-container {
   .notices {
-    font-size: 15px;
+    font-size: 18px;
     letter-spacing: 0;
     line-height: 13px;
     text-decoration: none solid rgba(0, 0, 0, 0);
