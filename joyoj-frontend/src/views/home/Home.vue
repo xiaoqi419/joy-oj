@@ -377,11 +377,10 @@ const notices = [
 .notices-container {
   .notices {
     font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0px;
-    line-height: 24px;
+    letter-spacing: 0;
+    line-height: 13px;
     text-decoration: none solid rgba(0, 0, 0, 0);
-    word-spacing: 0px;
+    word-spacing: 0;
   }
 }
 </style>
