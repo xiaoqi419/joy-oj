@@ -198,7 +198,7 @@ const scrollToElement = (elementId: string) => {
   if (element) {
     const topPosition = element.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({
-      top: topPosition - 28,
+      top: topPosition - 208,
       behavior: "smooth"
     });
   }
