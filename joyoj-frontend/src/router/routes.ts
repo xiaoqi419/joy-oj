@@ -122,8 +122,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: "/system/config/announce-settings",
         name: "AnnounceSettings",
-        component: () =>
-          import("@/views/system/children/AnnounceSettingsView.vue")
+        component: () => import("@/views/system/children/BasicSettingsView.vue")
       }
     ]
   },
