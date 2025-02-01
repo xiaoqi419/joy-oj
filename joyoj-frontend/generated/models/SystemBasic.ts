@@ -2,16 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Post = {
-    content?: string;
+export type SystemBasic = {
+    announcement?: string;
     createTime?: string;
-    favourNum?: number;
     id?: number;
     isDelete?: number;
-    tags?: string;
-    thumbNum?: number;
-    title?: string;
     updateTime?: string;
-    userId?: number;
+    websiteName?: string;
 };
 

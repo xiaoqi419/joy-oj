@@ -2,18 +2,17 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse_boolean_ } from '../models/BaseResponse_boolean_';
-import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
+import type { BaseResponse } from '../models/BaseResponse';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class VerifyControllerService {
     /**
      * getArithmetic
-     * @returns BaseResponse_string_ OK
+     * @returns BaseResponse OK
      * @throws ApiError
      */
-    public static getArithmeticUsingGet(): CancelablePromise<BaseResponse_string_> {
+    public static getArithmeticUsingGet(): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/verify/captcha',
@@ -27,12 +26,12 @@ export class VerifyControllerService {
     /**
      * getEmailCode
      * @param email email
-     * @returns BaseResponse_boolean_ OK
+     * @returns BaseResponse OK
      * @throws ApiError
      */
     public static getEmailCodeUsingGet(
         email: string,
-    ): CancelablePromise<BaseResponse_boolean_> {
+    ): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/verify/email',

@@ -66,6 +66,10 @@ const doLogout = async () => {
 const goProfile = () => {
   router.push("/profile");
 };
+
+// 获取网站配置
+const { basic } = JSON.parse(localStorage.getItem("systems")!);
+const websiteName = basic.websiteName;
 </script>
 
 <template>
@@ -85,7 +89,7 @@ const goProfile = () => {
           >
             <div class="title-bar" @click="jumpHome">
               <!--              <img class="logo" src="../../assets/images/logo.png"/>-->
-              <div class="title">Joy Judge</div>
+              <div class="title">{{ websiteName }}</div>
             </div>
           </a-menu-item>
           <a-menu-item v-for="item in visibleRoutes" :key="item.path">
@@ -134,11 +138,11 @@ const goProfile = () => {
                   key="1"
                   style="text-align: center"
                   @click="showLoginModal"
-                  >登录</a-menu-item
-                >
+                  >登录
+                </a-menu-item>
                 <a-menu-item key="2" @click="showRegisterModal"
-                  >去注册</a-menu-item
-                >
+                  >去注册
+                </a-menu-item>
               </a-menu>
               <a-menu v-else>
                 <a-menu-item key="3" @click="goProfile">个人中心</a-menu-item>

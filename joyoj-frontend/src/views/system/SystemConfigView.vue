@@ -5,6 +5,11 @@ import { useRoute } from "vue-router";
 const isShowIntro = ref(true);
 const route = useRoute();
 const selectedKeys = ref([route.path]); // 初始化为当前路径
+
+// 获取网站名称填充到水印中
+const { basic } = JSON.parse(localStorage.getItem("systems")!);
+const websiteName = basic.websiteName;
+
 // 页面加载时,从localStorage中获取isShowIntro
 onMounted(() => {
   const storedIsShowIntro = localStorage.getItem("isShowIntro");
@@ -28,7 +33,6 @@ onMounted(() => {
     }
   );
 });
-console.log(selectedKeys.value);
 </script>
 
 <template>
@@ -64,16 +68,13 @@ console.log(selectedKeys.value);
                       </a-space>
                     </a-menu-item>
                   </router-link>
-                  <a-menu-item key="0_1">Menu 2</a-menu-item>
-                  <a-menu-item key="0_2">Menu 3</a-menu-item>
-                  <a-menu-item key="0_3">Menu 4</a-menu-item>
                 </a-sub-menu>
               </a-menu>
             </a-layout-sider>
             <a-layout-content>
               <!-- 路由 -->
               <div class="content-container">
-                <a-watermark content="Joy Judge">
+                <a-watermark :content="websiteName">
                   <a-card
                     :style="{ width: '100%', minHeight: '500px' }"
                     hoverable

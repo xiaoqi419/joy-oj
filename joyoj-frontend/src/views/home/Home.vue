@@ -208,8 +208,14 @@ const startStep = () => {
 };
 
 // 公告配置
-const notices = ["Joy Judge 是一个开源的在线评测系统，支持多种编程语言"];
-// todo 获取接口
+const notices = ref(["Joy Judge 是一个开源的在线评测系统，支持多种编程语言"]);
+// 获取系统配置
+const { basic } = JSON.parse(localStorage.getItem("systems")!);
+// 只保留新公告announcement到notices中
+if (basic) {
+  notices.value = notices.value.slice(0, 0);
+  notices.value.push(basic.announcement);
+}
 </script>
 
 <style scoped lang="scss">

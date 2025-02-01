@@ -3,31 +3,25 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseResponse } from '../models/BaseResponse';
+import type { SystemBasic } from '../models/SystemBasic';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-export class FileControllerService {
+export class SystemConfigControllerService {
     /**
-     * uploadFile
-     * @param file file
-     * @param biz
+     * changeBasicConfig
+     * @param systemBasic systemBasic
      * @returns BaseResponse OK
      * @returns any Created
      * @throws ApiError
      */
-    public static uploadFileUsingPost(
-        file: Blob,
-        biz?: string,
+    public static changeBasicConfigUsingPost(
+        systemBasic: SystemBasic,
     ): CancelablePromise<BaseResponse | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/file/upload',
-            query: {
-                'biz': biz,
-            },
-            formData: {
-                'file': file,
-            },
+            url: '/api/system_config/changeBasic',
+            body: systemBasic,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -36,21 +30,14 @@ export class FileControllerService {
         });
     }
     /**
-     * uploadUserAvatar
-     * @param file file
+     * getBasicConfig
      * @returns BaseResponse OK
-     * @returns any Created
      * @throws ApiError
      */
-    public static uploadUserAvatarUsingPost(
-        file: Blob,
-    ): CancelablePromise<BaseResponse | any> {
+    public static getBasicConfigUsingGet(): CancelablePromise<BaseResponse> {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/file/uploadAvatar',
-            formData: {
-                'file': file,
-            },
+            method: 'GET',
+            url: '/api/system_config/getBasicConfig',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

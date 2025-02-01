@@ -1,11 +1,36 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { SystemConfigControllerService } from "../../../../generated";
+import { Message } from "@arco-design/web-vue";
+import useSystemStore from "@/store/modules/system";
 
 const form = ref({
   announcement: "",
-  websiteName: "",
-  isRead: false
+  websiteName: ""
 });
+
+// 提交修改
+const submitForm = async () => {
+  const res = await SystemConfigControllerService.changeBasicConfigUsingPost({
+    announcement: form.value.announcement,
+    websiteName: form.value.websiteName
+  });
+  if (res.code === 20000) {
+    Message.success("修改成功");
+    // 重新获取系统配置
+    const basicConfig =
+      await SystemConfigControllerService.getBasicConfigUsingGet();
+    if (basicConfig.code === 20000) {
+      useSystemStore().setBasic(basicConfig.data);
+      // 刷新页面
+      window.location.reload();
+    } else {
+      Message.error("获取数据失败:" + basicConfig.message);
+    }
+  } else {
+    Message.error("修改失败:" + res.message);
+  }
+};
 </script>
 
 <template>
@@ -17,6 +42,7 @@ const form = ref({
       size="large"
       label-align="left"
       :label-col-props="{ span: 2 }"
+      @submit="submitForm"
     >
       <a-form-item
         field="websiteName"
@@ -25,10 +51,10 @@ const form = ref({
         :style="{ marginTop: '10px' }"
       >
         <a-input
-          :v-model="form.websiteName"
+          v-model="form.websiteName"
           allow-clear
           placeholder="请输入你的网站名称"
-          max-length="20"
+          :max-length="20"
         ></a-input>
       </a-form-item>
       <a-form-item
