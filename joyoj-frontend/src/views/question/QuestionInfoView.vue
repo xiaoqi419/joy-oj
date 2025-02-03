@@ -242,7 +242,9 @@ watch(
                   题解
                 </a-space>
               </template>
-              <Solution />
+              <div :style="{ paddingRight: '2px' }">
+                <Solution />
+              </div>
             </a-tab-pane>
           </a-tabs>
         </a-card>
