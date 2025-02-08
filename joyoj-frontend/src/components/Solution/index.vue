@@ -163,12 +163,14 @@ const toggleOverflow = () => {
             您最近提交的运行速度超过了&nbsp;1%&nbsp;的用户</a-typography-text
           >
         </span>
-        <a-button type="primary" shape="round">
-          <template #icon>
-            <icon-edit />
-          </template>
-          <template #default>发布题解</template>
-        </a-button>
+        <router-link to="/post-editor/solution">
+          <a-button type="primary" shape="round">
+            <template #icon>
+              <icon-edit />
+            </template>
+            <template #default>发布题解</template>
+          </a-button>
+        </router-link>
       </div>
     </a-card>
     <!--  题解渲染  -->

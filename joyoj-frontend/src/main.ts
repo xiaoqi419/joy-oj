@@ -23,6 +23,25 @@ import "animate.css";
 // 跑马灯插件
 import Vue3Marquee from "vue3-marquee";
 
+import VueMarkdownEditor from "@kangc/v-md-editor";
+import "@kangc/v-md-editor/lib/style/base-editor.css";
+import vuepressTheme from "@kangc/v-md-editor/lib/theme/vuepress.js";
+import "@kangc/v-md-editor/lib/theme/style/vuepress.css";
+import Prism from "prismjs";
+import createEmojiPlugin from "@kangc/v-md-editor/lib/plugins/emoji/index";
+import "@kangc/v-md-editor/lib/plugins/emoji/emoji.css";
+import createTodoListPlugin from "@kangc/v-md-editor/lib/plugins/todo-list/index";
+import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
+import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
+import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
+import createAlignPlugin from "@kangc/v-md-editor/lib/plugins/align";
+
+VueMarkdownEditor.use(vuepressTheme, { Prism });
+VueMarkdownEditor.use(createEmojiPlugin());
+VueMarkdownEditor.use(createTodoListPlugin());
+VueMarkdownEditor.use(createCopyCodePlugin());
+VueMarkdownEditor.use(createAlignPlugin());
+
 const startApp = () => {
   const app = createApp(App);
   app.use(ArcoVueIcon);
@@ -30,6 +49,7 @@ const startApp = () => {
   app.use(hljsVuePlugin);
   app.use(Vue3Marquee);
   hljs.registerLanguage("java", java);
+  app.use(VueMarkdownEditor);
   // 静态资源
   installAssets(app);
   // 路由 VueRouter

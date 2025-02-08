@@ -19,6 +19,27 @@ export const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: "/post-editor",
+    name: "postEditor",
+    meta: {
+      title: "编辑器",
+      access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+      hidden: true
+    },
+    children: [
+      {
+        path: "/post-editor/solution",
+        name: "solution",
+        component: () => import("@/components/Solution/AddSolution.vue"),
+        meta: {
+          title: "发布题解",
+          access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+          hidden: true
+        }
+      }
+    ]
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/home/About.vue"),
