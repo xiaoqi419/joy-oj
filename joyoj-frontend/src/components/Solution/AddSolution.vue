@@ -133,6 +133,12 @@ const addSolution = async () => {
   }
 };
 
+const backQuestionView = () => {
+  router.push({
+    path: `/view/question/${route.params.id}`
+  });
+};
+
 watch(
   () => tags.value,
   () => {
@@ -167,6 +173,15 @@ watch(
                   v-model:model-value="title"
                 />
               </div>
+            </a-col>
+            <a-col :flex="1">
+              <a-button
+                type="primary"
+                status="warning"
+                @click="backQuestionView"
+                :style="{ borderRadius: '.5rem' }"
+                >返回题目
+              </a-button>
             </a-col>
             <a-col :flex="1">
               <div>
