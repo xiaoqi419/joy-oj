@@ -41,6 +41,16 @@ public class PostVO implements Serializable {
     private Integer favourNum;
 
     /**
+     * 查看数
+     */
+    private Integer viewNum;
+
+    /**
+     * 评论数
+     */
+    private Integer commentNum;
+
+    /**
      * 创建用户 id
      */
     private Long userId;

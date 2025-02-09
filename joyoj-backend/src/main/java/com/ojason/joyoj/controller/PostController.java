@@ -30,8 +30,7 @@ import java.util.List;
 /**
  * 帖子接口
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author <a href="https://github.com/xiaoqi419">Jason</a>
  */
 @RestController
 @RequestMapping("/post")
@@ -53,25 +52,15 @@ public class PostController {
      * @return
      */
     @PostMapping("/add")
-    public BaseResponse<Long> addPost(@RequestBody PostAddRequest postAddRequest) {
+    public BaseResponse<Boolean> addPost(@RequestBody PostAddRequest postAddRequest) {
         if (postAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        Post post = new Post();
-        BeanUtils.copyProperties(postAddRequest, post);
-        List<String> tags = postAddRequest.getTags();
-        if (tags != null) {
-            post.setTags(JSONUtil.toJsonStr(tags));
-        }
-        postService.validPost(post, true);
-        User loginUser = userService.getLoginUser();
-        post.setUserId(loginUser.getId());
-        post.setFavourNum(0);
-        post.setThumbNum(0);
-        boolean result = postService.save(post);
+
+        boolean result = postService.addSolution(postAddRequest);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-        long newPostId = post.getId();
-        return ResultUtils.success(newPostId);
+
+        return ResultUtils.success(true);
     }
 
     /**
@@ -255,5 +244,6 @@ public class PostController {
         boolean result = postService.updateById(post);
         return ResultUtils.success(result);
     }
+
 
 }

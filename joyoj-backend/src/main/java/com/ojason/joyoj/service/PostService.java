@@ -3,6 +3,7 @@ package com.ojason.joyoj.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ojason.joyoj.model.dto.post.PostAddRequest;
 import com.ojason.joyoj.model.dto.post.PostQueryRequest;
 import com.ojason.joyoj.model.entity.Post;
 import com.ojason.joyoj.model.vo.PostVO;
@@ -57,5 +58,10 @@ public interface PostService extends IService<Post> {
      * @return
      */
     Page<PostVO> getPostVOPage(Page<Post> postPage);
+
+    /**
+     * 发表题解
+     */
+    boolean addSolution(PostAddRequest postAddRequest);
 
 }

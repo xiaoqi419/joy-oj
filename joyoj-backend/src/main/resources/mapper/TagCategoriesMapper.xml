@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ojason.joyoj.mapper.TagCategoriesMapper">
+
+    <resultMap id="BaseResultMap" type="com.ojason.joyoj.model.entity.TagCategories">
+            <id property="id" column="id" />
+            <result property="categoryname" column="categoryName" />
+            <result property="createdtime" column="createdTime" />
+            <result property="updatedtime" column="updatedTime" />
+            <result property="isdelete" column="isDelete" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,categoryName,createdTime,updatedTime,isDelete
+    </sql>
+</mapper>

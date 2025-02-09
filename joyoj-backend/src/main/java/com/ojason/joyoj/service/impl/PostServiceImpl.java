@@ -1,6 +1,7 @@
 package com.ojason.joyoj.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,13 +11,12 @@ import com.ojason.joyoj.exception.BusinessException;
 import com.ojason.joyoj.exception.ThrowUtils;
 import com.ojason.joyoj.mapper.PostFavourMapper;
 import com.ojason.joyoj.mapper.PostMapper;
+import com.ojason.joyoj.mapper.PostSolutionMapper;
 import com.ojason.joyoj.mapper.PostThumbMapper;
+import com.ojason.joyoj.model.dto.post.PostAddRequest;
 import com.ojason.joyoj.model.dto.post.PostEsDTO;
 import com.ojason.joyoj.model.dto.post.PostQueryRequest;
-import com.ojason.joyoj.model.entity.Post;
-import com.ojason.joyoj.model.entity.PostFavour;
-import com.ojason.joyoj.model.entity.PostThumb;
-import com.ojason.joyoj.model.entity.User;
+import com.ojason.joyoj.model.entity.*;
 import com.ojason.joyoj.model.vo.PostVO;
 import com.ojason.joyoj.model.vo.UserVO;
 import com.ojason.joyoj.service.PostService;
@@ -30,6 +30,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHit;
@@ -37,6 +38,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +66,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Resource
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
+
+    @Resource
+    private PostSolutionMapper postSolutionMapper;
 
     @Override
     public void validPost(Post post, boolean add) {
@@ -300,6 +305,29 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }).collect(Collectors.toList());
         postVOPage.setRecords(postVOList);
         return postVOPage;
+    }
+
+    @Override
+    @Transactional
+    public boolean addSolution(PostAddRequest postAddRequest) {
+        Post post = new Post();
+        BeanUtils.copyProperties(postAddRequest, post);
+        List<String> tags = postAddRequest.getTags();
+        if (tags != null) {
+            post.setTags(JSONUtil.toJsonStr(tags));
+        }
+        validPost(post, true);
+        User loginUser = userService.getLoginUser();
+        post.setUserId(loginUser.getId());
+        // 1.添加题解
+        this.baseMapper.insert(post);
+        long newPostId = post.getId();
+        // 2.向post_solution表中添加
+        PostSolution postSolution = new PostSolution();
+        postSolution.setPostId(newPostId);
+        postSolution.setQuestionId(postAddRequest.getQuestionId());
+        int insert = postSolutionMapper.insert(postSolution);
+        return insert > 0;
     }
 
 }
