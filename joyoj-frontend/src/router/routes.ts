@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
-import ACCESS_ENUM from "@/assets/enum/accessEnum";
+import ACCESS_ENUM from "@/assets/enum/accessEnum"; // 提取出路由配置
 
 // 提取出路由配置
 export const routes: Array<RouteRecordRaw> = [
@@ -28,7 +28,7 @@ export const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "/post-editor/solution",
+        path: "/post-editor/solution/:id",
         name: "solution",
         component: () => import("@/components/Solution/AddSolution.vue"),
         meta: {

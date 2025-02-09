@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type PostAddRequest = {
-    content?: string;
-    questionId?: number;
-    tags?: Array<string>;
-    title?: string;
+import type { PostVO } from './PostVO';
+export type BaseResponse_PostVO_ = {
+    code?: number;
+    data?: PostVO;
+    message?: string;
 };
 

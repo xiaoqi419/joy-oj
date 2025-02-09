@@ -2,32 +2,22 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponse_string_ } from '../models/BaseResponse_string_';
+import type { BaseResponse_List_SolutionTagsVO_ } from '../models/BaseResponse_List_SolutionTagsVO_';
+import type { SolutionTagsRequest } from '../models/SolutionTagsRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-export class FileControllerService {
+export class SolutionControllerService {
     /**
-     * uploadFile
-     * @param file file
-     * @param biz
-     * @returns BaseResponse_string_ OK
+     * getRandomTags
+     * @returns BaseResponse_List_SolutionTagsVO_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static uploadFileUsingPost(
-        file: Blob,
-        biz?: string,
-    ): CancelablePromise<BaseResponse_string_ | any> {
+    public static getRandomTagsUsingPost(): CancelablePromise<BaseResponse_List_SolutionTagsVO_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/file/upload',
-            query: {
-                'biz': biz,
-            },
-            formData: {
-                'file': file,
-            },
+            url: '/api/solution/randomTags',
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,
@@ -36,21 +26,19 @@ export class FileControllerService {
         });
     }
     /**
-     * uploadUserAvatar
-     * @param file file
-     * @returns BaseResponse_string_ OK
+     * getTags
+     * @param solutionTagsRequest solutionTagsRequest
+     * @returns BaseResponse_List_SolutionTagsVO_ OK
      * @returns any Created
      * @throws ApiError
      */
-    public static uploadUserAvatarUsingPost(
-        file: Blob,
-    ): CancelablePromise<BaseResponse_string_ | any> {
+    public static getTagsUsingPost(
+        solutionTagsRequest: SolutionTagsRequest,
+    ): CancelablePromise<BaseResponse_List_SolutionTagsVO_ | any> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/file/uploadAvatar',
-            formData: {
-                'file': file,
-            },
+            url: '/api/solution/tags',
+            body: solutionTagsRequest,
             errors: {
                 401: `Unauthorized`,
                 403: `Forbidden`,

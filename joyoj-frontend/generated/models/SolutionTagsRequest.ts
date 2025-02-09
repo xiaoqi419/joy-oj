@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type BaseResponse = {
-    code?: number;
-    data?: any;
-    message?: string;
+export type SolutionTagsRequest = {
+    tagName?: string;
 };
 

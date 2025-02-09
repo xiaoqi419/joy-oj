@@ -2,10 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type PostAddRequest = {
-    content?: string;
-    questionId?: number;
-    tags?: Array<string>;
-    title?: string;
+import type { User } from './User';
+export type BaseResponse_User_ = {
+    code?: number;
+    data?: User;
+    message?: string;
 };
 

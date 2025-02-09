@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router"; // 定义颜色数组
 
 // 定义颜色数组
 const colors = ref([
@@ -50,6 +51,15 @@ const toggleOverflow = () => {
   //   // 截取数组中的前8个重新赋值
   //   colors.value = colors.value.slice(0, 10);
   // }
+};
+
+const router = useRouter();
+const pushToAddSolution = () => {
+  const path = window.location.pathname; // 获取路径部分，例如 "/view/question/1"
+  const segments = path.split("/"); // 将路径分割为数组 ["", "view", "question", "1"]
+  router.push({
+    path: `/post-editor/solution/${segments[segments.length - 1]}`
+  });
 };
 </script>
 
@@ -163,14 +173,13 @@ const toggleOverflow = () => {
             您最近提交的运行速度超过了&nbsp;1%&nbsp;的用户</a-typography-text
           >
         </span>
-        <router-link to="/post-editor/solution">
-          <a-button type="primary" shape="round">
-            <template #icon>
-              <icon-edit />
-            </template>
-            <template #default>发布题解</template>
-          </a-button>
-        </router-link>
+
+        <a-button type="primary" shape="round" @click="pushToAddSolution">
+          <template #icon>
+            <icon-edit />
+          </template>
+          <template #default>发布题解</template>
+        </a-button>
       </div>
     </a-card>
     <!--  题解渲染  -->
