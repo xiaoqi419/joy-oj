@@ -9,6 +9,7 @@ import com.ojason.joyoj.model.entity.Post;
 import com.ojason.joyoj.model.vo.PostVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 帖子服务
@@ -64,4 +65,5 @@ public interface PostService extends IService<Post> {
      */
     boolean addSolution(PostAddRequest postAddRequest);
 
+    List<Long> listSolutionIdsByPostId(long id);
 }

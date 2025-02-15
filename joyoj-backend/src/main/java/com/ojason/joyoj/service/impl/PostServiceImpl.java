@@ -3,6 +3,7 @@ package com.ojason.joyoj.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ojason.joyoj.common.ErrorCode;
@@ -112,6 +113,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         List<String> tagList = postQueryRequest.getTags();
         Long userId = postQueryRequest.getUserId();
         Long notId = postQueryRequest.getNotId();
+        List<Long> ids = postQueryRequest.getIds();
+
         // 拼接查询条件
         if (StringUtils.isNotBlank(searchText)) {
             queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText));
@@ -128,6 +131,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
+        // 如果ids不为空，则查询所有的数据
+        if (CollUtil.isNotEmpty(ids)) {
+            queryWrapper.in("id", ids);
+        }
         return queryWrapper;
     }
 
@@ -328,6 +335,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         postSolution.setQuestionId(postAddRequest.getQuestionId());
         int insert = postSolutionMapper.insert(postSolution);
         return insert > 0;
+    }
+
+    @Override
+    public List<Long> listSolutionIdsByPostId(long id) {
+        // 获取当前题目的所有题解ID
+        return postSolutionMapper
+                .selectList(Wrappers.lambdaQuery(PostSolution.class)
+                        .eq(PostSolution::getQuestionId, id))
+                .stream().map(PostSolution::getPostId)
+                .collect(Collectors.toList());
     }
 
 }

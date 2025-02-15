@@ -245,5 +245,16 @@ public class PostController {
         return ResultUtils.success(result);
     }
 
+    /**
+     * 获取当前题目的所有题解ID
+     */
+    @GetMapping("/list/solution")
+    public BaseResponse<List<Long>> listSolutionIdsByPostId(@RequestParam long id) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return ResultUtils.success(postService.listSolutionIdsByPostId(id));
+    }
+
 
 }
