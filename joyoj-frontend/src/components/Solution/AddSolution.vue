@@ -81,7 +81,6 @@ const removeTag = (item: number) => {
 
 // 搜索标签
 const searchTagsByEnter = async () => {
-  console.log(tagData.value);
   const res = await SolutionControllerService.getTagsUsingPost({
     tagName: tagData.value
   });

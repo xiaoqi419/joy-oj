@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router"; // 定义颜色数组
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import {
+  PostControllerService,
+  SolutionControllerService
+} from "../../../generated";
+import { Message } from "@arco-design/web-vue"; // 定义颜色数组
 
 // 定义颜色数组
 const colors = ref([
@@ -44,13 +49,16 @@ const tagStyle = {
 
 // 状态变量
 const isOverflow = ref(true); // 是否处于省略状态
+const tags = ref();
 // 切换展开状态
-const toggleOverflow = () => {
+const toggleOverflow = async () => {
   isOverflow.value = !isOverflow.value;
-  // if (isOverflow.value) {
-  //   // 截取数组中的前8个重新赋值
-  //   colors.value = colors.value.slice(0, 10);
-  // }
+  const res = await SolutionControllerService.getTagsUsingPost({});
+  if (res.code === 20000) {
+    tags.value = res.data;
+  } else {
+    Message.error(res.message);
+  }
 };
 
 const router = useRouter();
@@ -61,6 +69,154 @@ const pushToAddSolution = () => {
     path: `/post-editor/solution/${segments[segments.length - 1]}`
   });
 };
+
+// 父组件传递的数据
+const props = defineProps({
+  solutions: {
+    type: Object || null,
+    default: () => {}
+  },
+  current: {
+    type: Number,
+    default: 1
+  },
+  pageSize: {
+    type: Number,
+    default: 10
+  },
+  total: {
+    type: Number,
+    default: 0
+  }
+});
+
+// 搜索框搜索题解
+const searchTitle = ref();
+const emit = defineEmits<{
+  (e: "searchSolutionByTitle", solutions: any): void;
+  (e: "changePage", current: number): void;
+}>();
+const searchSolution = async () => {
+  const res = await PostControllerService.listPostVoByPageUsingPost({
+    current: props.current,
+    pageSize: props.pageSize,
+    title: searchTitle.value
+  });
+  if (res.code === 20000) {
+    // 获得搜索之后的数据返回父组件
+    emit("searchSolutionByTitle", res.data.records);
+  }
+};
+
+watch(
+  () => searchTitle.value,
+  () => {
+    if (!searchTitle.value) {
+      // 返回空
+      emit("searchSolutionByTitle", null);
+    }
+  },
+  {
+    deep: true
+  }
+);
+
+// 改变页码
+const changePage = (current: number) => {
+  emit("changePage", current);
+};
+
+const like = ref(false);
+const star = ref(false);
+
+// 排序改变时
+const sortChange = async (val: any) => {
+  console.log(val);
+  const res = await PostControllerService.listPostVoByPageUsingPost({
+    current: 1,
+    pageSize: 5,
+    sortField: val,
+    sortOrder: val === "createTime" ? "descend" : "ascend"
+  });
+  if (res.code === 20000) {
+    // 获得搜索之后的数据返回父组件
+    emit("searchSolutionByTitle", res.data);
+  } else {
+    Message.error("获取数据失败:" + res.message);
+  }
+};
+
+// 获取随机标签
+const randomTags = ref([]);
+const getRandomTag = async () => {
+  const res = await SolutionControllerService.getRandomTagsUsingPost();
+  if (res.code === 20000) {
+    randomTags.value = res.data;
+  } else {
+    Message.error(res.message);
+  }
+};
+
+// 选中标签后搜索
+const tagIds = ref<string[]>([]);
+
+async function searchPosts(value: string[]) {
+  const res = await PostControllerService.listPostVoByPageUsingPost({
+    current: 1,
+    pageSize: 5,
+    tags: value
+  });
+  if (res.code === 20000) {
+    emit("searchSolutionByTitle", res.data);
+  } else {
+    Message.error("获取数据失败:" + res.message);
+  }
+}
+
+// 选中标签后，再次点击该标签则去掉该标签重新搜索
+const checkTag = async (value: string) => {
+  if (tagIds.value.includes(value)) {
+    tagIds.value = tagIds.value.filter((tag: string) => tag !== value);
+  } else {
+    tagIds.value.push(value.toString());
+  }
+
+  await searchPosts(tagIds.value);
+};
+
+const isEmpty = ref(true);
+// 如果没有数据则显示空
+watch(
+  () => props.solutions,
+  () => {
+    if (!props.solutions || props.solutions.length === 0) {
+      isEmpty.value = false;
+    } else {
+      isEmpty.value = true;
+    }
+  },
+  {
+    deep: true
+  }
+);
+
+const searchAllSolution = async () => {
+  const res = await PostControllerService.listPostVoByPageUsingPost({
+    current: 1,
+    pageSize: 5
+  });
+  if (res.code === 20000) {
+    emit("searchSolutionByTitle", res.data);
+    // 取消所有选中
+    tagIds.value = [];
+  } else {
+    Message.error("获取数据失败:" + res.message);
+  }
+};
+
+onMounted(() => {
+  getRandomTag();
+});
 </script>
 
 <template>
@@ -68,7 +224,12 @@ const pushToAddSolution = () => {
     <a-row class="grid-demo" style="margin-bottom: 16px">
       <a-col :flex="11">
         <div>
-          <a-input v-model="searchTitle" placeholder="搜索" allow-clear>
+          <a-input
+            v-model="searchTitle"
+            placeholder="按下回车搜索"
+            allow-clear
+            @pressEnter="searchSolution"
+          >
             <template #prepend>
               <icon-search />
             </template>
@@ -77,7 +238,7 @@ const pushToAddSolution = () => {
       </a-col>
       <a-col :flex="1">
         <div class="ml-1">
-          <a-dropdown @select="handleSelect">
+          <a-dropdown @select="sortChange">
             <a-button type="text">
               <template #icon>
                 <icon-sort />
@@ -85,10 +246,10 @@ const pushToAddSolution = () => {
               排序
             </a-button>
             <template #content>
-              <a-doption>点赞最多</a-doption>
-              <a-doption>热度最高</a-doption>
-              <a-doption>最新发布</a-doption>
-              <a-doption>最早发布</a-doption>
+              <a-doption value="thumbNum">点赞最多</a-doption>
+              <a-doption value="viewNum">热度最高</a-doption>
+              <a-doption value="createTime">最新发布</a-doption>
+              <a-doption value="updateTime">最早发布</a-doption>
             </template>
           </a-dropdown>
         </div>
@@ -104,30 +265,38 @@ const pushToAddSolution = () => {
               :class="{ 'overflow-hidden': isOverflow }"
               ref="tagsContent"
             >
-              <a-tag checkable bordered :style="tagStyle">不限</a-tag>
               <a-tag
-                v-for="(color, index) in colors"
-                :key="index"
                 checkable
-                :color="color"
                 bordered
                 :style="tagStyle"
+                @check="searchAllSolution"
+                >不限
+              </a-tag>
+              <a-tag
+                v-for="(item, index) in randomTags"
+                :key="item"
+                :color="colors[index]"
+                bordered
+                checkable
+                :style="tagStyle"
+                @check="checkTag(item.tagName)"
               >
-                {{ color }}
+                {{ item.tagName }}
               </a-tag>
             </div>
             <a-divider :size="1" v-if="!isOverflow" />
             <div class="tag-classification" v-if="!isOverflow">
               <a-tag
-                v-for="(color, index) in colors"
+                v-for="(item, index) in tags"
                 :key="index"
                 checkable
-                :color="color"
+                :color="colors[index]"
                 bordered
                 :style="tagStyle"
                 class="tag-classification-tags"
+                @check="checkTag(item.tagName)"
               >
-                {{ color }}
+                {{ item.tagName }}
               </a-tag>
             </div>
           </a-col>
@@ -170,7 +339,9 @@ const pushToAddSolution = () => {
         >
           <icon-plus-circle :style="{ fontSize: '22px', marginRight: '5px' }" />
           <a-typography-text>
-            您最近提交的运行速度超过了&nbsp;1%&nbsp;的用户</a-typography-text
+            您最近提交的运行速度超过了&nbsp;<span :style="{ color: 'blue' }"
+              >1%</span
+            >&nbsp;的用户</a-typography-text
           >
         </span>
 
@@ -183,59 +354,58 @@ const pushToAddSolution = () => {
       </div>
     </a-card>
     <!--  题解渲染  -->
-    <div class="post-container">
-      <a-comment v-for="item in 5" :key="item">
+    <div class="post-container" v-if="isEmpty">
+      <a-comment v-for="item in props.solutions" :key="item">
         <template #author>
-          <a-link href="link" :hoverable="false">测试用户名</a-link>
+          <a-link href="link" :hoverable="false"
+            >{{ item.user.userName }}
+          </a-link>
         </template>
         <!-- 徽章位 -->
         <template #datetime>🏕️</template>
         <template #content>
+          <div>
+            {{ item.title }}
+          </div>
           <a-typography-paragraph
             :ellipsis="{
               rows: 2
             }"
           >
-            A design is a plan or specification for the construction of an
-            object or system or for the implementation of an activity or
-            process, or the result of that plan or specification in the form of
-            a prototype, product or process. The verb to design expresses the
-            process of developing a design. The verb to design expresses the
-            process of developing a design.A design is a plan or specification
-            for the construction of an object or system or for the
-            implementation of an activity or process, or the result of that plan
-            or specification in the form of a prototype, product or process. The
-            verb to design expresses the process of developing a design. The
-            verb to design expresses the process of developing a design.
+            {{ item.content }}
           </a-typography-paragraph>
+          <a-space>
+            <a-tag v-for="(iitem, index) in item.tagList" :key="index"
+              >{{ iitem }}
+            </a-tag>
+          </a-space>
         </template>
         <template #actions>
-          <span class="action" key="heart" @click="onLikeChange">
+          <span class="action" key="heart">
             <span v-if="like">
               <IconHeartFill :style="{ color: '#f53f3f' }" />
             </span>
             <span v-else>
               <IconHeart />
             </span>
-            {{ 83 + (like ? 1 : 0) }}
+            {{ item.thumbNum }}
           </span>
-          <span class="action" key="star" @click="onStarChange">
+          <span class="action" key="star">
             <span v-if="star">
               <IconStarFill :style="{ color: '#ffb400' }" />
             </span>
             <span v-else>
               <icon-eye />
             </span>
-            {{ 3 + (star ? 1 : 0) }}
+            {{ item.viewNum }}
           </span>
-          <span class="action" key="reply"> <IconMessage /> 111 </span>
+          <span class="action" key="reply">
+            <IconMessage /> {{ item.commentNum }}</span
+          >
         </template>
         <template #avatar>
           <a-avatar>
-            <img
-              alt="avatar"
-              src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-            />
+            <img alt="avatar" :src="item.user.userAvatar" />
           </a-avatar>
         </template>
       </a-comment>
@@ -245,12 +415,18 @@ const pushToAddSolution = () => {
           <a-col :flex="11"></a-col>
           <a-col :flex="1">
             <div>
-              <a-pagination :total="50" />
+              <a-pagination
+                :pageSize="props.pageSize"
+                :current="props.current"
+                :total="props.total"
+                @change="changePage"
+              />
             </div>
           </a-col>
         </a-row>
       </div>
     </div>
+    <a-empty v-else />
   </div>
 </template>
 

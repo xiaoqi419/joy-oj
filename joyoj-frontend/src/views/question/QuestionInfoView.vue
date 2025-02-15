@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineComponent, onMounted, ref, watch, withDefaults } from "vue";
 import {
+  PostControllerService,
   QuestionControllerService,
   QuestionEditRequest,
   QuestionSubmitAddRequest
@@ -177,6 +178,58 @@ watch(
   },
   { deep: true }
 );
+
+// 当切换到题解是获取题解内容
+const solutionData = ref();
+const solutionIds = ref();
+const solutions = ref();
+const getSolutionData = async () => {
+  const res1 = await PostControllerService.listSolutionIdsByPostIdUsingGet(
+    props.id as any
+  );
+  if (res1.code === 20000) {
+    solutionIds.value = res1.data;
+    const res2 = await PostControllerService.listPostVoByPageUsingPost({
+      current: 1,
+      pageSize: 5,
+      ids: solutionIds.value
+    });
+    if (res2.code === 20000) {
+      solutionData.value = res2.data;
+      solutions.value = solutionData.value.records;
+    } else {
+      Message.error("获取数据失败:" + res2.message);
+    }
+  } else {
+    Message.error("获取数据失败:" + res1.message);
+  }
+};
+
+const getSearchTitleObj = (res: any) => {
+  // 如果不为空
+  if (res) {
+    // 获得搜索之后的数据返回父组件
+    solutions.value = res.records;
+    solutionData.value = res;
+  } else {
+    getSolutionData();
+  }
+};
+
+// 当页码改变时
+const pageChange = async (cur: number) => {
+  const res = await PostControllerService.listPostVoByPageUsingPost({
+    current: cur,
+    pageSize: 5,
+    ids: solutionIds.value
+  });
+  if (res.code === 20000) {
+    solutionData.value = res.data;
+    solutions.value = res.data.records;
+  } else {
+    Message.error("获取数据失败:" + res.message);
+  }
+};
 </script>
 
 <template>
@@ -237,13 +290,22 @@ watch(
             </a-tab-pane>
             <a-tab-pane key="answer" title="题解">
               <template #title>
-                <a-space>
+                <a-space @click="getSolutionData">
                   <joy-svg-icon icon="flask" />
                   题解
                 </a-space>
               </template>
               <div :style="{ paddingRight: '2px' }">
-                <Solution />
+                <!-- 题解组件 -->
+                <Solution
+                  v-if="solutionData"
+                  :solutions="solutions"
+                  @searchSolutionByTitle="getSearchTitleObj"
+                  :pageSize="Number(solutionData.size)"
+                  :current="Number(solutionData.current)"
+                  :total="Number(solutionData.total)"
+                  @changePage="pageChange"
+                />
               </div>
             </a-tab-pane>
           </a-tabs>
