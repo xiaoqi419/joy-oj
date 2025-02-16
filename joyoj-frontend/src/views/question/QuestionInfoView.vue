@@ -230,6 +230,15 @@ const pageChange = async (cur: number) => {
     Message.error("获取数据失败:" + res.message);
   }
 };
+
+// 如果路由是/view/question/1/solution/的形式的话使tab默认选中题解
+const isDefaultTab = ref("questionInfo");
+onMounted(async () => {
+  if (route.currentRoute.value.name === "solutionInfo") {
+    isDefaultTab.value = "answer";
+  }
+  await getSolutionData();
+});
 </script>
 
 <template>
@@ -243,7 +252,7 @@ const pageChange = async (cur: number) => {
           :loading="loading"
           style="padding: 5px"
         >
-          <a-tabs default-active-key="questionInfo">
+          <a-tabs :default-active-key="isDefaultTab">
             <a-tab-pane key="questionInfo">
               <template #title>
                 <a-space>
@@ -290,7 +299,7 @@ const pageChange = async (cur: number) => {
             </a-tab-pane>
             <a-tab-pane key="answer" title="题解">
               <template #title>
-                <a-space @click="getSolutionData">
+                <a-space>
                   <joy-svg-icon icon="flask" />
                   题解
                 </a-space>
@@ -306,6 +315,15 @@ const pageChange = async (cur: number) => {
                   :total="Number(solutionData.total)"
                   @changePage="pageChange"
                 />
+                <a-skeleton :animation="true" v-else>
+                  <a-space
+                    direction="vertical"
+                    :style="{ width: '100%' }"
+                    size="large"
+                  >
+                    <a-skeleton-line :rows="5" />
+                  </a-space>
+                </a-skeleton>
               </div>
             </a-tab-pane>
           </a-tabs>

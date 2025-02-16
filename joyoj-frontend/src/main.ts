@@ -35,8 +35,13 @@ import "@kangc/v-md-editor/lib/plugins/todo-list/todo-list.css";
 import createCopyCodePlugin from "@kangc/v-md-editor/lib/plugins/copy-code/index";
 import "@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css";
 import createAlignPlugin from "@kangc/v-md-editor/lib/plugins/align";
+import "@kangc/v-md-editor/lib/style/preview.css";
+import "@kangc/v-md-editor/lib/plugins/tip/tip.css";
+import createTipPlugin from "@kangc/v-md-editor/lib/plugins/tip/index";
+import "@kangc/v-md-editor/lib/theme/style/github.css";
 
 VueMarkdownEditor.use(vuepressTheme, { Prism });
+VueMarkdownEditor.use(createTipPlugin());
 VueMarkdownEditor.use(createEmojiPlugin());
 VueMarkdownEditor.use(createTodoListPlugin());
 VueMarkdownEditor.use(createCopyCodePlugin());

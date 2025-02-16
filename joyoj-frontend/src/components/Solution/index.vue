@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   PostControllerService,
   SolutionControllerService
@@ -214,13 +214,42 @@ const searchAllSolution = async () => {
   }
 };
 
+// 跳转到题解详情
+const isGoto = ref(false);
+const route = useRoute();
+const gotoDetail = (id: number) => {
+  const lastPart = route.path.split("/").pop();
+  router.push({
+    name: "solutionInfo",
+    params: {
+      id: lastPart,
+      solutionId: id
+    }
+  });
+  isGoto.value = true;
+  // 使视角恢复到最顶端 丝滑一点
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+};
+
+watch(
+  () => route.path,
+  newPath => {
+    // 使用正则匹配动态路由
+    isGoto.value = !/^\/view\/question\/\d+$/.test(newPath);
+  },
+  { immediate: true }
+);
+
 onMounted(() => {
   getRandomTag();
 });
 </script>
 
 <template>
-  <div id="solution">
+  <div id="solution" v-if="!isGoto">
     <a-row class="grid-demo" style="margin-bottom: 16px">
       <a-col :flex="11">
         <div>
@@ -355,7 +384,12 @@ onMounted(() => {
     </a-card>
     <!--  题解渲染  -->
     <div class="post-container" v-if="isEmpty">
-      <a-comment v-for="item in props.solutions" :key="item">
+      <a-comment
+        v-for="item in props.solutions"
+        :key="item"
+        @click="gotoDetail(item.id)"
+        :style="{ cursor: 'pointer' }"
+      >
         <template #author>
           <a-link href="link" :hoverable="false"
             >{{ item.user.userName }}
@@ -428,6 +462,8 @@ onMounted(() => {
     </div>
     <a-empty v-else />
   </div>
+  <!-- 题解详情页 -->
+  <router-view v-else />
 </template>
 
 <style scoped lang="scss">

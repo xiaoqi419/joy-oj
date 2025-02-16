@@ -39,6 +39,7 @@ export const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
+
   {
     path: "/about",
     name: "About",
@@ -88,7 +89,20 @@ export const routes: Array<RouteRecordRaw> = [
       title: "题目详情",
       access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
       hidden: true
-    }
+    },
+    children: [
+      {
+        // 题解详情
+        path: "/view/question/:id/solution/:solutionId",
+        name: "solutionInfo",
+        component: () => import("@/components/Solution/SolutionInfoView.vue"),
+        meta: {
+          title: "题解详情",
+          access: [ACCESS_ENUM.STUDENT, ACCESS_ENUM.TEACHER, ACCESS_ENUM.ADMIN],
+          hidden: true
+        }
+      }
+    ]
   },
   {
     path: "/add/question",
