@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent } from "vue";
 import BasicLayout from "@/components/Layouts/BasicLayout.vue";
 import UserModal from "@/components/Modal/UserModal.vue";
 import RegisterModal from "@/components/Modal/RegisterModal.vue";
@@ -36,9 +36,8 @@ const init = async () => {
   }
 };
 const modalStore = storeToRefs(useModalStore());
-onMounted(() => {
-  init();
-});
+
+init();
 </script>
 
 <template>

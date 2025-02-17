@@ -57,6 +57,9 @@ const doLogout = async () => {
     Message.success("退出登录成功");
     await router.push("/");
   } else {
+    // 清楚浏览器缓存
+    localStorage.clear();
+    useUserStore().resetUserInfo();
     Message.error("退出登录失败");
   }
 };

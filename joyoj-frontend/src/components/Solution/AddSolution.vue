@@ -267,7 +267,7 @@ watch(
               <a-space align="center">
                 <a-tag
                   v-for="item of tags"
-                  :key="item"
+                  :key="item.id"
                   closable
                   size="large"
                   :style="{

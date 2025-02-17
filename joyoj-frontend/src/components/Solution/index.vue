@@ -147,7 +147,7 @@ const sortChange = async (val: any) => {
 };
 
 // 获取随机标签
-const randomTags = ref([]);
+const randomTags = ref<any[]>([]);
 const getRandomTag = async () => {
   const res = await SolutionControllerService.getRandomTagsUsingPost();
   if (res.code === 20000) {
