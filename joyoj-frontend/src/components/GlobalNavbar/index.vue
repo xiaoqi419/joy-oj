@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { computed, defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { routes } from "@/router/routes";
@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 import checkAccess from "@/utils/checkAccess";
 import { Message } from "@arco-design/web-vue";
 import { UserControllerService } from "../../../generated";
+import useSystemStore from "@/store/modules/system";
 
 defineComponent({
   name: "GlobalNavbar"
@@ -71,8 +72,14 @@ const goProfile = () => {
 };
 
 // 获取网站配置
-const { basic } = JSON.parse(localStorage.getItem("systems")!);
-const websiteName = basic.websiteName;
+const systemStore = useSystemStore();
+const basic = systemStore.basic;
+const websiteName = ref();
+if (basic) {
+  websiteName.value = basic.websiteName;
+} else {
+  websiteName.value = "Joy Judge";
+}
 </script>
 
 <template>
@@ -80,9 +87,9 @@ const websiteName = basic.websiteName;
     <a-row align="center">
       <a-col flex="auto">
         <a-menu
-          mode="horizontal"
           :default-selected-keys="['/']"
           :selected-keys="selectedKeys"
+          mode="horizontal"
           @menu-item-click="doMenuClick"
         >
           <a-menu-item
@@ -130,8 +137,8 @@ const websiteName = basic.websiteName;
             </a-avatar>
             <a-avatar v-else>
               <img
-                alt="avatar"
                 :src="userInfo.userAvatar"
+                alt="avatar"
                 style="width: 100%; height: 100%"
               />
             </a-avatar>
@@ -159,7 +166,7 @@ const websiteName = basic.websiteName;
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 #GlobalNavbar {
   border-bottom: 1px solid #ccc; /* 添加底部分割线 */
   :deep(.arco-menu-icon) {

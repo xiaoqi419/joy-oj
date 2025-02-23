@@ -1,5 +1,5 @@
-<script setup lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineComponent, onMounted } from "vue";
 import BasicLayout from "@/components/Layouts/BasicLayout.vue";
 import UserModal from "@/components/Modal/UserModal.vue";
 import RegisterModal from "@/components/Modal/RegisterModal.vue";
@@ -37,7 +37,9 @@ const init = async () => {
 };
 const modalStore = storeToRefs(useModalStore());
 
-init();
+onMounted(() => {
+  init();
+});
 </script>
 
 <template>
@@ -47,7 +49,7 @@ init();
     <RegisterModal v-if="modalStore.registerModal.value" />
     <ForgetModal v-if="modalStore.forgetModal.value" />
     <a-back-top>
-      <a-button type="primary" shape="circle">
+      <a-button shape="circle" type="primary">
         <icon-caret-up />
       </a-button>
     </a-back-top>

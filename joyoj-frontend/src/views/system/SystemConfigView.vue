@@ -1,14 +1,21 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import useSystemStore from "@/store/modules/system";
 
 const isShowIntro = ref(true);
 const route = useRoute();
 const selectedKeys = ref([route.path]); // 初始化为当前路径
 
 // 获取网站名称填充到水印中
-const { basic } = JSON.parse(localStorage.getItem("systems")!);
-const websiteName = basic.websiteName;
+const systemStore = useSystemStore();
+const basic = systemStore.basic;
+const websiteName = ref();
+if (basic) {
+  websiteName.value = basic.websiteName;
+} else {
+  websiteName.value = "Joy Judge";
+}
 
 // 页面加载时,从localStorage中获取isShowIntro
 onMounted(() => {
@@ -48,22 +55,22 @@ onMounted(() => {
       <div class="main-container">
         <a-layout style="height: 400px">
           <a-layout>
-            <a-layout-sider breakpoint="xl" :width="220" collapsible>
+            <a-layout-sider :width="220" breakpoint="xl" collapsible>
               <a-menu
+                :default-open-keys="['0']"
+                :selected-keys="selectedKeys"
                 :style="{ width: '200px', height: '100%' }"
                 breakpoint="xl"
-                :selected-keys="selectedKeys"
-                :default-open-keys="['0']"
               >
                 <a-sub-menu key="0">
                   <template #icon>
-                    <joy-svg-icon icon="house-gear" class="mr-1" />
+                    <joy-svg-icon class="mr-1" icon="house-gear" />
                   </template>
                   <template #title>系统配置</template>
                   <router-link to="/system/config/announce-settings">
                     <a-menu-item key="/system/config/announce-settings">
                       <a-space>
-                        <joy-svg-icon icon="config" class="mr-1" />
+                        <joy-svg-icon class="mr-1" icon="config" />
                         基础设置
                       </a-space>
                     </a-menu-item>
@@ -119,7 +126,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 #systemConfigView {
   max-width: 1450px;
   margin: 20px auto;
