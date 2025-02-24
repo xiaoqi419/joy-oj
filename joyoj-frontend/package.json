@@ -29,6 +29,7 @@
     "dayjs": "^1.11.11",
     "eslint-config-prettier": "^9.1.0",
     "highlight.js": "^11.9.0",
+    "marked": "^15.0.7",
     "monaco-editor": "^0.50.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.3",

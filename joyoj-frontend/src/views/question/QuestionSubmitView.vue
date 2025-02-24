@@ -4,6 +4,9 @@ import { QuestionControllerService } from "../../../generated";
 import { Message } from "@arco-design/web-vue";
 import dayjs from "dayjs";
 import useUserStore from "@/store/modules/user";
+import axios from "axios";
+import TypeIt from "typeit";
+import { marked } from "marked";
 
 const dataList = ref([]);
 const total = ref(0);
@@ -109,13 +112,89 @@ const showModal = (info: any) => {
   submitInfoVisible.value = true;
   console.log(submitInfo.value);
 };
+
+// AI分析相关
+const analysisVisible = ref(false);
+const analysisInfo = ref();
+const isShowLoading = ref(true);
+const showAnalysisModal = (info: any) => {
+  analysisInfo.value = info;
+  analysisVisible.value = true;
+  console.log(analysisInfo.value);
+  isShowLoading.value = true;
+  fetchAndDisplayText(info.code);
+};
+// 响应式变量：存储逐字显示的文本
+const displayedText = ref("");
+// 响应式变量：存储最终渲染的 HTML
+const renderedHTML = ref();
+// 创建 AbortController 实例
+const abortController = new AbortController();
+// 发起 API 请求并逐字显示文本
+const fetchAndDisplayText = async (code: any) => {
+  // 在code后面添加一段文字：（用中文回答）
+  code += "(用中文回答)";
+  const options = {
+    method: "POST",
+    url: "https://api.siliconflow.cn/v1/chat/completions",
+    headers: {
+      Authorization:
+        "Bearer sk-rcxkslbuvfjzbiigovxusjxeqfrmochyifnnrpfpndajwgfq",
+      "Content-Type": "application/json"
+    },
+    data: {
+      model: "Qwen/Qwen2.5-Coder-32B-Instruct",
+      messages: [
+        {
+          role: "user",
+          content: code
+        }
+      ]
+    },
+    signal: abortController.signal
+  };
+
+  try {
+    // 发起请求
+    const response = await axios(options);
+    const fullText = response.data.choices[0].message.content;
+
+    // 清空之前的显示内容
+    displayedText.value = "";
+    renderedHTML.value = marked.parse(fullText);
+    if (fullText) {
+      isShowLoading.value = false;
+    }
+    // 初始化 TypeIt
+    new TypeIt("#typing-container", {
+      strings: renderedHTML.value, // 要显示的文本
+      speed: 50, // 打字速度（单位：毫秒）
+      waitUntilVisible: true, // 确保元素可见后再开始
+      afterComplete: (instance: any) => {
+        instance.destroy(); // 可选：销毁实例
+      }
+    }).go();
+  } catch (error) {
+    if (axios.isCancel(error)) {
+      console.log("请求已中止:", error.message);
+    } else {
+      console.error("API 请求失败:", error);
+    }
+  }
+};
+const deleteContent = () => {
+  isShowLoading.value = true;
+  renderedHTML.value = null;
+  // 在组件卸载时中止请求
+  abortController.abort("组件已卸载，请求被中止");
+};
 </script>
 
 <template>
   <div id="questionSubmitView">
     <h2>浏览题目提交</h2>
     <a-form :model="searchParams" class="mb-4" layout="inline">
-      <a-form-item field="language" label="编程语言" style="min-width: 280px">
+      <a-form-item field="language" label="编程语言" style="min-width: 17.5rem">
         <a-input
           v-model="searchParams.language"
           placeholder="请输入编程语言 ..."
@@ -156,7 +235,12 @@ const showModal = (info: any) => {
           fixed="left"
           title="提交号"
         ></a-table-column>
-        <a-table-column align="center" data-index="language" title="编程语言">
+        <a-table-column
+          :width="100"
+          align="center"
+          data-index="language"
+          title="编程语言"
+        >
           <template #cell="{ record }">
             <a-space>
               <a-tag color="#168cff">{{ record.language }}</a-tag>
@@ -174,7 +258,12 @@ const showModal = (info: any) => {
             ></json-viewer>
           </template>
         </a-table-column>
-        <a-table-column align="center" data-index="status" title="判题状态">
+        <a-table-column
+          :width="100"
+          align="center"
+          data-index="status"
+          title="判题状态"
+        >
           <template #cell="{ record }">
             <a-space>
               <!-- 不同状态显示不同的标签（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败），不同颜色 -->
@@ -216,6 +305,12 @@ const showModal = (info: any) => {
               <a-button type="primary" @click="showModal(record)"
                 >答题详情
               </a-button>
+              <a-button
+                status="warning"
+                type="primary"
+                @click="showAnalysisModal(record)"
+                >AI分析
+              </a-button>
             </a-space>
           </template>
         </a-table-column>
@@ -228,6 +323,22 @@ const showModal = (info: any) => {
         <highlightjs :code="submitInfo.code" language="java"></highlightjs>
       </div>
     </a-modal>
+    <!--  AI分析  -->
+    <a-modal
+      v-if="analysisVisible"
+      v-model:visible="analysisVisible"
+      :width="800"
+      @beforeClose="deleteContent"
+    >
+      <template #title> AI分析</template>
+      <div>
+        <div v-if="isShowLoading">
+          <h1>思考中</h1>
+          <a-spin :size="32" />
+        </div>
+        <div id="typing-container"></div>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -236,5 +347,11 @@ const showModal = (info: any) => {
   width: 1200px;
   max-width: 1280px;
   margin: 40px auto;
+}
+
+#typing-container {
+  white-space: pre-wrap; /* 保留换行符 */
+  font-size: 18px;
+  color: #333;
 }
 </style>
